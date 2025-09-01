@@ -1,14 +1,30 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Login</title>
+    <!-- ... -->
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
+    <!-- <link th:href="@{/static/css/app.css}" rel="stylesheet" /> -->
+    <script th:src="@{/js/bootstrap.bundle.min.js}" defer></script>
+    <!-- <script th:src="@{/static/js/app.js}" defer></script> -->
+    <title>FreelanchingBD: Login</title>
 </head>
 <body>
-<h1>Login</h1>
-<form action="/login" method="post">
-    Username: <input type="text" name="username" /><br/>
-    Password: <input type="password" name="password" /><br/>
-    <button type="submit">Login</button>
+<h1>User Login</h1>
+<form th:action="@{/login}" method="post">
+    <div>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+    </div>
+    <div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+    </div>
+    <div>
+        <button type="submit">Login</button>
+    </div>
 </form>
+<p>
+    <a href="/register" th:href="@{/register}" class="btn btn-large btn-success">Not Registered! Sign up</a>
+</p>
 </body>
 </html>

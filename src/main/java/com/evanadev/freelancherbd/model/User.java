@@ -15,7 +15,9 @@ public class User {
 private long id;
 private String fname;
 private String lname;
+@Column(nullable = false, unique = true)
 private String username;
+@Column(nullable = false, unique = true)
 private String email;
 private String password;
 private String role;
