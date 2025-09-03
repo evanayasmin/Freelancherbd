@@ -19,11 +19,15 @@
     <div class="row h-100">
         <div class="col-lg-6 col-12">
             <div id="auth-left">
-                <div class="auth-logo">
-                    <a href="index.html"><img src="/images/logo-4.png" alt="Logo"></a>
+                <div class="auth-logo"><span style="margin-bottom:3rem;">
+                 <a href="login.html"><img src="/images/logo-4.png" alt="Logo" style="height: 200px; align:center;"></a>
+                </span>
+<!--                    <p>One Platform. Endless Opportunity.</p>-->
                 </div>
-                <h1 class="auth-title">Log in.</h1>
-                <p class="auth-subtitle mb-5">Pls Log in with your data that you entered during registration.</p>
+                <h1 class="auth-title">
+                <span style="font-size:28px; font-weight:bold; color:#2c3e50; text-align:left; display:block; margin-bottom:20px;">
+    Please Sign in.</span></h1>
+<!--                <p class="auth-subtitle mb-5">Pls Log in with your data that you entered during registration.</p>-->
 
                 <form th:action="@{/login}" method="post">
                     <div class="form-group position-relative has-icon-left mb-4">
@@ -47,7 +51,7 @@
                     <button class="btn btn-primary btn-block btn-lg shadow-lg mt-5">Log in</button>
                 </form>
                 <div class="text-center mt-5 text-lg fs-4">
-                    <p class="text-gray-600">Don't have an account? <a href="/register" th:href="@{/register}"
+                    <p class="text-gray-500">Don't have an account? <a href="/register" th:href="@{/register}"
                                                                        class="font-bold">Sign up</a>.</p>
                     <p><a class="font-bold" href="auth-forgot-password.html">Forgot password?</a>.</p>
                 </div>
@@ -55,7 +59,8 @@
         </div>
         <div class="col-lg-6 d-none d-lg-block">
             <div id="auth-right">
-                <img src="assets/images/logo/logo.png" alt="Logo">
+                <img src="/images/happy_mom_working.png" style="height: 700px; width:800px; align:center;">
+
             </div>
         </div>
     </div>
