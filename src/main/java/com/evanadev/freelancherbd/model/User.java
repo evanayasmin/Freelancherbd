@@ -2,7 +2,6 @@ package com.evanadev.freelancherbd.model;
 
 import jakarta.persistence.*;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -24,15 +23,26 @@ private String role;
 private Date birthdate;
 private String gender;
 private String address;
+@Column(nullable = false)
 private String phone;
 private String country;
 private String city;
+@Column(nullable = false)
+private Long nid;
 private int status;
 private LocalDateTime createdAt;
 private LocalDateTime updatedAt;
 
     public long getId() {
         return id;
+    }
+
+    public Long getNid() {
+        return nid;
+    }
+
+    public void setNid(Long nid) {
+        this.nid = nid;
     }
 
     public void setId(long id) {

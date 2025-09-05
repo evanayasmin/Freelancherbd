@@ -20,7 +20,7 @@ public class UserService {
     }
 
     public void RegisterUser(String fname, String lname, String username, String email, String password, String country, String city,
-                             String address, String phone, String role, String gender, Integer status, Date birthday)
+                             String address, String phone, String role, String gender, Integer status, Date birthday, Long nid)
     {
     User user = new User();
     user.setUsername(username);
@@ -28,15 +28,16 @@ public class UserService {
     user.setLname(lname);
     user.setEmail(email);
     user.setPassword(passwordEncoder.encode(password));
-    user.setCountry(country);
+    user.setCountry("Bangladesh");
     user.setCity(city);
     user.setAddress(address);
     user.setPhone(phone);
-    user.setRole("user");
+    user.setRole(role);
     user.setGender(gender);
     user.setStatus(1);
     user.setGender(gender);
     user.setBirthdate(birthday);
+    user.setNid(nid);
     userRepository.save(user);
     }
 

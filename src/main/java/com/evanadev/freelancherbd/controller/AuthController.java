@@ -23,9 +23,9 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ModelAndView  registerUser(@RequestParam String fname, String lname, String username, String email, String password, String country, String city, String address, String phone, String role, String gender, Integer status, Date birthday) {
+    public ModelAndView  registerUser(@RequestParam String fname, String lname, String username, String email, String password, String country, String city, String address, String phone, String role, String gender, Integer status, Date birthday, Long nid) {
         userService.RegisterUser(fname,  lname,  username,  email,  password,  country,  city,
-                 address,  phone,  role,  gender,  status,  birthday);
+                 address,  phone,  role,  gender,  status,  birthday, nid);
 
         return new ModelAndView("login");
     }
@@ -36,6 +36,8 @@ public class AuthController {
     }
 
     @GetMapping("/home")
+
+
     public ModelAndView home() {
          return new ModelAndView("home");
     }
