@@ -12,21 +12,16 @@ public class User {
 @GeneratedValue(strategy = GenerationType.AUTO)
 
 private long id;
-private String fname;
-private String lname;
+@Column(nullable = false)
+private String fullname;
 @Column(nullable = false, unique = true)
 private String username;
 @Column(nullable = false, unique = true)
 private String email;
 private String password;
 private String role;
-private Date birthdate;
-private String gender;
-private String address;
 @Column(nullable = false)
 private String phone;
-private String country;
-private String city;
 @Column(nullable = false)
 private Long nid;
 private int status;
@@ -49,20 +44,12 @@ private LocalDateTime updatedAt;
         this.id = id;
     }
 
-    public String getFname() {
-        return fname;
+    public String getFullname() {
+        return fullname;
     }
 
-    public void setFname(String fistname) {
-        this.fname = fistname;
-    }
-
-    public String getLname() {
-        return lname;
-    }
-
-    public void setLname(String lastname) {
-        this.lname = lastname;
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
     }
 
     public String getUsername() {
@@ -97,52 +84,12 @@ private LocalDateTime updatedAt;
         this.role = role;
     }
 
-    public Date getBirthdate() {
-        return birthdate;
-    }
-
-    public void setBirthdate(Date birthdate) {
-        this.birthdate = birthdate;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     public String getPhone() {
         return phone;
     }
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
     }
 
     public int getStatus() {

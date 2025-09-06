@@ -1,6 +1,6 @@
 package com.evanadev.freelancherbd.configuration;
 
-import com.evanadev.freelancherbd.service.CustomUserDetails;
+import com.evanadev.freelancherbd.service.CustomUserDetailService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,9 +13,9 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfiguration {
 
-    private final CustomUserDetails customUserDetails;
+    private final CustomUserDetailService customUserDetails;
 
-    public SecurityConfiguration(CustomUserDetails customUserDetails) {
+    public SecurityConfiguration(CustomUserDetailService customUserDetails) {
         this.customUserDetails = customUserDetails;
     }
 @Bean

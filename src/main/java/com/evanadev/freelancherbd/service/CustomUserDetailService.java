@@ -1,5 +1,6 @@
 package com.evanadev.freelancherbd.service;
 
+import com.evanadev.freelancherbd.model.CustomUserDetail;
 import com.evanadev.freelancherbd.model.User;
 import com.evanadev.freelancherbd.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,12 +10,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CustomUserDetails implements UserDetailsService {
+public class CustomUserDetailService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
 
-    public CustomUserDetails(UserRepository userRepository) {
+    public CustomUserDetailService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -25,7 +26,7 @@ public class CustomUserDetails implements UserDetailsService {
         if(user == null){
             throw new UsernameNotFoundException("Sorry! User not found with given username");
         }
-        return org.springframework.security.core.userdetails.User.withUsername(user.getUsername()).password(user.getPassword()).roles(user.getRole()).build();
-
+        //return org.springframework.security.core.userdetails.User.withUsername(user.getUsername()).password(user.getPassword()).roles(user.getRole()).build();
+        return new CustomUserDetail(user);
     }
 }
