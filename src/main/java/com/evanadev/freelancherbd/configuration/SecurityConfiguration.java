@@ -1,11 +1,10 @@
 package com.evanadev.freelancherbd.configuration;
 
-import com.evanadev.freelancherbd.service.CustomUserDetails;
+import com.evanadev.freelancherbd.service.CustomUserDetailService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -14,9 +13,9 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfiguration {
 
-    private final CustomUserDetails customUserDetails;
+    private final CustomUserDetailService customUserDetails;
 
-    public SecurityConfiguration(CustomUserDetails customUserDetails) {
+    public SecurityConfiguration(CustomUserDetailService customUserDetails) {
         this.customUserDetails = customUserDetails;
     }
 @Bean
@@ -29,6 +28,7 @@ public SecurityFilterChain configure(HttpSecurity http) throws Exception {
             .logout(logout -> logout.logoutSuccessUrl("/login").permitAll()).userDetailsService(customUserDetails);
     return http.build();
 }
+
 
 @Bean
 public PasswordEncoder passwordEncoder()    {

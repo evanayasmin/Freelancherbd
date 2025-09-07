@@ -2,9 +2,10 @@ package com.evanadev.freelancherbd.model;
 
 import jakarta.persistence.*;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 public class User {
@@ -13,46 +14,51 @@ public class User {
 @GeneratedValue(strategy = GenerationType.AUTO)
 
 private long id;
-private String fname;
-private String lname;
+@Column(nullable = false)
+private String fullname;
 @Column(nullable = false, unique = true)
 private String username;
 @Column(nullable = false, unique = true)
 private String email;
 private String password;
-private String role;
-private Date birthdate;
-private String gender;
-private String address;
+@Column(nullable = false)
 private String phone;
-private String country;
-private String city;
+@Column(nullable = false)
+private Long nid;
 private int status;
 private LocalDateTime createdAt;
 private LocalDateTime updatedAt;
 
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"), //user_id
+            inverseJoinColumns = @JoinColumn(name = "role_id") //role_id
+    )
+    private Set<Role> roles = new HashSet<>();
+
     public long getId() {
         return id;
+    }
+
+    public Long getNid() {
+        return nid;
+    }
+
+    public void setNid(Long nid) {
+        this.nid = nid;
     }
 
     public void setId(long id) {
         this.id = id;
     }
 
-    public String getFname() {
-        return fname;
+    public String getFullname() {
+        return fullname;
     }
 
-    public void setFname(String fistname) {
-        this.fname = fistname;
-    }
-
-    public String getLname() {
-        return lname;
-    }
-
-    public void setLname(String lastname) {
-        this.lname = lastname;
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
     }
 
     public String getUsername() {
@@ -79,36 +85,12 @@ private LocalDateTime updatedAt;
         this.password = password;
     }
 
-    public String getRole() {
-        return role;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public Date getBirthdate() {
-        return birthdate;
-    }
-
-    public void setBirthdate(Date birthdate) {
-        this.birthdate = birthdate;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     public String getPhone() {
@@ -117,22 +99,6 @@ private LocalDateTime updatedAt;
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
     }
 
     public int getStatus() {

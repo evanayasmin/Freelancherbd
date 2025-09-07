@@ -1,42 +1,45 @@
 package com.evanadev.freelancherbd.service;
 
+import com.evanadev.freelancherbd.model.Role;
 import com.evanadev.freelancherbd.model.User;
+import com.evanadev.freelancherbd.repository.RoleRepository;
 import com.evanadev.freelancherbd.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.util.Set;
+
 
 @Service
 public class UserService {
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository=userRepository;
+        this.roleRepository = roleRepository;
     }
 
-    public void RegisterUser(String fname, String lname, String username, String email, String password, String country, String city,
-                             String address, String phone, String role, String gender, Integer status, Date birthday)
+    public void RegisterUser(String fullname, String username, String email, String password,String phone, String roleName, Long nid)
     {
     User user = new User();
     user.setUsername(username);
-    user.setFname(fname);
-    user.setLname(lname);
+    user.setFullname(fullname);
     user.setEmail(email);
     user.setPassword(passwordEncoder.encode(password));
-    user.setCountry(country);
-    user.setCity(city);
-    user.setAddress(address);
     user.setPhone(phone);
-    user.setRole("user");
-    user.setGender(gender);
+
+    Role role = roleRepository.findByName(roleName)
+                .orElseThrow(() -> new RuntimeException("Role not found: " + roleName));
+
+    // Assign role to user
+    user.setRoles(Set.of(role));
     user.setStatus(1);
-    user.setGender(gender);
-    user.setBirthdate(birthday);
+    user.setNid(nid);
     userRepository.save(user);
     }
 
