@@ -3,6 +3,9 @@ package com.evanadev.freelancherbd.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 public class User {
@@ -18,7 +21,6 @@ private String username;
 @Column(nullable = false, unique = true)
 private String email;
 private String password;
-private String role;
 @Column(nullable = false)
 private String phone;
 @Column(nullable = false)
@@ -26,6 +28,14 @@ private Long nid;
 private int status;
 private LocalDateTime createdAt;
 private LocalDateTime updatedAt;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"), //user_id
+            inverseJoinColumns = @JoinColumn(name = "role_id") //role_id
+    )
+    private Set<Role> roles = new HashSet<>();
 
     public long getId() {
         return id;
@@ -75,12 +85,12 @@ private LocalDateTime updatedAt;
         this.password = password;
     }
 
-    public String getRole() {
-        return role;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     public String getPhone() {

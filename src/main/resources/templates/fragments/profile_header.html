@@ -43,7 +43,12 @@
                             <div class="user-menu d-flex">
                                 <div class="user-name text-end me-3">
                                     <h6 class="mb-0 text-gray-600"> <span th:text="${fullname}"></span></h6>
-                                    <p class="mb-0 text-sm text-gray-600"><span th:text="${role}"></span></p>
+                                    <p class="mb-0 text-sm text-gray-600" th:if="${#authentication != null}">
+                                        <span th:each="auth, iterStat : ${#authentication.authorities}">
+                                            <span th:text="${auth.authority.replace('ROLE_', '')}"></span>
+                                            <span th:if="${!iterStat.last}">, </span>
+                                        </span>
+                                    </p>
                                 </div>
                                 <div class="user-img d-flex align-items-center">
                                     <div class="avatar avatar-md">

@@ -23,8 +23,11 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ModelAndView registerUser(@RequestParam String fullname, String username, String email, String password, String phone, String role, Integer status, Long nid) {
-        userService.RegisterUser(fullname, username, email, password, phone, role, status, nid);
+    public ModelAndView registerUser(@RequestParam String fullname, @RequestParam String username,
+                                     @RequestParam String email, @RequestParam String password,
+                                     @RequestParam String phone, @RequestParam String role,
+                                     @RequestParam Long nid) {
+        userService.RegisterUser(fullname, username, email, password, phone, role, nid);
         return new ModelAndView("login");
     }
 
@@ -42,16 +45,15 @@ public class AuthController {
         String fullName = userDetails.getFullname();
         String username = userDetails.getUsername();
         String email = userDetails.getEmail();
-        String userType = userDetails.getRole();
         String nid = userDetails.getNid().toString();
 
         ModelAndView mav = new ModelAndView("home");
 
         mav.addObject("username", username);
         mav.addObject("email", email);
-        mav.addObject("role", userType);
         mav.addObject("fullname", fullName);
         mav.addObject("nid", nid);
+       // mav.addObject("user_role",userDetails.getAuthorities().iterator().next().getAuthority());
         return mav;
     }
 }

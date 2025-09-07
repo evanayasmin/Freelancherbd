@@ -29,6 +29,7 @@ public SecurityFilterChain configure(HttpSecurity http) throws Exception {
     return http.build();
 }
 
+
 @Bean
 public PasswordEncoder passwordEncoder()    {
 return new BCryptPasswordEncoder();
