@@ -12,13 +12,6 @@ public class Role {
     @Column(nullable = false, unique = true)
     private String name; // e.g., ROLE_ADMIN, ROLE_EMPLOYER, ROLE_FREELANCER
 
-    public Role() {
-    }
-
-    public Role(Integer id, String name) {
-        this.id = id;
-        this.name = name;
-    }
 
     public Integer getId() {
         return id;
