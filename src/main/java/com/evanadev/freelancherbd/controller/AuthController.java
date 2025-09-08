@@ -53,7 +53,6 @@ public class AuthController {
         mav.addObject("email", email);
         mav.addObject("fullname", fullName);
         mav.addObject("nid", nid);
-       // mav.addObject("user_role",userDetails.getAuthorities().iterator().next().getAuthority());
         return mav;
     }
 }

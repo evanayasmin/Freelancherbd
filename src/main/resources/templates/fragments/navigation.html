@@ -1,0 +1,233 @@
+<div class="sidebar-menu" th:fragment="navigation" xmlns:sec="http://www.w3.org/1999/xhtml">
+    <ul class="menu">
+        <li class="sidebar-title">Menu</li>
+        <li class="sidebar-item active">
+            <a href="/home" th:href="@{/home}" class='sidebar-link'><i class="bi bi-grid-fill"></i><span>Dashboard</span>
+            </a>
+        </li>
+
+        <li class="sidebar-item has-sub">
+            <a href="#" class='sidebar-link'>
+                <i class="bi bi-stack"></i>
+                <span>Job Category</span>
+            </a>
+            <ul class="submenu ">
+                <li class="submenu-item">
+                    <a href="component-alert.html">Software Development</a>
+                </li>
+                <li class="submenu-item">
+                    <a href="component-badge.html">Data Entry</a>
+                </li>
+                <li class="submenu-item ">
+                    <a href="component-breadcrumb.html">Project Management</a>
+                </li>
+                <li class="submenu-item ">
+                    <a href="component-button.html">Design and Creative</a>
+                </li>
+                <li class="submenu-item ">
+                    <a href="component-card.html">Marketing</a>
+                </li>
+                <li class="submenu-item ">
+                    <a href="component-card.html">Content Writing</a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="sidebar-item  has-sub" sec:authorize="hasRole('FREELANCER')">
+            <a href="#" class='sidebar-link'>
+                <i class="bi bi-collection-fill"></i>
+                <span>Find Work</span>
+            </a>
+            <ul class="submenu ">
+                <li class="submenu-item ">
+                    <a th:href="@{/new_jobs}">New Jobs</a>
+                </li>
+                <li class="submenu-item ">
+                    <a th:href="@{/recommend_jobs}">Recommended Jobs</a>
+                </li>
+                <li class="submenu-item ">
+                    <a th:href="@{/applied_jobs}">Applied Jobs</a>
+                </li>
+                <li class="submenu-item ">
+                    <a th:href="@{/save_jobs}">Saved Jobs</a>
+                </li>
+                <li class="submenu-item ">
+                    <a th:href="@{/working_jobs}">Work in Progress</a>
+                </li>
+                <li class="submenu-item ">
+                    <a th:href="@{/completed_jobs}">Completed Jobs</a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="sidebar-item has-sub" sec:authorize="hasRole('FREELANCER')">
+            <a href="#" class='sidebar-link'>
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Earnings</span>
+            </a>
+            <ul class="submenu active">
+                <li class="submenu-item ">
+                    <a th:href="@{/wallet_balance}">Wallet Balance</a>
+                </li>
+                <li class="submenu-item ">
+                    <a th:href="@{/withdrwal}">Withdrawal</a>
+                </li>
+                <li class="submenu-item active">
+                    <a th:href="@{/transaction_history}">Transaction History</a>
+                </li>
+                <li class="submenu-item ">
+                    <a th:href="@{/employer_reports}">Reports</a>
+                </li>
+            </ul>
+        </li>
+        <li class="sidebar-item has-sub" sec:authorize="hasRole('EMPLOYER')">
+            <a href="#" class='sidebar-link'>
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Proposals</span>
+            </a>
+            <ul class="submenu active">
+                <li class="submenu-item ">
+                    <a th:href="@{/new_proposal}">New Proposals</a>
+                </li>
+                <li class="submenu-item ">
+                    <a th:href="@{/shortlisted}">Shortlisted</a>
+                </li>
+                <li class="submenu-item active">
+                    <a th:href="@{/hired_employee}">Hired</a>
+                </li>
+                <li class="submenu-item ">
+                    <a th:href="@{/declined_employee}">Decline</a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="sidebar-item has-sub" sec:authorize="hasRole('EMPLOYER')">
+            <a href="#" class='sidebar-link'>
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Contracts</span>
+            </a>
+            <ul class="submenu active">
+                <li class="submenu-item ">
+                    <a th:href="@{/onging_projects}">Ongoing Projects</a>
+                </li>
+                <li class="submenu-item ">
+                    <a th:href="@{/completed_projects}">Completed Projects</a>
+                </li>
+                <li class="submenu-item active">
+                    <a th:href="@{/disputes}">Disputes</a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="sidebar-item has-sub" sec:authorize="hasRole('EMPLOYER')">
+            <a href="#" class='sidebar-link'>
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Payments</span>
+            </a>
+            <ul class="submenu active">
+                <li class="submenu-item ">
+                    <a th:href="@{/pending_payments}">Pending Payments</a>
+                </li>
+                <li class="submenu-item ">
+                    <a th:href="@{/payment_history}">Payment History</a>
+                </li>
+                <li class="submenu-item active">
+                    <a th:href="@{/invoice_reports}">Invoice and Reports</a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="sidebar-item has-sub" sec:authorize="hasRole('EMPLOYER')">
+            <a href="#" class='sidebar-link'>
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Company Profile</span>
+            </a>
+            <ul class="submenu active">
+                <li class="submenu-item ">
+                    <a th:href="@{/company_profile}">View Profile</a>
+                </li>
+                <li class="submenu-item ">
+                    <a th:href="@{/edit_comprofile}">Edit Profile </a>
+                </li>
+                <li class="submenu-item active">
+                    <a th:href="@{/reviews_ratings}">Reviews and Ratings</a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="sidebar-item has-sub" sec:authorize="hasRole('EMPLOYER')">
+            <a href="#" class='sidebar-link'>
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Post Job</span>
+            </a>
+            <ul class="submenu active">
+                <li class="submenu-item ">
+                    <a th:href="@{/create_job}">Create New Job</a>
+                </li>
+                <li class="submenu-item ">
+                    <a th:href="@{/post_recuring_job}">Post Recuring Job</a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="sidebar-item has-sub" sec:authorize="hasRole('EMPLOYER')">
+            <a href="#" class='sidebar-link'>
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Manage Jobs</span>
+            </a>
+            <ul class="submenu active">
+                <li class="submenu-item ">
+                    <a th:href="@{/active_jobs}">Active Jobs</a>
+                </li>
+                <li class="submenu-item ">
+                    <a th:href="@{/pending_jobs}">Pending Jobs</a>
+                </li>
+                <li class="submenu-item ">
+                    <a th:href="@{/closed_jobs}">Closed Jobs</a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="sidebar-item has-sub" sec:authorize="hasRole('EMPLOYER')">
+            <a href="#" class='sidebar-link'>
+                <i class="bi bi-person-badge-fill"></i>
+                <span>Find Freelancer</span>
+            </a>
+            <ul class="submenu active">
+                <li class="submenu-item ">
+                    <a th:href="@{/skilled_freelancer}">Browse by Skills</a>
+                </li>
+                <li class="submenu-item ">
+                    <a th:href="@{/top_rated}">Top Rated Freelancers</a>
+                </li>
+                <li class="submenu-item ">
+                    <a th:href="@{/recommended_freelancer}">Recommended Freelancers</a>
+                </li>
+                <li class="submenu-item ">
+                    <a th:href="@{/saved_freelancer}">Saved Freelancers</a>
+                </li>
+            </ul>
+        </li>
+
+        <!-- <li class="sidebar-title">Forms &amp; Tables</li>-->
+
+        <li class="sidebar-item  has-sub" sec:authorize="hasAnyRole('FREELANCER','EMPLOYER')">
+            <a href="#" class='sidebar-link'>
+                <i class="bi bi-hexagon-fill"></i>
+                <span>Support</span>
+            </a>
+            <ul class="submenu ">
+                <li class="submenu-item ">
+                    <a th:href="@{/help_center}">Help Center</a>
+                </li>
+                <li class="submenu-item ">
+                    <a th:href="@{/report_problem}">Report a Problem</a>
+                </li>
+                <li class="submenu-item ">
+                    <a th:href="@{/contactus}">Contact Support</a>
+                </li>
+            </ul>
+        </li>
+
+    </ul>
+</div>
