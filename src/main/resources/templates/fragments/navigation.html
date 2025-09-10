@@ -216,18 +216,145 @@
                 <i class="bi bi-hexagon-fill"></i>
                 <span>Support</span>
             </a>
-            <ul class="submenu ">
-                <li class="submenu-item ">
+            <ul class="submenu">
+                <li class="submenu-item">
                     <a th:href="@{/help_center}">Help Center</a>
                 </li>
-                <li class="submenu-item ">
+                <li class="submenu-item">
                     <a th:href="@{/report_problem}">Report a Problem</a>
                 </li>
-                <li class="submenu-item ">
+                <li class="submenu-item">
                     <a th:href="@{/contactus}">Contact Support</a>
                 </li>
             </ul>
         </li>
+
+<!--        Admin user menu-->
+        <li class="sidebar-item has-sub" sec:authorize="hasRole('ADMIN')">
+            <a href="#" class='sidebar-link'>
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>User Management</span>
+            </a>
+            <ul class="submenu active">
+                <li class="submenu-item">
+                    <a th:href="@{/freelancers}">Freelancers</a>
+                </li>
+                <li class="submenu-item">
+                    <a th:href="@{/clients}">Clients</a>
+                </li>
+                <li class="submenu-item active">
+                    <a th:href="@{/role_manage}">Role Management</a>
+                </li>
+            </ul>
+        </li>
+        <li class="sidebar-item has-sub" sec:authorize="hasRole('ADMIN')">
+            <a href="#" class='sidebar-link'>
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Projects Management</span>
+            </a>
+            <ul class="submenu active">
+                <li class="submenu-item">
+                    <a th:href="@{/posted_jobs}">Posted Jobs</a>
+                </li>
+                <li class="submenu-item">
+                    <a th:href="@{/pending_approval_jobs}">Pending Approval Jobs</a>
+                </li>
+                <li class="submenu-item">
+                    <a th:href="@{/active_completed_jobs}">Active/Completed Jobs</a>
+                </li>
+                <li class="submenu-item">
+                    <a th:href="@{/dispute_resolution}">Dispute Resolution</a>
+                </li>
+            </ul>
+        </li>
+        <li class="sidebar-item has-sub" sec:authorize="hasRole('ADMIN')">
+            <a href="#" class='sidebar-link'>
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Financial Management</span>
+            </a>
+            <ul class="submenu active">
+                <li class="submenu-item">
+                    <a th:href="@{/platform_earnings}">Platform Earnings</a>
+                </li>
+                <li class="submenu-item">
+                    <a th:href="@{/freelancer_withdrawals}">Freelancer withdrawals</a>
+                </li>
+                <li class="submenu-item">
+                    <a th:href="@{/transacction_history}">Transaction History</a>
+                </li>
+                <li class="submenu-item">
+                    <a th:href="@{/refund_request}">Refund Request</a>
+                </li>
+            </ul>
+        </li>
+        <li class="sidebar-item has-sub" sec:authorize="hasRole('ADMIN')">
+            <a href="#" class='sidebar-link'>
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Content Management</span>
+            </a>
+            <ul class="submenu active">
+                <li class="submenu-item">
+                    <a th:href="@{/category_list}">Category List</a>
+                </li>
+                <li class="submenu-item">
+                    <a th:href="@{/create_category}">New Category</a>
+                </li>
+                <li class="submenu-item">
+                    <a th:href="@{/transacction_history}">Transaction History</a>
+                </li>
+                <li class="submenu-item">
+                    <a th:href="@{/refund_request}">Refund Request</a>
+                </li>
+            </ul>
+        </li>
+        <li class="sidebar-item has-sub" sec:authorize="hasRole('ADMIN')">
+            <a href="#" class='sidebar-link'>
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Report & Analytics</span>
+            </a>
+            <ul class="submenu active">
+                <li class="submenu-item">
+                    <a th:href="@{/user_growth}">User Growth Reports.</a>
+                </li>
+                <li class="submenu-item">
+                    <a th:href="@{/top_earning_user}">Top Earning User</a>
+                </li>
+                <li class="submenu-item">
+                    <a th:href="@{/revenue_analytics}">Revenue Analytics</a>
+                </li>
+               </ul>
+        </li>
+        <li class="sidebar-item has-sub" sec:authorize="hasRole('ADMIN')">
+            <a href="#" class='sidebar-link'>
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Support & Disputes</span>
+            </a>
+            <ul class="submenu active">
+                <li class="submenu-item">
+                    <a th:href="@{/ticket_management}">Ticket Management System</a>
+                </li>
+                <li class="submenu-item">
+                    <a th:href="@{/dispute_resolution_panel}">Dispute Resolution Panel</a>
+                </li>
+            </ul>
+        </li>
+        <li class="sidebar-item has-sub" sec:authorize="hasRole('ADMIN')">
+            <a href="#" class='sidebar-link'>
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>System Settings</span>
+            </a>
+            <ul class="submenu active">
+                <li class="submenu-item">
+                    <a th:href="@{/platform_settings}">Platform Settings</a>
+                </li>
+                <li class="submenu-item">
+                    <a th:href="@{/notification_templates}">Notification/email templates</a>
+                </li>
+            </ul>
+        </li>
+
+
+
 
     </ul>
 </div>
