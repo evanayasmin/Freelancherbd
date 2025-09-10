@@ -18,7 +18,7 @@ public class CustomUserDetail implements UserDetails {
     public String getFullname() { return user.getFullname(); }
     public Long getNid() { return user.getNid(); }
     public String getEmail() { return user.getEmail(); }
-    //public String getRole() { return user.getRole(); }
+    public Long getId() { return user.getId(); }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
