@@ -1,11 +1,12 @@
 package com.evanadev.freelancherbd.controller;
 
 import com.evanadev.freelancherbd.model.CustomUserDetail;
-import com.evanadev.freelancherbd.model.User;
 import com.evanadev.freelancherbd.model.UserProfile;
 import com.evanadev.freelancherbd.repository.UserProfileRepository;
 import com.evanadev.freelancherbd.repository.UserRepository;
+import com.evanadev.freelancherbd.service.FileStorageService;
 import com.evanadev.freelancherbd.service.UserProfileService;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -24,14 +25,14 @@ public class UserProfileController {
     private UserProfileService userProfileService;
     private final UserRepository userRepository;
     private final UserProfileRepository userProfileRepository;
-    //private final FileStorageService fileStorageService;
+    private final FileStorageService fileStorageService;
 
     @Autowired
     public UserProfileController(UserRepository userRepository,
-                                 UserProfileRepository userProfileRepository) {
+                                 UserProfileRepository userProfileRepository,FileStorageService fileStorageService) {
         this.userRepository = userRepository;
         this.userProfileRepository = userProfileRepository;
-       // this.fileStorageService = fileStorageService;
+        this.fileStorageService = fileStorageService;
     }
 
     @GetMapping("/user_profile")
@@ -61,13 +62,17 @@ public class UserProfileController {
         CustomUserDetail userDetails = (CustomUserDetail) authentication.getPrincipal();
         Long userId = userDetails.getId();
 
-        String cvPath = "/uploads/cv/" + cv.getOriginalFilename();
-        String profilePicPath = "/uploads/profile/" + profile_picture.getOriginalFilename();
+        //String cvPath = "/uploads/cv/" + cv.getOriginalFilename();
+        //String profilePicPath = "/uploads/profile/" + profile_picture.getOriginalFilename();
 
-        UserProfile profile = userProfileService.CreateUserProfile(city, country, gender, skills, cvPath,
-                github, linkedin, company_name, company_address, company_email, company_business, company_phone, company_url, profilePicPath);
+        // Save files using service
+        String cvFilePath = fileStorageService.saveFile(cv, "cv");
+        String profilePicturePath = fileStorageService.saveFile(profile_picture, "profile");
 
-        userProfileRepository.save(profile);
+        UserProfile profile = userProfileService.CreateUserProfile(city, country, gender, skills, cvFilePath,
+                github, linkedin, company_name, company_address, company_email, company_business, company_phone, company_url, profilePicturePath);
+
+
         return ResponseEntity.ok("Profile created successfully with uploaded CV & Profile Picture!");
        // return "Ok";
 
