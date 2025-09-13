@@ -11,6 +11,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserProfileService {
 
@@ -24,33 +26,80 @@ public class UserProfileService {
     }
 
     public UserProfile CreateUserProfile(String city, String country, String gender, String skill, String cv, String
-                                  github, String linkedin, String company_name, String company_address, String company_email,
-                                  String company_business, String company_phone, String company_url, String profile_picture) {
+                                  github, String linkedin, String profile_picture) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long userId = ((CustomUserDetail) authentication.getPrincipal()).getId();
 
-        // 1. Fetch User by ID
+        //Fetch User by ID
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found with id " + userId));
 
-        UserProfile userProfile = new UserProfile();
-        userProfile.setUser(user);
-        userProfile.setCity(city);
-        userProfile.setCountry(country);
-        userProfile.setGender(gender);
-        userProfile.setCv(cv);
-        userProfile.setSkills(skill);
-        userProfile.setGithubUrl(github);
-        userProfile.setLinkedinUrl(linkedin);
-        userProfile.setCompanyName(company_name);
-        userProfile.setCompanyAddress(company_address);
-        userProfile.setCompanyEmail(company_email);
-        userProfile.setCompanyBusiness(company_business);
-        userProfile.setCompanyPhone(company_phone);
-        userProfile.setCompanyUrl(company_url);
-        userProfile.setProfilePicture(profile_picture);
-        return userProfileRepository.save(userProfile);
+        UserProfile savedProfile = null;
+        Optional<UserProfile> existingProfile = userProfileRepository.findByUserId(userId);
+        if (existingProfile.isPresent()) {
+            UserProfile userProfile = existingProfile.get();
+            //userProfile.setUser(user);
+            userProfile.setCity(city);
+            userProfile.setCountry(country);
+            userProfile.setGender(gender);
+            userProfile.setCv(cv);
+            userProfile.setSkills(skill);
+            userProfile.setGithubUrl(github);
+            userProfile.setLinkedinUrl(linkedin);
+            userProfile.setProfilePicture(profile_picture);
+            savedProfile = userProfileRepository.save(userProfile);
+        }
+        else{
+            UserProfile Profile = new UserProfile();
+            Profile.setUser(user);
+            Profile.setCity(city);
+            Profile.setCountry(country);
+            Profile.setGender(gender);
+            Profile.setCv(cv);
+            Profile.setSkills(skill);
+            Profile.setGithubUrl(github);
+            Profile.setLinkedinUrl(linkedin);
+            Profile.setProfilePicture(profile_picture);
+            savedProfile = userProfileRepository.save(Profile);
+        }
+        return savedProfile;
+    }
+
+    public UserProfile CreateCompanyProfile(String company_name, String company_email, String company_phone,
+                                         String company_address, String company_business, String company_url){
+
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long userId = ((CustomUserDetail) authentication.getPrincipal()).getId();
+
+        //Fetch User by ID
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with id " + userId));
+
+        UserProfile savedProfile = null;
+        Optional<UserProfile> existingProfile = userProfileRepository.findByUserId(userId);
+        if (existingProfile.isPresent()) {
+            UserProfile userProfile = existingProfile.get();
+            userProfile.setCompanyName(company_name);
+            userProfile.setCompanyEmail(company_email);
+            userProfile.setCompanyAddress(company_address);
+            userProfile.setCompanyBusiness(company_business);
+            userProfile.setCompanyPhone(company_phone);
+            savedProfile = userProfileRepository.save(userProfile);
+        }else {
+            UserProfile userProfile = new UserProfile();
+            userProfile.setUser(user);
+            userProfile.setCompanyName(company_name);
+            userProfile.setCompanyEmail(company_email);
+            userProfile.setCompanyAddress(company_address);
+            userProfile.setCompanyBusiness(company_business);
+            userProfile.setCompanyPhone(company_phone);
+            userProfile.setCompanyUrl(company_url);
+            savedProfile = userProfileRepository.save(userProfile);
+        }
+        return savedProfile;
+
     }
 
 }

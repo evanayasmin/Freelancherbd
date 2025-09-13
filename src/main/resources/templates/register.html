@@ -18,15 +18,16 @@
 <div id="auth">
     <div class="row h-100">
         <div class="col-lg-7 col-12">
+            <p align="center"><a href="login.html"><img src="/images/logo-4.png" alt="Logo" style="height: 150px; align:center;"></a></p>
             <div id="auth-left">
 
-                <div class="auth-logo">
-                 <a href="login.html"><img src="/images/logo-4.png" alt="Logo" style="height: 150px; align:center;"></a>
+<!--                <div class="auth-logo">-->
 
-                    <!--                    <p>One Platform. Endless Opportunity.</p>-->
-                </div>
+
+<!--                    &lt;!&ndash;                    <p>One Platform. Endless Opportunity.</p>&ndash;&gt;-->
+<!--                </div>-->
                 <h1 class="auth-title">
-                <span style="font-size:24px; font-weight:bold; color:#2c3e50; text-align:left; display:block; margin-bottom:20px;"> Please Sign Up Here.</span></h1>
+                <span style="font-size:24px; font-weight:bold; color:#2c3e50; text-align:center; display:block; margin-bottom:20px;"> Please Sign Up Here.</span></h1>
                 <form th:action="@{/register}" method="post">
                     <div class="col-lg-12 col-12">
                         <div class="card">
@@ -147,22 +148,23 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="text-center mt-5 text-lg fs-4">
-                                            <p class="text-gray-600">You already have an account? <a href="/login" th:href="@{/login}"
-                                                                                               class="font-bold">Sign In !</a>.</p>
-                                        </div>
+
                                     </form>
+
                                 </div>
                             </div>
                         </div>
                     </div>
                 </form>
-
-            </div>
+                <div class="text-center mt-5 text-lg fs-4">
+                    <p class="text-gray-600">You already have an account? <a href="/login" th:href="@{/login}"
+                                                                             class="font-bold">Sign In !</a>.</p>
+                </div>
+             </div>
         </div>
         <div class="col-lg-5 d-none d-lg-block">
             <div id="auth-right">
-                <img src="/images/happy_mom_working.png" style="height: 700px; width:700px; align:center;">
+                <img src="/images/happy_mom_working.png" style="height: 600px; width:550px; align:center; padding-top: 20px;">
 
             </div>
         </div>
