@@ -96,24 +96,24 @@
                                                     <div class="col-12">
                                                         <div class="form-group">
                                                             <label for="cv">Upload Your CV</label>
-                                                            <input th:type="file" id="cv" class="form-control" name="cv">
+                                                            <input th:type="file" id="cv" class="form-control" name="cv" required>
                                                         </div>
                                                     </div>
                                                     <div class="col-12">
                                                         <div class="form-group">
                                                             <label for="profile_picture">Upload Profile Picture</label>
-                                                            <input th:type="file" id="profile_picture" class="form-control" name="profile_picture">
+                                                            <input th:type="file" id="profile_picture" class="form-control" name="profile_picture" required>
                                                         </div>
                                                     </div>
                                                     <div class="col-12">
                                                         <div class="form-group">
-                                                            <label for="github_url">Github URL</label>
-                                                            <input type="text" id="github_url" class="form-control" name="github_url" placeholder="Github URL">
+                                                            <label for="github">Github URL</label>
+                                                            <input type="text" id="github" class="form-control" name="github" placeholder="Github URL">
                                                         </div>
                                                     </div>
                                                     <div class="col-12">
                                                         <div class="form-group">
-                                                            <label for="linkedin">Github URL</label>
+                                                            <label for="linkedin">LinkedIn URL</label>
                                                             <input type="text" id="linkedin" class="form-control" name="linkedin" placeholder="LinkedIn Profile">
                                                         </div>
                                                     </div>
@@ -138,8 +138,8 @@
                                 </div>
                                 <div class="card-content">
                                     <div class="card-body">
-                                        <div th:if="${successMessage}" class="alert alert-success">
-                                            <span th:text="${successMessage}"></span>
+                                        <div th:if="${comMessage}" class="alert alert-success">
+                                            <span th:text="${comMessage}"></span>
                                         </div>
                                         <form class="form form-vertical" th:action="@{/company_profile_create}" method="post">
                                             <div class="form-body">
@@ -158,11 +158,12 @@
                                                                    placeholder="Company Email">
                                                         </div>
                                                     </div>
+
                                                     <div class="col-12">
                                                         <div class="form-group">
-                                                            <label for="company_mobile">Company Mobile</label>
-                                                            <input type="number" id="company_mobile" class="form-control" name="company_mobile"
-                                                                   placeholder="Company Mobile">
+                                                            <label for="company_phone">Company Phone</label>
+                                                            <input type="number" id="company_phone" class="form-control" name="company_phone"
+                                                                   placeholder="Company Phone">
                                                         </div>
                                                     </div>
                                                     <div class="col-12">

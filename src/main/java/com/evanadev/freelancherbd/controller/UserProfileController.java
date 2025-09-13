@@ -22,17 +22,18 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Optional;
 
-@RestController
+@Controller
 public class UserProfileController {
 
-    private UserProfileService userProfileService;
+    @Autowired
+    private final UserProfileService userProfileService;
     private final UserRepository userRepository;
     private final UserProfileRepository userProfileRepository;
     private final FileStorageService fileStorageService;
 
-    @Autowired
-    public UserProfileController(UserRepository userRepository,
+    public UserProfileController(UserProfileService userProfileService, UserRepository userRepository,
                                  UserProfileRepository userProfileRepository, FileStorageService fileStorageService) {
+        this.userProfileService = userProfileService;
         this.userRepository = userRepository;
         this.userProfileRepository = userProfileRepository;
         this.fileStorageService = fileStorageService;
@@ -115,7 +116,7 @@ public class UserProfileController {
             userProfileService.CreateCompanyProfile(company_name, company_email, company_address, company_phone, company_business, company_url);
             message = "Company Profile Created Successfully";
         }
-        model.addAttribute("successMessage", message);
+        model.addAttribute("comMessage", message);
         return "user_profile";
     }
 }

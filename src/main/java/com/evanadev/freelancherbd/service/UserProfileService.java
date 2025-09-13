@@ -25,8 +25,7 @@ public class UserProfileService {
       this.userRepository = userRepository;
     }
 
-    public UserProfile CreateUserProfile(String city, String country, String gender, String skill, String cv, String
-                                  github, String linkedin, String profile_picture) {
+    public UserProfile CreateUserProfile(String city, String country, String gender, String skill, String cv, String github, String linkedin, String profile_picture) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long userId = ((CustomUserDetail) authentication.getPrincipal()).getId();
@@ -66,8 +65,7 @@ public class UserProfileService {
         return savedProfile;
     }
 
-    public UserProfile CreateCompanyProfile(String company_name, String company_email, String company_phone,
-                                         String company_address, String company_business, String company_url){
+    public UserProfile CreateCompanyProfile(String company_name, String company_email, String company_address, String company_phone, String company_business, String company_url){
 
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
