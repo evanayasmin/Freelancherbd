@@ -58,15 +58,15 @@
                                                     <div class="col-12">
                                                         <div class="form-group">
                                                             <label for="country">Country</label>
-                                                            <select class="form-control" name="country" id="country">
-                                                                <option value="Bangladesh">Bangladesh</option>
+                                                            <select class="form-control" name="country" id="country" th:field="*{profile.country}">
+                                                                <option th:value="Bangladesh">Bangladesh</option>
                                                             </select>
                                                         </div>
                                                     </div>
                                                     <div class="col-12">
                                                         <div class="form-group">
                                                             <label for="city">City</label>
-                                                            <select class="form-control" id="city" name="city">
+                                                            <select class="form-control" id="city" name="city" th:field="*{profile.city}">
                                                                 <option value="Dhaka" selected>Dhaka</option>
                                                                 <option value="Khulna">Khulna</option>
                                                                 <option value="Chittagong">Chittagong</option>
@@ -80,7 +80,7 @@
                                                     <div class="col-12">
                                                         <div class="form-group">
                                                             <label for="gender">Gender</label>
-                                                            <select class="form-control" id="gender" th:name="gender">
+                                                            <select class="form-control" id="gender" th:name="gender" th:field="*{profile.gender}">
                                                                 <option value="Male">Male</option>
                                                                 <option value="Female">Female</option>
                                                             </select>
@@ -90,31 +90,38 @@
                                                         <div class="form-group">
                                                             <label for="skills">Skills</label>
                                                             <textarea id="skills" rows="10" cols="10" class="form-control" name="skills"
-                                                             placeholder="Skills"></textarea>
+                                                             placeholder="Skills" th:text="${profile.skills}"></textarea>
                                                         </div>
                                                     </div>
                                                     <div class="col-12">
                                                         <div class="form-group">
                                                             <label for="cv">Upload Your CV</label>
+                                                            <div th:if="${profile.cv != null}">
+                                                                <a th:href="@{${profile.cv}}" target="_blank">Download Current CV</a>
+                                                            </div>
                                                             <input th:type="file" id="cv" class="form-control" name="cv" required>
                                                         </div>
                                                     </div>
                                                     <div class="col-12">
                                                         <div class="form-group">
                                                             <label for="profile_picture">Upload Profile Picture</label>
+                                                            <div th:if="${profile.profilePicture != null}">
+                                                                <img th:src="${profile.profilePicture}" alt="Profile Picture"
+                                                                     style="width:150px; height:100px; margin-bottom:10px; border-radius:8px;">
+                                                            </div>
                                                             <input th:type="file" id="profile_picture" class="form-control" name="profile_picture" required>
                                                         </div>
                                                     </div>
                                                     <div class="col-12">
                                                         <div class="form-group">
                                                             <label for="github">Github URL</label>
-                                                            <input type="text" id="github" class="form-control" name="github" placeholder="Github URL">
+                                                            <input type="text" th:text="@{profile.github_url}" id="github" class="form-control" name="github" placeholder="Github URL">
                                                         </div>
                                                     </div>
                                                     <div class="col-12">
                                                         <div class="form-group">
                                                             <label for="linkedin">LinkedIn URL</label>
-                                                            <input type="text" id="linkedin" class="form-control" name="linkedin" placeholder="LinkedIn Profile">
+                                                            <input type="text" id="linkedin" th:text="@{profile.linkedin_url}" class="form-control" name="linkedin" placeholder="LinkedIn Profile">
                                                         </div>
                                                     </div>
                                                      </div>
@@ -125,7 +132,6 @@
                                                                 class="btn btn-light-secondary me-1 mb-1">Reset</button>
                                                     </div>
                                                 </div>
-
                                         </form>
                                     </div>
                                 </div>
@@ -148,14 +154,14 @@
                                                         <div class="form-group">
                                                             <label for="company_name">Company Name</label>
                                                             <input type="text" id="company_name" class="form-control" name="company_name"
-                                                             placeholder="Company Name">
+                                                             placeholder="Company Name" th:text="${profile.companyName}">
                                                         </div>
                                                     </div>
                                                     <div class="col-12">
                                                         <div class="form-group">
                                                             <label for="company_email">Company Email</label>
                                                             <input type="email" id="company_email" class="form-control" name="company_email"
-                                                                   placeholder="Company Email">
+                                                                   placeholder="Company Email" th:text="${profile.companyEmail}">
                                                         </div>
                                                     </div>
 
@@ -163,27 +169,27 @@
                                                         <div class="form-group">
                                                             <label for="company_phone">Company Phone</label>
                                                             <input type="number" id="company_phone" class="form-control" name="company_phone"
-                                                                   placeholder="Company Phone">
+                                                                   placeholder="Company Phone" th:text="${profile.companyPhone}">
                                                         </div>
                                                     </div>
                                                     <div class="col-12">
                                                         <div class="form-group">
                                                             <label for="company_url">Company URL</label>
                                                             <input type="text" id="company_url" class="form-control" name="company_url"
-                                                                   placeholder="Company URL">
+                                                                   placeholder="Company URL" th:text="${profile.companyUrl}">
                                                         </div>
                                                     </div>
                                                     <div class="col-12">
                                                         <div class="form-group">
                                                             <label for="company_address">Company Address</label>
-                                                           <input name="company_address" id="company_address" type="text" class="form-control" placeholder="Company Address">
+                                                           <input name="company_address" id="company_address" type="text" th:text="${profile.companyAddress}" class="form-control" placeholder="Company Address">
                                                         </div>
                                                     </div>
 
                                                     <div class="col-12">
                                                         <div class="form-group">
                                                             <label for="company_business">Company Business</label>
-                                                            <textarea class="form-control" name="company_business" id="company_business" rows="3" cols="10" placeholder="Company Business"></textarea>
+                                                            <textarea class="form-control" th:field="*{profile.companyAddress}" name="company_business" id="company_business" rows="3" cols="10" placeholder="Company Business"></textarea>
                                                         </div>
                                                     </div>
                                                     <div class="col-12 d-flex justify-content-end">

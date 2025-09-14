@@ -33,7 +33,8 @@ public class FileStorageService {
 
             // save file
             Files.write(filePath, file.getBytes());
-            return filePath.toString(); // return full path
+            return "/" + UPLOAD_DIR + "/" + subDir + "/" + fileName;
+            //return filePath.toString(); // return full path
         } catch (IOException e) {
             throw new RuntimeException("File upload failed: " + file.getOriginalFilename(), e);
         }

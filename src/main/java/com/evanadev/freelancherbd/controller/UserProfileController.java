@@ -40,9 +40,18 @@ public class UserProfileController {
     }
 
     @GetMapping("/user_profile")
-    public ModelAndView userProfile() {
+    public String userProfile(Model model, Authentication authentication) {
 
-        return new ModelAndView("user_profile");
+        CustomUserDetail userDetails = (CustomUserDetail) authentication.getPrincipal();
+        Long userId = userDetails.getId();
+        Optional<UserProfile> profile = userProfileRepository.findByUserId(userId);
+
+        if(profile.isPresent()){
+            model.addAttribute("profile", profile.get());
+        }else{
+            model.addAttribute("profile", null);
+        }
+        return "user_profile";
     }
 
     @PostMapping(value = "/user_profile_submit", consumes = {"multipart/form-data"})
