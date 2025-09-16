@@ -84,6 +84,7 @@ public class UserProfileService {
             userProfile.setCompanyAddress(company_address);
             userProfile.setCompanyBusiness(company_business);
             userProfile.setCompanyPhone(company_phone);
+            userProfile.setCompanyUrl(company_url);
             savedProfile = userProfileRepository.save(userProfile);
         }else {
             UserProfile userProfile = new UserProfile();

@@ -107,7 +107,7 @@
                                                             <label for="profile_picture">Upload Profile Picture</label>
                                                             <div th:if="${profile.profilePicture != null}">
                                                                 <img th:src="${profile.profilePicture}" alt="Profile Picture"
-                                                                     style="width:150px; height:100px; margin-bottom:10px; border-radius:8px;">
+                                                                style="width:150px; height:140px; margin-bottom:10px; border-radius:8px;">
                                                             </div>
                                                             <input th:type="file" id="profile_picture" class="form-control" name="profile_picture" required>
                                                         </div>
@@ -115,13 +115,13 @@
                                                     <div class="col-12">
                                                         <div class="form-group">
                                                             <label for="github">Github URL</label>
-                                                            <input type="text" th:text="@{profile.github_url}" id="github" class="form-control" name="github" placeholder="Github URL">
+                                                            <input type="text" th:value="${profile.githubUrl}" id="github" class="form-control" name="github">
                                                         </div>
                                                     </div>
                                                     <div class="col-12">
                                                         <div class="form-group">
                                                             <label for="linkedin">LinkedIn URL</label>
-                                                            <input type="text" id="linkedin" th:text="@{profile.linkedin_url}" class="form-control" name="linkedin" placeholder="LinkedIn Profile">
+                                                            <input type="text" id="linkedin" th:value="${profile.linkedinUrl}" class="form-control" name="linkedin">
                                                         </div>
                                                     </div>
                                                      </div>
@@ -189,7 +189,7 @@
                                                     <div class="col-12">
                                                         <div class="form-group">
                                                             <label for="company_business">Company Business</label>
-                                                            <textarea class="form-control" th:field="*{profile.companyAddress}" name="company_business" id="company_business" rows="3" cols="10" placeholder="Company Business"></textarea>
+                                                            <textarea class="form-control" th:field="*{profile.companyBusiness}" id="company_business" rows="3" cols="10" placeholder="Company Business"></textarea>
                                                         </div>
                                                     </div>
                                                     <div class="col-12 d-flex justify-content-end">

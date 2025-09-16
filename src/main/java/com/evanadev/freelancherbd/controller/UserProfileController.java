@@ -1,24 +1,19 @@
 package com.evanadev.freelancherbd.controller;
 
 import com.evanadev.freelancherbd.model.CustomUserDetail;
+import com.evanadev.freelancherbd.model.User;
 import com.evanadev.freelancherbd.model.UserProfile;
 import com.evanadev.freelancherbd.repository.UserProfileRepository;
 import com.evanadev.freelancherbd.repository.UserRepository;
 import com.evanadev.freelancherbd.service.FileStorageService;
 import com.evanadev.freelancherbd.service.UserProfileService;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Optional;
 
@@ -98,33 +93,39 @@ public class UserProfileController {
         return "user_profile";
     }
     @PostMapping(value = "/company_profile_create")
-    public String createCompanyProfile(@RequestParam String company_name,
-                                                @RequestParam String company_address,
-                                                @RequestParam String company_email,
-                                                @RequestParam String company_url,
-                                                @RequestParam String company_business,
-                                                @RequestParam String company_phone, Model model) {
+    public String createCompanyProfile(@ModelAttribute UserProfile profile, Model model) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetail userDetails = (CustomUserDetail) authentication.getPrincipal();
         Long userId = userDetails.getId();
 
+        //profile.(userId); // Always ensure user ID is set
+
+        User user = userRepository.findById(userId).orElse(null);
+
+        // Check if profile already exists for this user
         Optional<UserProfile> existingProfile = userProfileRepository.findByUserId(userId);
-        String message = "";
-        UserProfile profile;
-        if (existingProfile.isPresent()) { // Update existing record
-            profile = existingProfile.get();
-            profile.setCompanyName(company_name);
-            profile.setCompanyEmail(company_email);
-            profile.setCompanyAddress(company_address);
-            profile.setCompanyPhone(company_phone);
-            profile.setCompanyBusiness(company_business);
-            userProfileRepository.save(profile);
+
+        String message;
+        if (existingProfile.isPresent()) {
+            UserProfile dbProfile = existingProfile.get();
+
+            // copy submitted values into existing entity
+            dbProfile.setCompanyName(profile.getCompanyName());
+            dbProfile.setCompanyAddress(profile.getCompanyAddress());
+            dbProfile.setCompanyEmail(profile.getCompanyEmail());
+            dbProfile.setCompanyUrl(profile.getCompanyUrl());
+            dbProfile.setCompanyPhone(profile.getCompanyPhone());
+            dbProfile.setCompanyBusiness(profile.getCompanyBusiness());
+
+            userProfileRepository.save(dbProfile);
             message = "Company Profile Updated Successfully";
-        } else { // Create new record
-            userProfileService.CreateCompanyProfile(company_name, company_email, company_address, company_phone, company_business, company_url);
+        }else{
+            profile.setUser(user);
+            userProfileRepository.save(profile);
             message = "Company Profile Created Successfully";
         }
+
         model.addAttribute("comMessage", message);
         return "user_profile";
     }
