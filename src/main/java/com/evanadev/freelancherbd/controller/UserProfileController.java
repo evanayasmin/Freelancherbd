@@ -44,7 +44,7 @@ public class UserProfileController {
         if(profile.isPresent()){
             model.addAttribute("profile", profile.get());
         }else{
-            model.addAttribute("profile", null);
+            model.addAttribute("profile", new UserProfile());
         }
         return "user_profile";
     }
@@ -82,13 +82,14 @@ public class UserProfileController {
             profile.setGithubUrl(github);
             profile.setLinkedinUrl(linkedin);
             profile.setProfilePicture(profilePicturePath);
-            userProfileRepository.save(profile);
+            profile = userProfileRepository.save(profile);
             message = "User Profile Updated Successfully";
         } else { // Create new record
             userProfileService.CreateUserProfile(city, country, gender, skills, cvFilePath, github, linkedin, profilePicturePath);
             message = "User Profile Created Successfully";
         }
         model.addAttribute("successMessage", message);
+        //model.addAttribute("profile", profile);
         // Render the template (e.g., profile.html)
         return "user_profile";
     }
@@ -118,7 +119,7 @@ public class UserProfileController {
             dbProfile.setCompanyPhone(profile.getCompanyPhone());
             dbProfile.setCompanyBusiness(profile.getCompanyBusiness());
 
-            userProfileRepository.save(dbProfile);
+            profile = userProfileRepository.save(dbProfile);
             message = "Company Profile Updated Successfully";
         }else{
             profile.setUser(user);
@@ -127,6 +128,7 @@ public class UserProfileController {
         }
 
         model.addAttribute("comMessage", message);
+        model.addAttribute("profile", profile);
         return "user_profile";
     }
 }
