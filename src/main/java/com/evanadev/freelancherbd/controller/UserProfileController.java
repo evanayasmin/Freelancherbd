@@ -15,7 +15,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
+import java.util.UUID;
 
 @Controller
 public class UserProfileController {
@@ -50,45 +55,61 @@ public class UserProfileController {
     }
 
     @PostMapping(value = "/user_profile_submit", consumes = {"multipart/form-data"})
-    public String createProfile(@RequestParam String country,
-                                                     @RequestParam String city,
-                                                     @RequestParam String gender,
-                                                     @RequestParam String skills,
-                                                     @RequestParam MultipartFile cv,
-                                                     @RequestParam String github,
-                                                     @RequestParam String linkedin,
-                                                     @RequestParam MultipartFile profile_picture, Model model) {
+    public String createProfile(@ModelAttribute UserProfile userProfile, Model model)  throws IOException {
 
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetail userDetails = (CustomUserDetail) authentication.getPrincipal();
         Long userId = userDetails.getId();
 
-        // Save files using service
-        String cvFilePath = fileStorageService.saveFile(cv, "cv");
-        String profilePicturePath = fileStorageService.saveFile(profile_picture, "profile");
-
         // Check if user profile exists
         Optional<UserProfile> existingProfile = userProfileRepository.findByUserId(userId);
+
+        // Save files using service
+        String cvFilePath = null;
+        String profilePicturePath = null;
+
+        MultipartFile cvFile = userProfile.getCvFile();
+        MultipartFile profilePicture = userProfile.getPictureFile();
+
+        if (cvFile != null && !cvFile.isEmpty()) {
+            if (existingProfile.get().getCv() != null) {
+                Path oldPath = Paths.get("uploads/profile/", existingProfile.get().getCv());
+                Files.deleteIfExists(oldPath);
+            }
+            cvFilePath = fileStorageService.saveFile(cvFile, "cv");
+        }
+
+        if (profilePicture != null && !profilePicture.isEmpty()) {
+
+            if (existingProfile.get().getProfilePicture() != null) {
+                Path oldPath = Paths.get("uploads/profile/", existingProfile.get().getProfilePicture());
+                Files.deleteIfExists(oldPath);
+            }
+            profilePicturePath = fileStorageService.saveFile(profilePicture, "profile");
+        }
+
         String message = "";
         UserProfile profile;
         if (existingProfile.isPresent()) {  // Update existing record
             profile = existingProfile.get();
-            profile.setCity(city);
-            profile.setCountry(country);
-            profile.setGender(gender);
-            profile.setSkills(skills);
+            profile.setCity(userProfile.getCity());
+            profile.setCountry(userProfile.getCountry());
+            profile.setGender(userProfile.getGender());
+            profile.setSkills(userProfile.getSkills());
             profile.setCv(cvFilePath);
-            profile.setGithubUrl(github);
-            profile.setLinkedinUrl(linkedin);
+            profile.setGithubUrl(userProfile.getGithubUrl());
+            profile.setLinkedinUrl(userProfile.getLinkedinUrl());
             profile.setProfilePicture(profilePicturePath);
             profile = userProfileRepository.save(profile);
             message = "User Profile Updated Successfully";
         } else { // Create new record
-            userProfileService.CreateUserProfile(city, country, gender, skills, cvFilePath, github, linkedin, profilePicturePath);
+            //userProfileService.CreateUserProfile(city, country, gender, skills, cvFilePath, githubUrl, linkedinUrl, profilePicturePath);
+            profile = userProfileRepository.save(userProfile);
             message = "User Profile Created Successfully";
         }
         model.addAttribute("successMessage", message);
+        model.addAttribute("profile", profile);
         //model.addAttribute("profile", profile);
         // Render the template (e.g., profile.html)
         return "user_profile";
@@ -110,7 +131,6 @@ public class UserProfileController {
         String message;
         if (existingProfile.isPresent()) {
             UserProfile dbProfile = existingProfile.get();
-
             // copy submitted values into existing entity
             dbProfile.setCompanyName(profile.getCompanyName());
             dbProfile.setCompanyAddress(profile.getCompanyAddress());

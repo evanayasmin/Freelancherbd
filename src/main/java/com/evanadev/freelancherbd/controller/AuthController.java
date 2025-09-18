@@ -56,7 +56,7 @@ public class AuthController {
         String profilePicture = null;
         if(existingProfile.isPresent()) {
              profile = existingProfile.get();
-             profilePicture = profile.getProfilePicture();
+             profilePicture = String.valueOf(profile.getProfilePicture());
         }
         String fullName = userDetails.getFullname();
         String username = userDetails.getUsername();

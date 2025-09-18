@@ -67,7 +67,7 @@
                                                         <div class="form-group">
                                                             <label for="city">City</label>
                                                             <select class="form-control" id="city" name="city" th:field="*{city}">
-                                                                <option value="Dhaka" selected>Dhaka</option>
+                                                                <option value="Dhaka">Dhaka</option>
                                                                 <option value="Khulna">Khulna</option>
                                                                 <option value="Chittagong">Chittagong</option>
                                                                 <option value="Sylhet">Sylhet</option>
@@ -95,34 +95,33 @@
                                                     </div>
                                                     <div class="col-12">
                                                         <div class="form-group">
-                                                            <label for="cv">Upload Your CV</label>
-                                                            <div th:if="${profile.cv != null}">
-                                                                <a th:href="@{${profile.cv}}" target="_blank">Download Current CV</a>
-                                                            </div>
-                                                            <input th:type="file" id="cv" class="form-control" name="cv" required>
+                                                        <label for="cv">Upload Your CV</label>
+                                                           <div th:if="${profile.cv != null}">
+                                                             <a th:href="@{${profile.cv}}" target="_blank">Download Current CV</a>
+                                                          </div>
+                                                            <input th:type="file" id="cv" th:field="*{cvFile}"  class="form-control" name="profile_picture" accept=".pdf,.doc,.docx" required>
                                                         </div>
-
                                                     </div>
                                                     <div class="col-12">
                                                         <div class="form-group">
-                                                            <label for="profile_picture">Upload Profile Picture</label>
-                                                            <div th:if="${profile.profilePicture != null}">
-                                                                <img th:src="${profile.profilePicture}" alt="Profile Picture"
-                                                                style="width:150px; height:140px; margin-bottom:10px; border-radius:8px;">
-                                                            </div>
-                                                            <input th:type="file" id="profile_picture" class="form-control" name="profile_picture" required>
+                                                            <label for="profile_picture">Profile Picture</label>
+                                                       <div th:if="${profile.profilePicture != null}">
+                                                             <img th:src="${profile.profilePicture}" alt="Profile Picture"
+                                                         style="width:150px; height:140px; margin-bottom:10px; border-radius:8px;">
+                                                         </div>
+                                                            <input th:type="file" id="profile_picture" th:field="*{profilePicture}"  class="form-control" name="profile_picture" accept="image/*" required>
                                                         </div>
                                                     </div>
                                                     <div class="col-12">
                                                         <div class="form-group">
                                                             <label for="github">Github URL</label>
-                                                            <input type="text" th:field="*{githubUrl}" id="github" class="form-control" name="github">
+                                                            <input type="text" th:field="*{githubUrl}" id="github" class="form-control" name="githubUrl">
                                                         </div>
                                                     </div>
                                                     <div class="col-12">
                                                         <div class="form-group">
                                                             <label for="linkedin">LinkedIn URL</label>
-                                                            <input type="text" id="linkedin" th:field="*{linkedinUrl}" class="form-control" name="linkedin">
+                                                            <input type="text" id="linkedin" th:field="*{linkedinUrl}" class="form-control" name="linkedinUrl">
                                                         </div>
                                                     </div>
                                                      </div>

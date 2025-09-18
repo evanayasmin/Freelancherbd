@@ -42,11 +42,11 @@ public class UserProfileService {
             userProfile.setCity(city);
             userProfile.setCountry(country);
             userProfile.setGender(gender);
-            userProfile.setCv(cv);
+            //userProfile.setCv(cv);
             userProfile.setSkills(skill);
             userProfile.setGithubUrl(github);
             userProfile.setLinkedinUrl(linkedin);
-            userProfile.setProfilePicture(profile_picture);
+            //userProfile.setProfilePicture(profile_picture);
             savedProfile = userProfileRepository.save(userProfile);
         }
         else{

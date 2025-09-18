@@ -1,6 +1,7 @@
 package com.evanadev.freelancherbd.model;
 
 import jakarta.persistence.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Entity
 public class UserProfile {
@@ -21,8 +22,13 @@ public class UserProfile {
     @Column(length = 500)
     private String skills; // Comma-separated or JSON
 
-    private String cv; // file path or cloud URL
-    private String profilePicture; // image path or cloud URL
+    private String cv;
+    private String ProfilePicture;
+
+    @Transient
+    private MultipartFile cvFile; // file path or cloud URL
+    @Transient
+    private MultipartFile PictureFile; // image path or cloud URL
 
     private String linkedinUrl;
     private String githubUrl;
@@ -92,11 +98,27 @@ public class UserProfile {
     }
 
     public String getProfilePicture() {
-        return profilePicture;
+        return ProfilePicture;
     }
 
     public void setProfilePicture(String profilePicture) {
-        this.profilePicture = profilePicture;
+        ProfilePicture = profilePicture;
+    }
+
+    public MultipartFile getCvFile() {
+        return cvFile;
+    }
+
+    public void setCvFile(MultipartFile cvFile) {
+        this.cvFile = cvFile;
+    }
+
+    public MultipartFile getPictureFile() {
+        return PictureFile;
+    }
+
+    public void setPictureFile(MultipartFile pictureFile) {
+        PictureFile = pictureFile;
     }
 
     public String getLinkedinUrl() {
