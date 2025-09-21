@@ -99,7 +99,16 @@
                                                            <div th:if="${profile.cv != null}">
                                                              <a th:href="@{${profile.cv}}" target="_blank">Download Current CV</a>
                                                           </div>
-                                                            <input th:type="file" id="cv" th:field="*{cvFile}"  class="form-control" name="profile_picture" accept=".pdf,.doc,.docx" required>
+
+                                                            <!-- File input for Create (required) -->
+                                                            <input th:if="${profile.id == null}"
+                                                                   type="file" id="cv" th:field="*{cvFile}" class="form-control"
+                                                                   name="cv" accept=".pdf,.doc,.docx" required>
+
+                                                            <!-- File input for Update (optional) -->
+                                                            <input th:if="${profile.id != null}"
+                                                                   type="file" id="cv" th:field="*{cvFile}" class="form-control"
+                                                                   name="cv" accept=".pdf,.doc,.docx">
                                                         </div>
                                                     </div>
                                                     <div class="col-12">
@@ -109,7 +118,16 @@
                                                              <img th:src="${profile.profilePicture}" alt="Profile Picture"
                                                          style="width:150px; height:140px; margin-bottom:10px; border-radius:8px;">
                                                          </div>
-                                                            <input th:type="file" id="profile_picture" th:field="*{profilePicture}"  class="form-control" name="profile_picture" accept="image/*" required>
+
+                                                            <!-- Create (new record, required) -->
+                                                            <input th:if="${profile.id == null}"
+                                                                   type="file" id="profile_picture" th:field="*{profilePictureFile}"
+                                                                   class="form-control" name="profile_picture" accept="image/*" required>
+
+                                                            <!-- Update (existing record, optional) -->
+                                                            <input th:if="${profile.id != null}"
+                                                                   type="file" id="profile_picture" th:field="*{profilePictureFile}"
+                                                                   class="form-control" name="profile_picture" accept="image/*">
                                                         </div>
                                                     </div>
                                                     <div class="col-12">

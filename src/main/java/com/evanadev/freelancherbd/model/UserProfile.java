@@ -28,7 +28,7 @@ public class UserProfile {
     @Transient
     private MultipartFile cvFile; // file path or cloud URL
     @Transient
-    private MultipartFile PictureFile; // image path or cloud URL
+    private MultipartFile profilePictureFile; // image path or cloud URL
 
     private String linkedinUrl;
     private String githubUrl;
@@ -113,12 +113,12 @@ public class UserProfile {
         this.cvFile = cvFile;
     }
 
-    public MultipartFile getPictureFile() {
-        return PictureFile;
+    public MultipartFile getProfilePictureFile() {
+        return profilePictureFile;
     }
 
-    public void setPictureFile(MultipartFile pictureFile) {
-        PictureFile = pictureFile;
+    public void setProfilePictureFile(MultipartFile profilePictureFile) {
+        this.profilePictureFile = profilePictureFile;
     }
 
     public String getLinkedinUrl() {

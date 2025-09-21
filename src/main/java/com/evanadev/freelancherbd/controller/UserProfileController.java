@@ -68,9 +68,15 @@ public class UserProfileController {
         // Save files using service
         String cvFilePath = null;
         String profilePicturePath = null;
+        MultipartFile cvFile = null;
+        MultipartFile profilePicture = null;
 
-        MultipartFile cvFile = userProfile.getCvFile();
-        MultipartFile profilePicture = userProfile.getPictureFile();
+        if(userProfile.getCvFile() !=null && !userProfile.getCvFile().isEmpty()){
+             cvFile = userProfile.getCvFile();
+        }
+        if(userProfile.getProfilePictureFile() !=null && !userProfile.getProfilePictureFile().isEmpty()){
+             profilePicture = userProfile.getProfilePictureFile();
+        }
 
         if (cvFile != null && !cvFile.isEmpty()) {
             if (existingProfile.get().getCv() != null) {
@@ -81,7 +87,6 @@ public class UserProfileController {
         }
 
         if (profilePicture != null && !profilePicture.isEmpty()) {
-
             if (existingProfile.get().getProfilePicture() != null) {
                 Path oldPath = Paths.get("uploads/profile/", existingProfile.get().getProfilePicture());
                 Files.deleteIfExists(oldPath);
@@ -97,10 +102,14 @@ public class UserProfileController {
             profile.setCountry(userProfile.getCountry());
             profile.setGender(userProfile.getGender());
             profile.setSkills(userProfile.getSkills());
-            profile.setCv(cvFilePath);
+            if(cvFile !=null){
+                profile.setCv(cvFilePath);
+            }
             profile.setGithubUrl(userProfile.getGithubUrl());
             profile.setLinkedinUrl(userProfile.getLinkedinUrl());
-            profile.setProfilePicture(profilePicturePath);
+            if(profilePicture !=null) {
+                profile.setProfilePicture(profilePicturePath);
+            }
             profile = userProfileRepository.save(profile);
             message = "User Profile Updated Successfully";
         } else { // Create new record
@@ -114,6 +123,7 @@ public class UserProfileController {
         // Render the template (e.g., profile.html)
         return "user_profile";
     }
+
     @PostMapping(value = "/company_profile_create")
     public String createCompanyProfile(@ModelAttribute UserProfile profile, Model model) {
 
@@ -129,7 +139,7 @@ public class UserProfileController {
         Optional<UserProfile> existingProfile = userProfileRepository.findByUserId(userId);
 
         String message;
-        if (existingProfile.isPresent()) {
+        if (existingProfile.isPresent()){
             UserProfile dbProfile = existingProfile.get();
             // copy submitted values into existing entity
             dbProfile.setCompanyName(profile.getCompanyName());
