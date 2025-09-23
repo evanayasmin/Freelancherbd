@@ -1,6 +1,6 @@
 <div class="sidebar-menu" th:fragment="navigation" xmlns:sec="http://www.w3.org/1999/xhtml">
     <ul class="menu">
-        <li class="sidebar-title">Menu</li>
+        <li class="sidebar-title">Quick Menu</li>
         <li class="sidebar-item active">
             <a href="/home" th:href="@{/home}" class='sidebar-link'><i class="bi bi-grid-fill"></i><span>Dashboard</span>
             </a>
@@ -12,6 +12,12 @@
                 <span>Job Category</span>
             </a>
             <ul class="submenu ">
+                <li class="submenu-item" sec:authorize="hasRole('ADMIN')">
+                    <a th:href="@{/admin/category/create}">Create Category</a>
+                </li>
+                <li class="submenu-item" sec:authorize="hasRole('ADMIN')">
+                    <a th:href="@{/admin/category/category_list}">Category List</a>
+                </li>
                 <li class="submenu-item">
                     <a href="component-alert.html">Software Development</a>
                 </li>
