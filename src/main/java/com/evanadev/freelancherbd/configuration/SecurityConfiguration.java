@@ -23,10 +23,20 @@ public SecurityFilterChain configure(HttpSecurity http) throws Exception {
     http.csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(request -> request.requestMatchers("/css/**", "/js/**", "/images/**", "/assets/**", "/webjars/**").permitAll()
             .requestMatchers("/register", "/login").permitAll()
+            .requestMatchers("/admin/category/**").hasRole("ADMIN") //Only admin can access
             .anyRequest().authenticated())
-            .formLogin(form -> form.loginPage("/login").loginProcessingUrl("/login").defaultSuccessUrl("/home", true).permitAll())
-            .logout(logout -> logout.logoutSuccessUrl("/login").permitAll()).userDetailsService(customUserDetails);
-    return http.build();
+            .formLogin(form -> form.
+                    loginPage("/login").
+                    loginProcessingUrl("/login").
+                    defaultSuccessUrl("/home", true)
+                    .permitAll()
+            )
+            .logout(logout -> logout
+                    .logoutSuccessUrl("/login")
+                    .permitAll()
+            )
+            .userDetailsService(customUserDetails);
+            return http.build();
 }
 
 

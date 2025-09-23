@@ -12,6 +12,12 @@
                 <span>Job Category</span>
             </a>
             <ul class="submenu ">
+                <li class="submenu-item" sec:authorize="hasRole('ADMIN')">
+                    <a th:href="@{/admin/category/create}">Create Category</a>
+                </li>
+                <li class="submenu-item" sec:authorize="hasRole('ADMIN')">
+                    <a th:href="@{/admin/category/category_list}">Category List</a>
+                </li>
                 <li class="submenu-item">
                     <a href="component-alert.html">Software Development</a>
                 </li>
