@@ -28,7 +28,7 @@
                 <div class="page-title">
                     <div class="row">
                         <div class="col-12 col-md-6 order-md-1 order-last">
-                            <!--                            <h3>Vertical Layout with Navbar</h3>-->
+                            <!--  <h3>Vertical Layout with Navbar</h3>-->
                         </div>
                         <div class="col-12 col-md-6 order-md-2 order-first">
                             <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
@@ -42,7 +42,7 @@
                 </div>
                 <section id="basic-vertical-layouts">
                     <div class="row match-height">
-                        <div class="col-md-6 col-12">
+                        <div class="col-md-5 col-12">
                             <div class="card">
                                 <div class="card-header"><h4 class="card-title">Category Create Form</h4></div>
                                 <div class="card-content">
@@ -57,23 +57,59 @@
                                                         <div class="form-group">
                                                             <label for="category_name">Category Name</label>
                                                             <input type="text" id="category_name" class="form-control" name="category_name"
-                                                                   placeholder="Category Name" th:field="*{categoryName}" required>
+                                                                   placeholder="Category Name" th:field="*{categoryName}" required />
                                                         </div>
                                                     </div>
                                                     <div class="col-12">
                                                         <div class="form-group">
-                                                            <label for="description">Company Email</label>
+                                                            <label for="description">Description</label>
                                                             <input type="text" id="description" class="form-control" name="description"
-                                                                   placeholder="Category Description" th:field="*{description}">
+                                                                   placeholder="Category Description" th:field="*{description}" />
                                                         </div>
                                                     </div>
                                                     <div class="col-12 d-flex justify-content-end">
-                                                        <button type="submit" class="btn btn-primary me-1 mb-1">Submit</button>
+                                                        <button th:if="${category.id == null}" type="submit" class="btn btn-primary me-1 mb-1">Submit</button>
+                                                        <button th:if="${category.id != null}" type="submit" class="btn btn-primary me-1 mb-1">Update</button>
                                                         <button type="reset" class="btn btn-light-secondary me-1 mb-1">Reset</button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-7 col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Recently Created Category</h4>
+                                </div>
+                                <div class="card-content">
+                                    <div class="card-body">
+                                        <div class="card-content">
+
+                                            <!-- table head dark -->
+                                            <div class="table-responsive">
+                                                <table class="table mb-0">
+                                                    <thead class="thead-dark">
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Description</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr th:each="cat : ${singleCategory}">
+                                                        <td th:text="${cat.categoryName}"></td>
+                                                        <td th:text="${cat.description}"></td>
+                                                        <td><a th:href="@{/admin/category/update_form(id=${cat.id})}"><div class="icon dripicons-pencil">Edit</div></a>&nbsp;
+                                                            <a th:href="@{/admin/category/delete/{id}(id=${cat.id})}"><div class="icon dripicons-trash">Delete</div></a></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>

@@ -2,8 +2,6 @@ package com.evanadev.freelancherbd.controller;
 
 import com.evanadev.freelancherbd.model.Category;
 import com.evanadev.freelancherbd.repository.CategoryRepository;
-import com.evanadev.freelancherbd.repository.UserProfileRepository;
-import com.evanadev.freelancherbd.repository.UserRepository;
 import com.evanadev.freelancherbd.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,6 +9,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 
 @Controller
@@ -31,18 +34,42 @@ public class CategoryController {
         return "category_form";
     }
 
+    @GetMapping("/admin/category/update_form")
+    public String categoryUpdate(@RequestParam(required = false) Long id, Model model) {
+        if (id != null) {
+            //Optional<Category> category = categoryRepository.findById(id); // existing category
+            Category category = categoryRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Category not found"));
+            model.addAttribute("category", category);
+        } else {
+            model.addAttribute("category", new Category()); // empty object for create
+        }
+        return "category_form";
+
+    }
+    //Save new Category
     @PostMapping("/admin/category/submit_category")
     public String category_submit(@ModelAttribute Category category, Model model){
 
         String message = "";
-        if(categoryRepository.existsCategoriesByCategoryName(category.getCategoryName())){
-            message = "Category Already Exists!";
-        }else{
-            message = "Category Created Successfully!";
-            category = categoryService.create_category(category);
-        }
+        List<Category> singlecategory = null;
+            if(category.getId() == null){
+                if(categoryRepository.existsCategoriesByCategoryName(category.getCategoryName())){
+                    message = "Category Already Exists!";
+                }else {
+                    category = categoryService.create_category(category);
+                    message = "Category Created Successfully!";
+                }
+            }else{
+              categoryService.update_category(category); // service will handle update if id exists
+              message = "Category Updated Successfully!";
+            }
+           singlecategory = Collections.singletonList(category);
+
         model.addAttribute("messsage", message);
-        model.addAttribute("category", category);
+        model.addAttribute("category", new Category());
+        model.addAttribute("singleCategory", singlecategory);
         return "category_form";
     }
+
 }
