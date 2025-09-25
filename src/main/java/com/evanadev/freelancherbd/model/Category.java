@@ -14,12 +14,17 @@ public class Category {
     @Column(unique = true, nullable = false)
     String categoryName;
     String description;
+
+    @Enumerated(EnumType.STRING) // store enum as string in DB (e.g., "ACTIVE", "INACTIVE")
+    private Status status = Status.ACTIVE;
+
     @Column(updatable = false) // once created, won’t change on update
     LocalDateTime creationDate;
 
     // Auto set before inserting
     @PrePersist
     protected void onCreate() {
+
         this.creationDate = LocalDateTime.now();
     }
 
@@ -45,6 +50,14 @@ public class Category {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     public LocalDateTime getCreationDate() {

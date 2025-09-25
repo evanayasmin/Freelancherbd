@@ -47,6 +47,7 @@ public class CategoryController {
         return "category_form";
 
     }
+
     //Save new Category
     @PostMapping("/admin/category/submit_category")
     public String category_submit(@ModelAttribute Category category, Model model){
@@ -70,6 +71,31 @@ public class CategoryController {
         model.addAttribute("category", new Category());
         model.addAttribute("singleCategory", singlecategory);
         return "category_form";
+    }
+
+    // category Deletion
+    @GetMapping("/admin/category/delete_category")
+    public String categoryDelete(@RequestParam(required = false) Long id, Model model) {
+        if (id != null) {
+            Category category = categoryRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Category not found"));
+            categoryRepository.deleteById(category.getId());
+           model.addAttribute("category", new Category());
+           model.addAttribute("messsage", "Category Deleted Successfully!");
+        }else {
+            model.addAttribute("category", new Category()); // empty object for create
+        }
+        return "category_form";
+    }
+
+    // Category Listing
+    @GetMapping("/admin/category/category_list")
+    public String categoryUpdate(Model model) {
+
+        List<Category> categories = categoryService.getAllCategories();
+        model.addAttribute("categories", categories);
+
+        return "category_list";
     }
 
 }

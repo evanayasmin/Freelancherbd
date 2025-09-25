@@ -102,14 +102,13 @@
                                                     <tr th:each="cat : ${singleCategory}">
                                                         <td th:text="${cat.categoryName}"></td>
                                                         <td th:text="${cat.description}"></td>
-                                                        <td><a th:href="@{/admin/category/update_form(id=${cat.id})}"><div class="icon dripicons-pencil">Edit</div></a>&nbsp;
-                                                            <a th:href="@{/admin/category/delete/{id}(id=${cat.id})}"><div class="icon dripicons-trash">Delete</div></a></td>
+                                                        <td><a th:href="@{/admin/category/update_form(id=${cat.id})}" title="Edit"><i class="bi bi-pencil"></i></a>&nbsp;
+                                                        <a th:href="@{/admin/category/delete_category(id=${cat.id})}" title="Delete"><i class="bi bi-trash text-danger"></i></a></td>
                                                     </tr>
                                                     </tbody>
                                                 </table>
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
