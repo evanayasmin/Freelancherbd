@@ -3,6 +3,7 @@ package com.evanadev.freelancherbd.controller;
 import com.evanadev.freelancherbd.model.Category;
 import com.evanadev.freelancherbd.repository.CategoryRepository;
 import com.evanadev.freelancherbd.service.CategoryService;
+import com.evanadev.freelancherbd.util.AESUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +23,7 @@ public class CategoryController {
     @Autowired
     private final CategoryService categoryService;
     private CategoryRepository categoryRepository;
+    @Autowired private AESUtil aesUtil;
 
     public CategoryController(CategoryService categoryService, CategoryRepository categoryRepository) {
         this.categoryService = categoryService;
@@ -35,10 +37,11 @@ public class CategoryController {
     }
 
     @GetMapping("/admin/category/update_form")
-    public String categoryUpdate(@RequestParam(required = false) Long id, Model model) {
-        if (id != null) {
-            //Optional<Category> category = categoryRepository.findById(id); // existing category
-            Category category = categoryRepository.findById(id)
+    public String categoryUpdate(@RequestParam("encId") String encId, Model model) {
+        System.out.println("category_id="+ encId);
+        if (encId != null) {
+            Long did = aesUtil.decryptId(encId);
+            Category category = categoryRepository.findById(did)
                     .orElseThrow(() -> new RuntimeException("Category not found"));
             model.addAttribute("category", category);
         } else {
@@ -70,13 +73,15 @@ public class CategoryController {
         model.addAttribute("messsage", message);
         model.addAttribute("category", new Category());
         model.addAttribute("singleCategory", singlecategory);
+        model.addAttribute("aesUtil", aesUtil);
         return "category_form";
     }
 
     // category Deletion
     @GetMapping("/admin/category/delete_category")
-    public String categoryDelete(@RequestParam(required = false) Long id, Model model) {
-        if (id != null) {
+    public String categoryDelete(@RequestParam("encId") String encId, Model model) {
+        if (encId != null) {
+            Long id = aesUtil.decryptId(encId);
             Category category = categoryRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("Category not found"));
             categoryRepository.deleteById(category.getId());

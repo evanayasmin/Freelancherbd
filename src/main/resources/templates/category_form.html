@@ -102,8 +102,10 @@
                                                     <tr th:each="cat : ${singleCategory}">
                                                         <td th:text="${cat.categoryName}"></td>
                                                         <td th:text="${cat.description}"></td>
-                                                        <td><a th:href="@{/admin/category/update_form(id=${cat.id})}" title="Edit"><i class="bi bi-pencil"></i></a>&nbsp;
-                                                        <a th:href="@{/admin/category/delete_category(id=${cat.id})}" title="Delete"><i class="bi bi-trash text-danger"></i></a></td>
+                                                        <td>
+                                                        <a th:href="@{/admin/category/update_form(encId=${@aesUtil.encryptId(cat.id)})}" title="Edit"><i class="bi bi-pencil"></i></a>&nbsp;
+                                                        <a th:href="@{/admin/category/delete_category(encId=${@aesUtil.encryptId(cat.id)})}" title="Delete"><i class="bi bi-trash text-danger"></i></a></td>
+
                                                     </tr>
                                                     </tbody>
                                                 </table>
