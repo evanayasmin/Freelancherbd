@@ -70,15 +70,36 @@
                                               class="badge bg-danger">Inactive</span>
 
                                     </td>
-                                    <td><a th:href="@{/admin/category/update_form(id=${cat.id})}" title="Edit"><i class="bi bi-pencil"></i></a>&nbsp;
-                                        <a th:href="@{/admin/category/delete_category(id=${cat.id})}" title="Delete"><i class="bi bi-trash text-danger"></i></a></td>
+                                    <td>
+                                        <button type="button"
+                                                class="btn btn-sm btn-outline-primary edit-btn"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#editModal"
+                                                th:data-url="@{/admin/category/update_category(encId=${@aesUtil.encryptId(cat.id)})}">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-outline-danger"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#deleteModal"
+                                                th:attr="data-url=@{/admin/category/delete_category(encId=${@aesUtil.encryptId(cat.id)})}">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
                                 </tr>
-
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </section>
+                <div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true" role="dialog"
+                     aria-labelledby="exampleModalCenterTitle">
+                    <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable"
+                         role="document">
+                        <div class="modal-content" id="editModalContent">
+
+
+                        </div>
+                    </div>
+                </div>
             </div>
             <footer>
                 <div class="footer clearfix mb-0 text-muted">
@@ -92,6 +113,8 @@
                 </div>
             </footer>
         </div>
+        <!-- Toast Container (GLOBAL) -->
+        <div id="toastContainer" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
     </div>
 </div>
 </body>
