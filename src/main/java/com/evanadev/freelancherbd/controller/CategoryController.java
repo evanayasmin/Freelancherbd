@@ -41,6 +41,8 @@ public class CategoryController {
             Category category = categoryRepository.findById(did)
                     .orElseThrow(() -> new RuntimeException("Category not found"));
             model.addAttribute("category", category);
+            List<Category> singlecategory = Collections.singletonList(category);
+            model.addAttribute("singleCategory", singlecategory);
         } else {
             model.addAttribute("category", new Category()); // empty object for create
         }

@@ -26,16 +26,12 @@ public class CategoryService {
 
     public void update_category(Category category) {
 
-        Optional<Category> existingCategory = categoryRepository.findById(category.getId());
-        if(existingCategory.isPresent()) {
-            category =  existingCategory.get();
-            category.setCategoryName(category.getCategoryName());
-            category.setDescription(category.getDescription());
-            category.setStatus(category.getStatus());
-            categoryRepository.save(category);
-        }
-        //Category savedCategory = categoryRepository.save(category);
-        return ;
+        Category existing = categoryRepository.findById(category.getId()).get();
+        existing.setCategoryName(category.getCategoryName());
+        existing.setDescription(category.getDescription());
+        existing.setStatus(category.getStatus());
+        categoryRepository.save(category);
+
     }
 
     public List<Category> getAllCategories() {
