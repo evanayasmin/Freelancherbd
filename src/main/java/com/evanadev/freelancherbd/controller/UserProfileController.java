@@ -57,7 +57,6 @@ public class UserProfileController {
     @PostMapping(value = "/user_profile_submit", consumes = {"multipart/form-data"})
     public String createProfile(@ModelAttribute UserProfile userProfile, Model model)  throws IOException {
 
-
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetail userDetails = (CustomUserDetail) authentication.getPrincipal();
         Long userId = userDetails.getId();
