@@ -6,6 +6,8 @@ import com.evanadev.freelancherbd.repository.CategoryRepository;
 import com.evanadev.freelancherbd.service.CategoryService;
 import com.evanadev.freelancherbd.util.AESUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -96,16 +98,16 @@ public class CategoryController {
     @ResponseBody
     public Map<String, String> category_update(@ModelAttribute Category category){
         Map<String, String> response = new HashMap<>();
+
         if(categoryRepository.existsCategoriesByCategoryName(category.getCategoryName())){
             response.put("status", "error");
             response.put("message", "Category Already Exists!");
-            }
+        }
         else{
             categoryService.update_category(category); // service will handle update if id exists
             response.put("status", "success");
             response.put("message", "Category Updated Successfully!");
         }
-
         return response;
     }
 
@@ -123,6 +125,25 @@ public class CategoryController {
             model.addAttribute("category", new Category()); // empty object for create
         }
         return "category_form";
+    }
+
+    // category Deletion
+    @GetMapping("/admin/category/delete_bycategory")
+    @ResponseBody
+    public ResponseEntity<String> categoryListDelete(@RequestParam("encId") String encId) {
+        if (encId != null) {
+            Long id = aesUtil.decryptId(encId);
+            Category category = categoryRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Category not found"));
+            if(category.getId() != null) {
+                categoryRepository.deleteById(id);
+                return ResponseEntity.ok("Category Deleted Successfully!");
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Category not found");
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid encId");
+        }
     }
 
     // Category Listing
