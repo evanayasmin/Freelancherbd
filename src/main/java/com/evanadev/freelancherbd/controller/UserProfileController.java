@@ -86,7 +86,7 @@ public class UserProfileController {
         }
 
         if (profilePicture != null && !profilePicture.isEmpty()) {
-            if (existingProfile.get().getProfilePicture() != null) {
+            if (existingProfile.get().getProfilePicture()!= null) {
                 Path oldPath = Paths.get("uploads/profile/", existingProfile.get().getProfilePicture());
                 Files.deleteIfExists(oldPath);
             }
@@ -140,7 +140,6 @@ public class UserProfileController {
         String message;
         if (existingProfile.isPresent()){
             UserProfile dbProfile = existingProfile.get();
-            // copy submitted values into existing entity
             dbProfile.setCompanyName(profile.getCompanyName());
             dbProfile.setCompanyAddress(profile.getCompanyAddress());
             dbProfile.setCompanyEmail(profile.getCompanyEmail());

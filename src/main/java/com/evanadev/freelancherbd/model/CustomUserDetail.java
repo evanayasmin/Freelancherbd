@@ -20,6 +20,14 @@ public class CustomUserDetail implements UserDetails {
     public String getEmail() { return user.getEmail(); }
     public Long getId() { return user.getId(); }
 
+    public String getProfilePicture() {
+        UserProfile profile = user.getUserProfile(); // get the associated profile
+        if (profile != null) {
+            return profile.getProfilePicture();
+        }
+        return null;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 

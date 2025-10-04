@@ -1,5 +1,6 @@
-    $(document).ready(function () {
-    $('#editModal').on('show.bs.modal', function (e) {
+$(document).ready(function() {
+
+     $('#editModal').on('show.bs.modal', function (e) {
         var button = $(e.relatedTarget);     // Button that triggered the modal
         var url = button.data('url');        // Extract url from data-url
 
@@ -11,6 +12,7 @@
             url: url,
             type: "GET",
             success: function (data) {
+
                 $('#editModalContent').html(data);
             },
             error: function () {
@@ -21,8 +23,8 @@
 });
 
 $(document).ready(function () {
-        // Handle form submit inside modal
-        $(document).on('submit', '#categoryUpdateForm', function (e) {
+    // Handle form submit inside modal
+    $(document).on('submit', '#categoryUpdateForm', function (e) {
             e.preventDefault();
             $.ajax({
                 url: $(this).attr('action'),
@@ -46,6 +48,31 @@ $(document).ready(function () {
             });
         });
 
+        // When a delete button is clicked, set the URL in the modal's confirm button
+        $('.deleteBtn').on('click', function () {
+            let url = $(this).data('url');
+            $('#confirmDeleteBtn').attr('href', url);
+        });
+
+        // When confirm delete button in modal is clicked
+        $('#confirmDeleteBtn').on('click', function (e) {
+            e.preventDefault();
+            let url = $(this).attr('href');
+            //alert(url);
+            $.ajax({
+                url: url,
+                type: "GET",
+                success: function (response) {
+                    $('#deleteModal').modal('hide');  // close modal
+                    showToast(response, "success");
+                    $('#table1').DataTable().ajax.reload(null, false); // refresh table
+                },
+                error: function () {
+                    alert("Error deleting category");
+                }
+            });
+        });
+
     // Toast function
     function showToast(message, type) {
         let bg = type === "success" ? "bg-success" : "bg-danger";
@@ -61,4 +88,5 @@ $(document).ready(function () {
         newToast.show();
     }
 });
+
 

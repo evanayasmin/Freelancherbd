@@ -29,6 +29,9 @@ private int status;
 private LocalDateTime createdAt;
 private LocalDateTime updatedAt;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private UserProfile userProfile;
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinTable(
             name = "user_roles",
@@ -123,5 +126,9 @@ private LocalDateTime updatedAt;
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public UserProfile getUserProfile() {
+        return userProfile;
     }
 }
