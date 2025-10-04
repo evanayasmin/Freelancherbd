@@ -98,8 +98,17 @@ public class CategoryController {
     @ResponseBody
     public Map<String, String> category_update(@ModelAttribute Category category){
         Map<String, String> response = new HashMap<>();
-
-        if(categoryRepository.existsCategoriesByCategoryName(category.getCategoryName())){
+        boolean duplicateExists;
+        if (category.getId() != null) {
+            // Updating existing category → exclude current ID
+            duplicateExists = categoryRepository.existsByCategoryNameAndIdNot(
+                    category.getCategoryName(), category.getId());
+        } else {
+            // Creating new category
+            duplicateExists = categoryRepository.existsCategoriesByCategoryName(
+                    category.getCategoryName());
+        }
+        if (duplicateExists) {
             response.put("status", "error");
             response.put("message", "Category Already Exists!");
         }

@@ -1,10 +1,68 @@
 <!-- fragments/category_update_form.html -->
 <div th:fragment="updateForm">
-    <div class="modal-header">
-        <h5 class="modal-title">Edit Category</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-    </div>
-    <div class="modal-body">
+    <!--Basic Modal -->
+<!--    <div class="modal fade text-left" id="editModal" tabindex="-1" role="dialog"-->
+<!--         aria-labelledby="myModalLabel1" aria-hidden="true">-->
+<!--        <div class="modal-dialog modal-dialog-scrollable" role="document">-->
+<!--            <div class="modal-content">-->
+<!--                <div class="modal-header">-->
+<!--                    <h5 class="modal-title" id="myModalLabel1">Basic Modal</h5>-->
+<!--                    <button type="button" class="close rounded-pill"-->
+<!--                            data-bs-dismiss="modal" aria-label="Close">-->
+<!--                        <i data-feather="x"></i>-->
+<!--                    </button>-->
+<!--                </div>-->
+<!--                <div class="modal-body">-->
+<!--                    <form id="categoryUpdateForm"  th:object="${category}" class="form form-vertical" th:action="@{/admin/category/update}" method="post">-->
+<!--                        <div class="form-body">-->
+<!--                            <input type="hidden" th:field="*{id}"/>-->
+<!--                            <div class="row">-->
+<!--                                <div class="col-12">-->
+<!--                                    <div class="form-group">-->
+<!--                                        <label for="category_name">Category Name</label>-->
+<!--                                        <input type="text" id="category_name" class="form-control" name="category_name"-->
+<!--                                               placeholder="Category Name" th:field="*{categoryName}" required />-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="col-12">-->
+<!--                                    <div class="form-group">-->
+<!--                                        <label for="description">Description</label>-->
+<!--                                        <input type="text" id="description" class="form-control" name="description"-->
+<!--                                               placeholder="Category Description" th:field="*{description}" />-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="col-12">-->
+<!--                                    <div class="form-group">-->
+<!--                                        <label class="form-label">Status</label>-->
+<!--                                        <select class="form-select" th:field="*{status}">-->
+<!--                                            <option th:each="st : ${statuses}"-->
+<!--                                                    th:value="${st}"-->
+<!--                                                    th:text="${st}"-->
+<!--                                                    th:selected="${st == category.status}">-->
+<!--                                            </option>-->
+<!--                                        </select>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="col-12 d-flex justify-content-end">-->
+<!--                                    <button type="submit" class="btn btn-primary me-1 mb-1">Update</button>-->
+<!--                                    <button type="reset" class="btn btn-light-secondary me-1 mb-1">Reset</button>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </form>-->
+<!--                </div>-->
+<!--                <div class="modal-footer">-->
+<!--                    <button type="button" class="btn" data-bs-dismiss="modal">-->
+<!--                        <i class="bx bx-x d-block d-sm-none"></i>-->
+<!--                        <span class="d-none d-sm-block">Close</span>-->
+<!--                    </button>-->
+
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+      <div class="modal-body">
          <form id="categoryUpdateForm" th:object="${category}" class="form form-vertical" th:action="@{/admin/category/update}" method="post">
             <div class="form-body">
                 <input type="hidden" th:field="*{id}"/>

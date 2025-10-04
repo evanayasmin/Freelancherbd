@@ -14,24 +14,10 @@
                 <li class="submenu-item" sec:authorize="hasRole('ADMIN')">
                     <a th:href="@{/admin/category/category_list}">Category List</a>
                 </li>
-                <li class="submenu-item">
-                    <a href="component-alert.html">Software Development</a>
+                <li th:each="cat : ${categories}" class="submenu-item">
+                    <a th:href="@{'/admin/category/' + ${cat.id}}" th:text="${cat.categoryName}"></a>
                 </li>
-                <li class="submenu-item">
-                    <a href="component-badge.html">Data Entry</a>
-                </li>
-                <li class="submenu-item ">
-                    <a href="component-breadcrumb.html">Project Management</a>
-                </li>
-                <li class="submenu-item ">
-                    <a href="component-button.html">Design and Creative</a>
-                </li>
-                <li class="submenu-item ">
-                    <a href="component-card.html">Marketing</a>
-                </li>
-                <li class="submenu-item ">
-                    <a href="component-card.html">Content Writing</a>
-                </li>
+
             </ul>
         </li>
 

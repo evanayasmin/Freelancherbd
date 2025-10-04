@@ -23,7 +23,7 @@ public class UserProfile {
     private String skills; // Comma-separated or JSON
 
     private String cv;
-    private String ProfilePicture;
+    private String profilePicture;
 
     @Transient
     private MultipartFile cvFile; // file path or cloud URL
@@ -81,6 +81,14 @@ public class UserProfile {
         this.gender = gender;
     }
 
+    public String getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
+    }
+
     public String getSkills() {
         return skills;
     }
@@ -95,14 +103,6 @@ public class UserProfile {
 
     public void setCv(String cv) {
         this.cv = cv;
-    }
-
-    public String getProfilePicture() {
-        return ProfilePicture;
-    }
-
-    public void setProfilePicture(String profilePicture) {
-        ProfilePicture = profilePicture;
     }
 
     public MultipartFile getCvFile() {
