@@ -43,7 +43,7 @@ private LocalDateTime updatedAt;
     public long getId() {
         return id;
     }
-
+                                        
     public Long getNid() {
         return nid;
     }

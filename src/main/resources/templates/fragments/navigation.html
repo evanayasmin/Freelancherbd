@@ -8,12 +8,7 @@
         <li class="sidebar-item has-sub">
             <a href="#" class='sidebar-link'><i class="bi bi-stack"></i><span>Job Category</span></a>
             <ul class="submenu ">
-                <li class="submenu-item" sec:authorize="hasRole('ADMIN')">
-                    <a th:href="@{/admin/category/create}">Create Category</a>
-                </li>
-                <li class="submenu-item" sec:authorize="hasRole('ADMIN')">
-                    <a th:href="@{/admin/category/category_list}">Category List</a>
-                </li>
+
                 <li th:each="cat : ${categories}" class="submenu-item">
                     <a th:href="@{'/admin/category/' + ${cat.id}}" th:text="${cat.categoryName}"></a>
                 </li>
@@ -225,13 +220,13 @@
             </a>
             <ul class="submenu active">
                 <li class="submenu-item">
-                    <a th:href="@{/freelancers}">Freelancers</a>
+                    <a th:href="@{/admin/users/freelancer_list}">Freelancers</a>
                 </li>
                 <li class="submenu-item">
-                    <a th:href="@{/clients}">Clients</a>
+                    <a th:href="@{/admin/users/client_list}">Clients</a>
                 </li>
                 <li class="submenu-item active">
-                    <a th:href="@{/role_manage}">Role Management</a>
+                    <a th:href="@{/admin/users/user_role}">Role Management</a>
                 </li>
             </ul>
         </li>
@@ -242,16 +237,16 @@
             </a>
             <ul class="submenu active">
                 <li class="submenu-item">
-                    <a th:href="@{/posted_jobs}">Posted Jobs</a>
+                    <a th:href="@{/admin/posted_jobs}">Posted Jobs</a>
                 </li>
                 <li class="submenu-item">
-                    <a th:href="@{/pending_approval_jobs}">Pending Approval Jobs</a>
+                    <a th:href="@{/admin/pending_approval_jobs}">Pending Approval Jobs</a>
                 </li>
                 <li class="submenu-item">
-                    <a th:href="@{/active_completed_jobs}">Active/Completed Jobs</a>
+                    <a th:href="@{/admin/active_completed_jobs}">Active/Completed Jobs</a>
                 </li>
                 <li class="submenu-item">
-                    <a th:href="@{/dispute_resolution}">Dispute Resolution</a>
+                    <a th:href="@{/admin/dispute_resolution}">Dispute Resolution</a>
                 </li>
             </ul>
         </li>
@@ -262,16 +257,16 @@
             </a>
             <ul class="submenu active">
                 <li class="submenu-item">
-                    <a th:href="@{/platform_earnings}">Platform Earnings</a>
+                    <a th:href="@{/admin/platform_earnings}">Platform Earnings</a>
                 </li>
                 <li class="submenu-item">
-                    <a th:href="@{/freelancer_withdrawals}">Freelancer withdrawals</a>
+                    <a th:href="@{/admin/freelancer_withdrawals}">Freelancer withdrawals</a>
                 </li>
                 <li class="submenu-item">
-                    <a th:href="@{/transacction_history}">Transaction History</a>
+                    <a th:href="@{/admin/transacction_history}">Transaction History</a>
                 </li>
                 <li class="submenu-item">
-                    <a th:href="@{/refund_request}">Refund Request</a>
+                    <a th:href="@{/admin/refund_request}">Refund Request</a>
                 </li>
             </ul>
         </li>
@@ -281,17 +276,18 @@
                 <span>Content Management</span>
             </a>
             <ul class="submenu active">
+                <li class="submenu-item" sec:authorize="hasRole('ADMIN')">
+                    <a th:href="@{/admin/category/create}">Create Category</a>
+                </li>
+                <li class="submenu-item" sec:authorize="hasRole('ADMIN')">
+                    <a th:href="@{/admin/category/category_list}">Category List</a>
+                </li>
+
                 <li class="submenu-item">
-                    <a th:href="@{/category_list}">Category List</a>
+                    <a th:href="@{/admin/transacction_history}">Transaction History</a>
                 </li>
                 <li class="submenu-item">
-                    <a th:href="@{/create_category}">New Category</a>
-                </li>
-                <li class="submenu-item">
-                    <a th:href="@{/transacction_history}">Transaction History</a>
-                </li>
-                <li class="submenu-item">
-                    <a th:href="@{/refund_request}">Refund Request</a>
+                    <a th:href="@{/admin/refund_request}">Refund Request</a>
                 </li>
             </ul>
         </li>
@@ -340,9 +336,5 @@
                 </li>
             </ul>
         </li>
-
-
-
-
     </ul>
 </div>
