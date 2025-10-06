@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 
 
@@ -41,6 +42,14 @@ public class UserService {
     user.setStatus(1);
     user.setNid(nid);
     userRepository.save(user);
+    }
+
+    public List<User> GetAllFreelancers(){
+        return userRepository.findAllFreelancers();
+    }
+
+    public List<User> GetAllClients(){
+        return userRepository.findAllClients();
     }
 
 }
