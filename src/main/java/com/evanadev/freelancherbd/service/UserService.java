@@ -2,6 +2,7 @@ package com.evanadev.freelancherbd.service;
 
 import com.evanadev.freelancherbd.model.Role;
 import com.evanadev.freelancherbd.model.User;
+import com.evanadev.freelancherbd.model.UserStatus;
 import com.evanadev.freelancherbd.repository.RoleRepository;
 import com.evanadev.freelancherbd.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,7 @@ public class UserService {
 
     // Assign role to user
     user.setRoles(Set.of(role));
-    user.setStatus(1);
+    user.setStatus(UserStatus.ACTIVE);
     user.setNid(nid);
     userRepository.save(user);
     }

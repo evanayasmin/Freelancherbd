@@ -25,9 +25,12 @@ private String password;
 private String phone;
 @Column(nullable = false)
 private Long nid;
-private int status;
+//private int status;
 private LocalDateTime createdAt;
 private LocalDateTime updatedAt;
+
+    @Enumerated(EnumType.STRING) // store enum as string in DB (e.g., "ACTIVE", "INACTIVE")
+    private UserStatus status = UserStatus.ACTIVE;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private UserProfile userProfile;
@@ -38,6 +41,7 @@ private LocalDateTime updatedAt;
             joinColumns = @JoinColumn(name = "user_id"), //user_id
             inverseJoinColumns = @JoinColumn(name = "role_id") //role_id
     )
+
     private Set<Role> roles = new HashSet<>();
 
     public long getId() {
@@ -104,13 +108,15 @@ private LocalDateTime updatedAt;
         this.phone = phone;
     }
 
-    public int getStatus() {
+    public UserStatus getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(UserStatus status) {
         this.status = status;
     }
+
+
 
     public LocalDateTime getCreatedAt() {
         return createdAt;

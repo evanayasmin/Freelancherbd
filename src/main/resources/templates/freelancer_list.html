@@ -64,10 +64,12 @@
                                     <td th:text="${user.userProfile != null ? user.userProfile.country : ''}"></td>
                                     <td th:text="${user.userProfile != null ? user.userProfile.city : ''}"></td>
                                     <td>
-                                        <span th:if="${user.status ==1 }"
+                                        <span th:if="${user.status.name() =='ACTIVE' }"
                                               class="badge bg-success">Active</span>
-                                        <span th:if="${user.status ==2 }"
-                                              class="badge bg-danger">Inactive</span>
+                                        <span th:if="${user.status.name() =='INACTIVE' }"
+                                              class="badge bg-silver">Inactive</span>
+                                        <span th:if="${user.status.name() =='BLOCKED' }"
+                                              class="badge bg-danger">Blocked</span>
                                     </td>
                                     <td th:text="${#dates.format(user.createdAt, 'yyyy-MM-dd')}"></td>
                                     <td>
@@ -94,7 +96,7 @@
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">View Details</h5>
+                                <h5 class="modal-title">User Profile Details</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
                             <div class="modal-body rounded bg-white" id="viewModalContent">
