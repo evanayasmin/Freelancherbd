@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 
@@ -50,6 +51,10 @@ public class UserService {
 
     public List<User> GetAllClients(){
         return userRepository.findAllClients();
+    }
+
+    public Optional<User>findUserDetailById(Long id){
+        return userRepository.findUserDetails(id);
     }
 
 }

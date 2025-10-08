@@ -131,4 +131,9 @@ private LocalDateTime updatedAt;
     public UserProfile getUserProfile() {
         return userProfile;
     }
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 }

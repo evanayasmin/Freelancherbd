@@ -61,12 +61,12 @@
                                     <td th:text="${user.fullname}"></td>
                                     <td th:text="${user.email}"></td>
                                     <td th:text="${user.phone}"></td>
-                                    <td th:text="${user.country}"></td>
-                                    <td th:text="${user.city}"></td>
+                                    <td th:text="${user.userProfile != null ? user.userProfile.country : ''}"></td>
+                                    <td th:text="${user.userProfile != null ? user.userProfile.city : 'N/A'}"></td>
                                     <td>
-                                        <span th:if="${user.status =='1`'}"
+                                        <span th:if="${user.status ==1}"
                                               class="badge bg-success">Active</span>
-                                        <span th:if="${user.status =='2'}"
+                                        <span th:if="${user.status ==2}"
                                               class="badge bg-danger">Inactive</span>
                                     </td>
                                     <td th:text="${#temporals.format(user.createdAt, 'yyyy-MM-dd')}"></td>
@@ -75,14 +75,14 @@
                                                 class="btn btn-sm btn-outline-primary edit-btn"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#editModal"
-                                                th:data-url="">
-                                            <i class="bi bi-pencil"></i>
+                                                th:data-url="@{/admin/users/update_bystatus(encId=${@aesUtil.encryptId(user.id)})}">
+                                            <i class="bi bi-book"></i>
                                         </button>
                                         <button type="button" class="btn btn-sm btn-outline-danger deleteBtn"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#deleteModal"
                                                 th:data-url="@{/admin/users/update_bystatus(encId=${@aesUtil.encryptId(user.id)})}">
-                                            <i class="bi bi-trash"></i>
+                                            <i class="bi bi-pencil"></i>
                                         </button>
                                 </tr>
                                 </tbody>

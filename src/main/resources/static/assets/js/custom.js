@@ -20,6 +20,23 @@ $(document).ready(function() {
             }
         });
     });
+     // UserDetails Modal Display On click view button.
+    $('#viewModal').on('show.bs.modal', function (e) {
+        var button = $(e.relatedTarget);
+        var url = button.data('url');
+        // Clear old content before loading new
+        $('#viewModalContent').html('<p class="text-center">Loading...</p>');
+        $.ajax({
+            url: url,
+            type: "GET",
+            success: function (data) {
+                $('#viewModalContent').html(data);
+            },
+            error: function () {
+                $('#viewModalContent').html('<p class="text-danger">Failed to load form.</p>');
+            }
+        });
+    });
 });
 
 $(document).ready(function () {

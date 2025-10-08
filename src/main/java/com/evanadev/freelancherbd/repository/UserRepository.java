@@ -4,6 +4,7 @@ import com.evanadev.freelancherbd.model.User;
 import com.evanadev.freelancherbd.model.UserProfile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public interface UserRepository extends JpaRepository<User,Long> {
     @Query("""
         SELECT DISTINCT u
         FROM User u
-        JOIN FETCH u.userProfile up
+        LEFT JOIN FETCH u.userProfile up
         JOIN u.roles r
         WHERE r.name = 'ROLE_FREELANCER'
         """)
@@ -28,9 +29,18 @@ public interface UserRepository extends JpaRepository<User,Long> {
     @Query("""
         SELECT DISTINCT u
         FROM User u
-        JOIN FETCH u.userProfile up
+        LEFT JOIN FETCH u.userProfile up
         JOIN u.roles r
         WHERE r.name = 'Role_EMPLOYER'
         """)
     List<User> findAllClients();
+
+    @Query("""
+    SELECT DISTINCT u
+    FROM User u
+    LEFT JOIN FETCH u.userProfile up
+    JOIN u.roles r
+    WHERE u.id = :userid
+    """)
+    Optional<User> findUserDetails(@Param("userid") Long userid);
 }
