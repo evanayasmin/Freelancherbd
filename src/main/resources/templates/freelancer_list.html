@@ -67,7 +67,7 @@
                                         <span th:if="${user.status.name() =='ACTIVE' }"
                                               class="badge bg-success">Active</span>
                                         <span th:if="${user.status.name() =='INACTIVE' }"
-                                              class="badge bg-silver">Inactive</span>
+                                              class="badge bg-light-danger">Inactive</span>
                                         <span th:if="${user.status.name() =='BLOCKED' }"
                                               class="badge bg-danger">Blocked</span>
                                     </td>
@@ -80,12 +80,7 @@
                                                 th:data-url="@{/admin/users/profile_details(encId=${@aesUtil.encryptId(user.id)})}">
                                             <i class="bi bi-book"></i>
                                         </button>
-                                        <button type="button" class="btn btn-sm btn-outline-success deleteBtn"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#deleteModal"
-                                                th:data-url="@{/admin/users/update_bystatus(encId=${@aesUtil.encryptId(user.id)})}">
-                                            <i class="bi bi-pencil"></i>
-                                        </button>
+
                                 </tr>
                                 </tbody>
                             </table>
@@ -107,21 +102,9 @@
                     </div>
                 </div>
                 <!-- Delete Confirmation Modal -->
-                <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                <div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Confirm Delete</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-                            <div class="modal-body">
-                                Are you sure you want to delete this category?
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <a id="confirmDeleteBtn" class="btn btn-danger">Delete</a>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             </div>

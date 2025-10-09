@@ -19,7 +19,22 @@
                            <div class="col-md-6"><label class="labels"><strong>Github Url:</strong></label>&nbsp;<span th:text="${userDetail.userProfile !=null && userDetail.userProfile.city !=null ? userDetail.userProfile.githubUrl : 'N/A'}"></span></div>
                            <div class="col-md-6"><label class="labels"><strong>Linkedin Url:</strong></label>&nbsp;<span th:text="${userDetail.userProfile !=null && userDetail.userProfile.linkedinUrl !=null ? userDetail.userProfile.linkedinUrl : 'N/A'}"></span></div>
                            <div class="col-md-6"><label class="labels"><strong>Skills:</strong> </label>&nbsp;<span th:text="${userDetail.userProfile !=null && userDetail.userProfile.skills !=null ? userDetail.userProfile.skills : 'N/A'}"></span></div>
-                           <div class="col-md-6"><label class="labels"><strong>Status:</strong></label>&nbsp;<span th:text="${userDetail.status}"></span></div>
+                            <div class="col-md-6">
+                            <form id="statusUpdateForm">
+                               <label class="labels"><strong>Status:</strong></label>&nbsp;
+                               <input type="hidden" id="encId" name="encId"  th:value="${@aesUtil.encryptId(userDetail.id)}" />
+                               <label class="form-label">User Status</label>
+                               <select class="form-select" name="status" id="statusSelect">
+                                   <option th:each="st : ${statuses}"
+                                           th:value="${st}"
+                                           th:text="${st}"
+                                           th:selected="${st == userDetail.status}">
+                                   </option>
+                               </select>
+                                <button type="submit" class="btn btn-primary mt-2">Update</button>
+                           </form>
+                                <div id="statusMessage" class="mt-2 text-success" style="display:none;"></div>
+                       </div>
                            <div class="col-md-6"><label class="labels"><strong>Created At:</strong></label>&nbsp;<span th:text="${userDetail.createdAt}"></span></div>
                        </div>
                         <div class="row mt-3">

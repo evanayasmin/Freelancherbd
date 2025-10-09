@@ -1,5 +1,6 @@
 package com.evanadev.freelancherbd.service;
 
+import com.evanadev.freelancherbd.model.Category;
 import com.evanadev.freelancherbd.model.Role;
 import com.evanadev.freelancherbd.model.User;
 import com.evanadev.freelancherbd.model.UserStatus;
@@ -56,6 +57,12 @@ public class UserService {
 
     public Optional<User>findUserDetailById(Long id){
         return userRepository.findUserDetails(id);
+    }
+
+    public void UpdateUserStatus(Long id,String status){
+        User existing = userRepository.findById(id).get();
+        existing.setStatus(UserStatus.valueOf(status));
+        userRepository.save(existing);
     }
 
 }

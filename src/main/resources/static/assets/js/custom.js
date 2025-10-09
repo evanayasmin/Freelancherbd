@@ -37,6 +37,29 @@ $(document).ready(function() {
             }
         });
     });
+
+});
+
+//User Status Updating:
+$(document).on("submit", "#statusUpdateForm", function(e) {
+    e.preventDefault();
+    console.log("AJAX triggered from dynamic modal");
+
+    const userId = $("#encId").val();
+    const status = $("#statusSelect").val();
+
+    $.ajax({
+        url: "/admin/users/statusUpdate",
+        type: "POST",
+        data: { encId: userId, status: status },
+        success: function() {
+            $("#statusMessage").text("Status updated successfully!").show();
+            //$("#main-content").load(" #main-content");
+        },
+        error: function() {
+            $("#statusMessage").text("Error occurred!").show();
+        }
+    });
 });
 
 $(document).ready(function () {
