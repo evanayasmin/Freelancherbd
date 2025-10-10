@@ -3,7 +3,11 @@
             <div class="row" th:object="${userDetail}">
                 <div class="col-md-3 border-right">
                     <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-                       <img class="rounded-circle" width="150px" th:src="${userDetail.userProfile != null && userDetail.userProfile.profilePicture != null ? userDetail.userProfile.profilePicture : '/images/default.png'}" />
+                        <img class="rounded-circle"
+                             style="width:150px; height:170px; border-radius:8px;"
+                             th:src="${userDetail.userProfile != null && userDetail.userProfile.profilePicture != null
+              ? '/'+userDetail.userProfile.profilePicture
+              : '/images/default.png'}" />
                         <span class="font-weight-bold" th:text="${userDetail.fullname}"></span><span class="text-black-50" th:text="${userDetail.email}"></span>
                     </div>
                 </div>
