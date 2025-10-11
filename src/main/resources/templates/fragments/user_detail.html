@@ -7,7 +7,7 @@
                              style="width:150px; height:170px; border-radius:8px;"
                              th:src="${userDetail.userProfile != null && userDetail.userProfile.profilePicture != null
               ? '/'+userDetail.userProfile.profilePicture
-              : '/images/default.png'}" />
+              : '/images/default.jpg'}" />
                         <span class="font-weight-bold" th:text="${userDetail.fullname}"></span><span class="text-black-50" th:text="${userDetail.email}"></span>
                     </div>
                 </div>

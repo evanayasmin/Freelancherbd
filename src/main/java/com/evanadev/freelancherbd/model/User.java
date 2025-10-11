@@ -116,8 +116,6 @@ private LocalDateTime updatedAt;
         this.status = status;
     }
 
-
-
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }

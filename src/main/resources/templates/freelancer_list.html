@@ -71,7 +71,7 @@
                                         <span th:if="${user.status.name() =='BLOCKED' }"
                                               class="badge bg-danger">Blocked</span>
                                     </td>
-                                    <td th:text="${#dates.format(user.createdAt, 'yyyy-MM-dd')}"></td>
+                                    <td th:text="${#temporals.format(user.createdAt, 'yyyy-MM-dd')}"></td>
                                     <td>
                                         <button type="button"
                                                 class="btn btn-sm btn-outline-primary edit-btn"
