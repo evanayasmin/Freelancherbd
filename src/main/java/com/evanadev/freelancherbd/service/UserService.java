@@ -1,7 +1,9 @@
 package com.evanadev.freelancherbd.service;
 
+import com.evanadev.freelancherbd.model.Category;
 import com.evanadev.freelancherbd.model.Role;
 import com.evanadev.freelancherbd.model.User;
+import com.evanadev.freelancherbd.model.UserStatus;
 import com.evanadev.freelancherbd.repository.RoleRepository;
 import com.evanadev.freelancherbd.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 
@@ -39,7 +42,7 @@ public class UserService {
 
     // Assign role to user
     user.setRoles(Set.of(role));
-    user.setStatus(1);
+    user.setStatus(UserStatus.ACTIVE);
     user.setNid(nid);
     userRepository.save(user);
     }
@@ -50,6 +53,16 @@ public class UserService {
 
     public List<User> GetAllClients(){
         return userRepository.findAllClients();
+    }
+
+    public Optional<User>findUserDetailById(Long id){
+        return userRepository.findUserDetails(id);
+    }
+
+    public void UpdateUserStatus(Long id,String status){
+        User existing = userRepository.findById(id).get();
+        existing.setStatus(UserStatus.valueOf(status));
+        userRepository.save(existing);
     }
 
 }

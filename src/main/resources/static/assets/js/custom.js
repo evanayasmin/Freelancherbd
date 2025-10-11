@@ -20,6 +20,46 @@ $(document).ready(function() {
             }
         });
     });
+     // UserDetails Modal Display On click view button.
+    $('#viewModal').on('show.bs.modal', function (e) {
+        var button = $(e.relatedTarget);
+        var url = button.data('url');
+        // Clear old content before loading new
+        $('#viewModalContent').html('<p class="text-center">Loading...</p>');
+        $.ajax({
+            url: url,
+            type: "GET",
+            success: function (data) {
+                $('#viewModalContent').html(data);
+            },
+            error: function () {
+                $('#viewModalContent').html('<p class="text-danger">Failed to load form.</p>');
+            }
+        });
+    });
+
+});
+
+//User Status Updating:
+$(document).on("submit", "#statusUpdateForm", function(e) {
+    e.preventDefault();
+    console.log("AJAX triggered from dynamic modal");
+
+    const userId = $("#encId").val();
+    const status = $("#statusSelect").val();
+
+    $.ajax({
+        url: "/admin/users/statusUpdate",
+        type: "POST",
+        data: { encId: userId, status: status },
+        success: function() {
+            $("#statusMessage").text("Status updated successfully!").show();
+            //$("#main-content").load(" #main-content");
+        },
+        error: function() {
+            $("#statusMessage").text("Error occurred!").show();
+        }
+    });
 });
 
 $(document).ready(function () {

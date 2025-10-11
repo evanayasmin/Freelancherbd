@@ -184,4 +184,5 @@ public class UserProfile {
     public void setCompanyEmail(String companyEmail) {
         this.companyEmail = companyEmail;
     }
+
 }

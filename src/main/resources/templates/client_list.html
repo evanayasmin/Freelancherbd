@@ -33,7 +33,7 @@
                             <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a th:href="@{/home}">Dashboard</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">Client List</li>
+                                    <li class="breadcrumb-item active" aria-current="page">Freelancer List</li>
                                 </ol>
                             </nav>
                         </div>
@@ -61,44 +61,42 @@
                                     <td th:text="${user.fullname}"></td>
                                     <td th:text="${user.email}"></td>
                                     <td th:text="${user.phone}"></td>
-                                    <td th:text="${user.country}"></td>
-                                    <td th:text="${user.city}"></td>
+                                    <td th:text="${user.userProfile != null ? user.userProfile.country : ''}"></td>
+                                    <td th:text="${user.userProfile != null ? user.userProfile.city : ''}"></td>
                                     <td>
-                                        <span th:if="${user.status =='1`'}"
+                                        <span th:if="${user.status.name() =='ACTIVE' }"
                                               class="badge bg-success">Active</span>
-                                        <span th:if="${user.status =='2'}"
-                                              class="badge bg-danger">Inactive</span>
+                                        <span th:if="${user.status.name() =='INACTIVE' }"
+                                              class="badge bg-light-danger">Inactive</span>
+                                        <span th:if="${user.status.name() =='BLOCKED' }"
+                                              class="badge bg-danger">Blocked</span>
                                     </td>
                                     <td th:text="${#temporals.format(user.createdAt, 'yyyy-MM-dd')}"></td>
                                     <td>
                                         <button type="button"
                                                 class="btn btn-sm btn-outline-primary edit-btn"
                                                 data-bs-toggle="modal"
-                                                data-bs-target="#editModal"
-                                                th:data-url="">
-                                            <i class="bi bi-pencil"></i>
+                                                data-bs-target="#viewModal"
+                                                th:data-url="@{/admin/users/profile_details(encId=${@aesUtil.encryptId(user.id)})}">
+                                            <i class="bi bi-book"></i>
                                         </button>
-                                        <button type="button" class="btn btn-sm btn-outline-danger deleteBtn"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#deleteModal"
-                                                th:data-url="@{/admin/users/update_bystatus(encId=${@aesUtil.encryptId(user.id)})}">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
+
                                 </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </section>
-                <div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
-                    <div class="modal-dialog modal-md">
+                <div class="modal fade" id="viewModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">Edit Category</h5>
+                                <h5 class="modal-title">User Profile Details</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
-                            <div class="modal-body" id="editModalContent">
+                            <div class="modal-body rounded bg-white" id="viewModalContent">
                                 <!-- Form content will be loaded here -->
+
                             </div>
                         </div>
                     </div>
@@ -107,17 +105,8 @@
                 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Confirm Delete</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-                            <div class="modal-body">
-                                Are you sure you want to delete this category?
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <a id="confirmDeleteBtn" class="btn btn-danger">Delete</a>
-                            </div>
+
+
                         </div>
                     </div>
                 </div>

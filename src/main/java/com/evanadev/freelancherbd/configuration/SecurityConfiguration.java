@@ -25,7 +25,9 @@ public SecurityFilterChain configure(HttpSecurity http) throws Exception {
             .requestMatchers("/register", "/login").permitAll()
             .requestMatchers("/admin/category/**").hasRole("ADMIN") //Only admin can access
             .requestMatchers("/admin/users/**").hasRole("ADMIN")      //Only admin can access
-            .anyRequest().authenticated())
+            .requestMatchers("/employer/jobs/**").hasRole("EMPLOYER")     //Only Employer can access
+            .requestMatchers("/freelancer/jobs/**").hasRole("FREELANCER")  //Only Freelancer can access
+             .anyRequest().authenticated())
             .formLogin(form -> form.
                     loginPage("/login").
                     loginProcessingUrl("/login").

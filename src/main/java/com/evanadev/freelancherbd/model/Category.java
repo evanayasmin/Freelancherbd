@@ -3,6 +3,7 @@ package com.evanadev.freelancherbd.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Entity
@@ -14,6 +15,9 @@ public class Category {
     @Column(unique = true, nullable = false)
     String categoryName;
     String description;
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Job> jobs;
 
     @Enumerated(EnumType.STRING) // store enum as string in DB (e.g., "ACTIVE", "INACTIVE")
     private Status status = Status.ACTIVE;
@@ -58,6 +62,14 @@ public class Category {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public List<Job> getJobs() {
+        return jobs;
+    }
+
+    public void setJobs(List<Job> jobs) {
+        this.jobs = jobs;
     }
 
     public LocalDateTime getCreationDate() {

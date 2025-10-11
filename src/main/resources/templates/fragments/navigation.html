@@ -145,10 +145,10 @@
             </a>
             <ul class="submenu active">
                 <li class="submenu-item ">
-                    <a th:href="@{/create_job}">Create New Job</a>
+                    <a th:href="@{/employer/jobs/create_job}">Create New Job</a>
                 </li>
                 <li class="submenu-item ">
-                    <a th:href="@{/post_recuring_job}">Post Recuring Job</a>
+                    <a th:href="@{/employer/jobs/post_recuring_job}">Post Recuring Job</a>
                 </li>
             </ul>
         </li>
@@ -160,13 +160,16 @@
             </a>
             <ul class="submenu active">
                 <li class="submenu-item ">
-                    <a th:href="@{/active_jobs}">Active Jobs</a>
+                    <a th:href="@{/employer/jobs/active_jobs}">Active Jobs</a>
                 </li>
                 <li class="submenu-item ">
-                    <a th:href="@{/pending_jobs}">Pending Jobs</a>
+                    <a th:href="@{/employer/jobs/pending_jobs}">Pending Jobs</a>
                 </li>
                 <li class="submenu-item ">
-                    <a th:href="@{/closed_jobs}">Closed Jobs</a>
+                    <a th:href="@{/employer/jobs/completed_jobs}">Completed Jobs</a>
+                </li>
+                <li class="submenu-item ">
+                    <a th:href="@{/employer/jobs/closed_jobs}">Closed Jobs</a>
                 </li>
             </ul>
         </li>
@@ -225,9 +228,9 @@
                 <li class="submenu-item">
                     <a th:href="@{/admin/users/client_list}">Clients</a>
                 </li>
-                <li class="submenu-item active">
-                    <a th:href="@{/admin/users/user_role}">Role Management</a>
-                </li>
+<!--                <li class="submenu-item active">-->
+<!--                    <a th:href="@{/admin/users/user_role}">Role Management</a>-->
+<!--                </li>-->
             </ul>
         </li>
         <li class="sidebar-item has-sub" sec:authorize="hasRole('ADMIN')">
