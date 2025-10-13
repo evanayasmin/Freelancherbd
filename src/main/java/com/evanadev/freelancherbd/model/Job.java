@@ -5,9 +5,12 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import java.time.LocalDateTime;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class Job {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,13 +24,19 @@ public class Job {
     private String description;
 
     @Column(nullable = false)
+    private Integer vacancy;
+    private String ageLimit;
+    private String experience;
+    @Column(nullable = false)
     private String company;
+    private String companyInstruction;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    @Column(nullable = false)
+    @Lob
+    @Column(columnDefinition = "LONGTEXT", nullable = false)
     private String RequiredSkill;
     private String RequiredLevel;
 
@@ -35,8 +44,11 @@ public class Job {
     private JobType jobType;
 
     @Enumerated(EnumType.STRING)
-    private JobStatus jobStatus;
+    private JobStatus jobStatus = JobStatus.PENDING;
     private String PaymentAmount;
+
+    @Column(nullable = false)
+    private String jobLocation;
 
     private LocalDateTime PaymentDate;
     private String PaymentMethod;
@@ -48,13 +60,8 @@ public class Job {
     @Column(updatable = false)
     private LocalDateTime CreatedAt;
 
-    @LastModifiedDate
     private LocalDateTime CompletedAt;
-
-    @LastModifiedBy
-    @Column(updatable = false)
     private String CompletedBy;
-
     private LocalDateTime CancelledAt;
 
     @CreatedBy
@@ -91,6 +98,46 @@ public class Job {
 
     public void setCompany(String company) {
         this.company = company;
+    }
+
+    public String getCompanyInstruction() {
+        return companyInstruction;
+    }
+
+    public void setCompanyInstruction(String companyInstruction) {
+        this.companyInstruction = companyInstruction;
+    }
+
+    public Integer getVacancy() {
+        return vacancy;
+    }
+
+    public void setVacancy(Integer vacancy) {
+        this.vacancy = vacancy;
+    }
+
+    public String getAgeLimit() {
+        return ageLimit;
+    }
+
+    public void setAgeLimit(String ageLimit) {
+        this.ageLimit = ageLimit;
+    }
+
+    public String getExperience() {
+        return experience;
+    }
+
+    public void setExperience(String experience) {
+        this.experience = experience;
+    }
+
+    public String getJobLocation() {
+        return jobLocation;
+    }
+
+    public void setJobLocation(String jobLocation) {
+        this.jobLocation = jobLocation;
     }
 
     public Category getCategory() {

@@ -15,7 +15,7 @@ public class JobService {
     @Autowired
     private JobRepository jobRepository;
 
-    public Job save(Job job) {
+    public Job JobSave(Job job) {
         return jobRepository.save(job);
     }
 

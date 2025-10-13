@@ -112,7 +112,6 @@ public class UserProfileController {
             profile = userProfileRepository.save(profile);
             message = "User Profile Updated Successfully";
         } else { // Create new record
-            //userProfileService.CreateUserProfile(city, country, gender, skills, cvFilePath, githubUrl, linkedinUrl, profilePicturePath);
             profile = userProfileRepository.save(userProfile);
             message = "User Profile Created Successfully";
         }
