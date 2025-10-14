@@ -6,21 +6,20 @@ $(document).ready(function() {
 
         // Clear old content before loading new
         $('#editModalContent').html('<p class="text-center">Loading...</p>');
-
         // Load form via AJAX
         $.ajax({
             url: url,
             type: "GET",
             success: function (data) {
-
-                $('#editModalContent').html(data);
+              $('#editModalContent').html(data);
             },
             error: function () {
                 $('#editModalContent').html('<p class="text-danger">Failed to load form.</p>');
             }
         });
     });
-     // UserDetails Modal Display On click view button.
+
+    // UserDetails Modal Display On click view button.
     $('#viewModal').on('show.bs.modal', function (e) {
         var button = $(e.relatedTarget);
         var url = button.data('url');
@@ -38,16 +37,39 @@ $(document).ready(function() {
         });
     });
 
+    //JobDetails Modal Display On click view button.
+    $('#jobViewModal').on('show.bs.modal', function (e) {
+        var button = $(e.relatedTarget);
+        var url = button.data('url');
+
+        // Clear old content before loading new
+        $('#viewModalContent').html('<p class="text-center">Loading...</p>');
+        $.ajax({
+            url: url,
+            type: "GET",
+            success: function (data) {
+                $('#viewModalContent').html(data);
+                tinymce.remove();
+                tinymce.init({ selector: 'textarea.tinymce-editor' });
+            },
+            error: function () {
+                $('#viewModalContent').html('<p class="text-danger">Failed to load form.</p>');
+            }
+        });
+    });
+    //Closing the modal
+    $('#jobViewModal').on('hidden.bs.modal', function () {
+        tinymce.remove();
+    });
+
 });
 
 //User Status Updating:
 $(document).on("submit", "#statusUpdateForm", function(e) {
     e.preventDefault();
     console.log("AJAX triggered from dynamic modal");
-
     const userId = $("#encId").val();
     const status = $("#statusSelect").val();
-
     $.ajax({
         url: "/admin/users/statusUpdate",
         type: "POST",
@@ -83,7 +105,7 @@ $(document).ready(function () {
                     }
                 },
                 error: function () {
-                    showToast("❌ Something went wrong!", "error");
+                    showToast("Something went wrong!", "error");
                 }
             });
         });

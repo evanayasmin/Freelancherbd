@@ -1,0 +1,137 @@
+<!-- fragments/category_update_form.html -->
+<div th:fragment="jobDetail">
+    <div class="modal-body">
+        <form id="jobUpdateForm" th:object="${jobDetail}" class="form form-vertical" th:action="@{/employer/job/update}" method="post">
+            <div class="form-body">
+                <input type="hidden" th:field="*{id}"/>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label for="job_title">Job Title</label>
+                            <input type="text" id="job_title" class="form-control"
+                             placeholder="Job Title" th:field="*{title}" required />
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label for="jobDescription">Job Description</label>
+                            <textarea class="form-control tinymce-editor" id="jobDescription" cols="30" rows="10" name="description" th:field="*{description}" th:utext="*{description}"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label for="company">Company Name</label>
+                            <input type="text" id="company" class="form-control"
+                                   placeholder="Company" th:field="*{company}" required />
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label class="form-label">Job Category</label>
+                            <select class="form-select" th:field="*{category}" required>
+                                <option th:each="st : ${categories}"
+                                        th:value="${st.id}"
+                                        th:text="${st.categoryName}">
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label class="form-label">Job Type</label>
+                            <select class="form-select" th:field="*{jobType}" required>
+                                <option th:each="jt : ${jobType}"
+                                        th:value="${jt.name()}"
+                                        th:text="${jt.name()}">
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label for="requiredSkill">Required Skill</label>
+                            <textarea class="form-control tinymce-editor" id="requiredSkill" cols="30" rows="10" name="requiredSkill" th:field="*{requiredSkill}"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label for="required_level">Required Level</label>
+                            <select class="form-control" id="required_level" th:name="requiredLevel" th:field="*{requiredLevel}" th:attr="data-selected=${requiredLevel}">
+                                <option value="S.S.C">S.S.C</option>
+                                <option value="H.S.C">H.S.C</option>
+                                <option value="BA(Degree)">BA(Degree)</option>
+                                <option value="MA(Degree)">MA(Degree)</option>
+                                <option value="BSc(Hons)">BSc(Hons)</option>
+                                <option value="MSc">MSc</option>
+                                <option value="PHD">PHD</option>
+                                <option value="PGD">PGD</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label for="vacancy">Vacancy</label>
+                            <input type="number" id="vacancy" class="form-control"
+                                   placeholder="Vacancy" th:field="*{vacancy}" />
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label for="age_limit">Vacancy</label>
+                            <input type="text" id="age_limit" class="form-control"
+                                   placeholder="Age Limit" th:field="*{ageLimit}" />
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label for="experience">Required Experience</label>
+                            <input type="text" id="experience" class="form-control"
+                                   placeholder="Required Experience" th:field="*{experience}" />
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label for="payment">Payment(Tk.)</label>
+                            <input type="text" id="payment" class="form-control"
+                                   placeholder="Job Price" th:field="*{paymentAmount}" required/>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label for="deadline">Deadline</label>
+<!--                            <input type="datetime-local" id="deadline" class="form-control"-->
+<!--                                    th:field="*{deadline}" required/>-->
+                            <input type="datetime-local" id="deadline" class="form-control"
+                                 th:value="${#temporals.format(jobDetail.deadline, 'yyyy-MM-dd''T''HH:mm')}"
+                                 name="deadline" required />
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label for="job_locatiob">Job Location</label>
+                            <input type="text" id="job_locatiob" class="form-control"
+                                   placeholder="Job Location" th:field="*{jobLocation}" required/>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label for="specialInstruction">Special Instruction</label>
+                            <textarea id="specialInstruction" class="form-control tinymce-editor" cols="30" rows="5" name="companyInstruction" th:field="*{companyInstruction}"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-12 d-flex justify-content-end">
+                        <button type="submit" class="btn btn-primary me-1 mb-1">Update</button>
+                        <button type="reset" class="btn btn-light-secondary me-1 mb-1">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-light-secondary"
+                data-bs-dismiss="modal">
+            <i class="bx bx-x d-block d-sm-none"></i>
+            <span class="d-none d-sm-block">Close</span>
+        </button>
+    </div>
+</div>

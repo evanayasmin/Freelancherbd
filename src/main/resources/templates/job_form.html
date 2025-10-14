@@ -2,6 +2,13 @@
 <html xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <div th:replace="~{fragments/header :: header}"></div>
+    <script th:src="@{/assets/vendors/tinymce/tinymce.min.js}"></script>
+    <script th:src="@{/assets/vendors/tinymce/plugins/code/plugin.min.js}"></script>
+    <script>
+        tinymce.init({ selector: '#default' });
+        tinymce.init({ selector: '#required_skill' });
+        tinymce.init({ selector: '#dark', toolbar: 'undo redo styleselect bold italic alignleft aligncenter alignright bullist numlist outdent indent code', plugins: 'code' });
+    </script>
 </head>
 <body>
 <div id="app">
@@ -182,13 +189,7 @@
                 <div class="footer clearfix mb-0 text-muted">
                     <div th:replace="~{fragments/footer :: footer}"></div>
                 </div>
-                <script th:src="@{/assets/vendors/tinymce/tinymce.min.js}"></script>
-                <script th:src="@{/assets/vendors/tinymce/plugins/code/plugin.min.js}"></script>
-                <script>
-                    tinymce.init({ selector: '#default' });
-                    tinymce.init({ selector: '#required_skill' });
-                    tinymce.init({ selector: '#dark', toolbar: 'undo redo styleselect bold italic alignleft aligncenter alignright bullist numlist outdent indent code', plugins: 'code' });
-                </script>
+
             </footer>
         </div>
     </div>

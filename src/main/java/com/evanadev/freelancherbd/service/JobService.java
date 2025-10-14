@@ -34,6 +34,9 @@ public class JobService {
     public List<Job> findAll() {
         return jobRepository.findAll();
     }
+    public Job findById(Long id) {
+        return jobRepository.findById(id).get();
+    }
     public List<Job> findAllJobsWithCategory(User loggedInUser) {
         if (loggedInUser == null) {
             throw new IllegalArgumentException("Logged-in user cannot be null");

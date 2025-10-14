@@ -14,9 +14,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class JobController {
@@ -67,6 +69,24 @@ public class JobController {
         model.addAttribute("statuses", UserStatus.values());
         model.addAttribute("aesUtil", aesUtil);
         return "alljob_list";
+
     }
+
+    @GetMapping("/employer/jobs/job_detail")
+    public String jobDetail(@RequestParam("encId") String encId, Model model) {
+        if (encId != null) {
+            Long did = aesUtil.decryptId(encId);
+            Job job  = jobService.findById(did);
+            log.debug("Job details: {}", job);
+            List<Category> categories = categoryService.getAllCategories();
+            model.addAttribute("jobDetail", job);
+            model.addAttribute("statuses", JobStatus.values());
+            model.addAttribute("jobType", JobType.values());
+            model.addAttribute("categories", categories);
+        }
+
+        return "fragments/job_detail :: jobDetail";
+    }
+
 
 }
