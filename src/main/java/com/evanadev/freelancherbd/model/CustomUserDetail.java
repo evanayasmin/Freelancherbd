@@ -14,6 +14,9 @@ public class CustomUserDetail implements UserDetails {
     public CustomUserDetail(User user) {
         this.user = user;
     }
+    public User getUser() {
+        return user;
+    }
 
     public String getFullname() { return user.getFullname(); }
     public Long getNid() { return user.getNid(); }

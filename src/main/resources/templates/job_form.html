@@ -89,8 +89,8 @@
                                                             <label class="form-label">Job Type</label>
                                                             <select class="form-select" th:field="*{jobType}" required>
                                                                 <option th:each="jt : ${jobTypes}"
-                                                                        th:value="${jt}"
-                                                                        th:text="${jt}">
+                                                                        th:value="${jt.name()}"
+                                                                        th:text="${jt.name()}">
                                                                 </option>
                                                             </select>
                                                         </div>

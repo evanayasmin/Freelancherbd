@@ -1,9 +1,6 @@
 package com.evanadev.freelancherbd.service;
 
-import com.evanadev.freelancherbd.model.Category;
-import com.evanadev.freelancherbd.model.Job;
-import com.evanadev.freelancherbd.model.JobStatus;
-import com.evanadev.freelancherbd.model.JobType;
+import com.evanadev.freelancherbd.model.*;
 import com.evanadev.freelancherbd.repository.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,7 +34,12 @@ public class JobService {
     public List<Job> findAll() {
         return jobRepository.findAll();
     }
-
+    public List<Job> findAllJobsWithCategory(User loggedInUser) {
+        if (loggedInUser == null) {
+            throw new IllegalArgumentException("Logged-in user cannot be null");
+        }
+        return jobRepository.findAllJobsWithCategory(loggedInUser.getUsername());
+    }
     public List<Job> findByCategory(Category category) {
         return jobRepository.findByCategory(category);
     }
