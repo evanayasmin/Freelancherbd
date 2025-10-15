@@ -1,9 +1,6 @@
 package com.evanadev.freelancherbd.service;
 
-import com.evanadev.freelancherbd.model.Category;
-import com.evanadev.freelancherbd.model.Job;
-import com.evanadev.freelancherbd.model.JobStatus;
-import com.evanadev.freelancherbd.model.JobType;
+import com.evanadev.freelancherbd.model.*;
 import com.evanadev.freelancherbd.repository.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +12,7 @@ public class JobService {
     @Autowired
     private JobRepository jobRepository;
 
-    public Job save(Job job) {
+    public Job JobSave(Job job) {
         return jobRepository.save(job);
     }
 
@@ -31,13 +28,25 @@ public class JobService {
         existing.setRequiredLevel(job.getRequiredLevel());
         existing.setJobStatus(job.getJobStatus());
         existing.setDeadline(job.getDeadline());
+        existing.setAgeLimit(job.getAgeLimit());
+        existing.setVacancy(job.getVacancy());
+        existing.setExperience(job.getExperience());
         jobRepository.save(existing);
 
     }
     public List<Job> findAll() {
         return jobRepository.findAll();
     }
+    public Job findById(Long id) {
+        return jobRepository.findById(id).get();
+    }
 
+    public List<Job> findAllJobsWithCategory(User loggedInUser) {
+        if (loggedInUser == null) {
+            throw new IllegalArgumentException("Logged-in user cannot be null");
+        }
+        return jobRepository.findAllJobsWithCategory(loggedInUser.getUsername());
+    }
     public List<Job> findByCategory(Category category) {
         return jobRepository.findByCategory(category);
     }
@@ -46,7 +55,7 @@ public class JobService {
         return jobRepository.findByJobType(jobType);
     }
 
-    public List<Job> findByJobStatus(JobStatus jobStatus) {
-        return jobRepository.findByJobStatus(jobStatus);
+    public List<Job> findByJobStatus(User loggedInUser, JobStatus jobStatus) {
+        return jobRepository.findByJobStatus(loggedInUser.getUsername(), jobStatus);
     }
 }

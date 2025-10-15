@@ -1,4 +1,4 @@
-<div class="sidebar-menu" th:fragment="navigation" xmlns:sec="http://www.w3.org/1999/xhtml">
+<div class="sidebar-menu" th:fragment="navigation" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <ul class="menu">
         <li class="sidebar-title">Quick Menu</li>
         <li class="sidebar-item active">
@@ -20,7 +20,7 @@
             <a href="#" class='sidebar-link'>
                 <i class="bi bi-collection-fill"></i>
                 <span>Find Work</span>
-            </a>
+            </a>-?
             <ul class="submenu ">
                 <li class="submenu-item ">
                     <a th:href="@{/new_jobs}">New Jobs</a>
@@ -147,8 +147,9 @@
                 <li class="submenu-item ">
                     <a th:href="@{/employer/jobs/create_job}">Create New Job</a>
                 </li>
-                <li class="submenu-item ">
-                    <a th:href="@{/employer/jobs/post_recuring_job}">Post Recuring Job</a>
+
+                <li class="submenu-item">
+                    <a th:href="@{/employer/jobs/job_list}">All Job List</a>
                 </li>
             </ul>
         </li>
@@ -164,6 +165,9 @@
                 </li>
                 <li class="submenu-item ">
                     <a th:href="@{/employer/jobs/pending_jobs}">Pending Jobs</a>
+                </li>
+                <li class="submenu-item ">
+                    <a th:href="@{/employer/jobs/posted_jobs}">Posted Jobs</a>
                 </li>
                 <li class="submenu-item ">
                     <a th:href="@{/employer/jobs/completed_jobs}">Completed Jobs</a>
@@ -240,16 +244,19 @@
             </a>
             <ul class="submenu active">
                 <li class="submenu-item">
-                    <a th:href="@{/admin/posted_jobs}">Posted Jobs</a>
+                    <a th:href="@{/admin/jobs/posted_jobs}">Posted Jobs</a>
                 </li>
                 <li class="submenu-item">
-                    <a th:href="@{/admin/pending_approval_jobs}">Pending Approval Jobs</a>
+                    <a th:href="@{/admin/jobs/pending_jobs}">Pending Jobs</a>
                 </li>
                 <li class="submenu-item">
-                    <a th:href="@{/admin/active_completed_jobs}">Active/Completed Jobs</a>
+                    <a th:href="@{/admin/jobs/active_jobs}">Active Jobs</a>
                 </li>
                 <li class="submenu-item">
-                    <a th:href="@{/admin/dispute_resolution}">Dispute Resolution</a>
+                    <a th:href="@{/admin/jobs/active_jobs}">Completed Jobs</a>
+                </li>
+                <li class="submenu-item">
+                    <a th:href="@{/admin/jobs/dispute_resolution}">Dispute Resolution</a>
                 </li>
             </ul>
         </li>

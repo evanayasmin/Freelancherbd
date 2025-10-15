@@ -6,21 +6,20 @@ $(document).ready(function() {
 
         // Clear old content before loading new
         $('#editModalContent').html('<p class="text-center">Loading...</p>');
-
         // Load form via AJAX
         $.ajax({
             url: url,
             type: "GET",
             success: function (data) {
-
-                $('#editModalContent').html(data);
+              $('#editModalContent').html(data);
             },
             error: function () {
                 $('#editModalContent').html('<p class="text-danger">Failed to load form.</p>');
             }
         });
     });
-     // UserDetails Modal Display On click view button.
+
+    // UserDetails Modal Display On click view button.
     $('#viewModal').on('show.bs.modal', function (e) {
         var button = $(e.relatedTarget);
         var url = button.data('url');
@@ -38,16 +37,38 @@ $(document).ready(function() {
         });
     });
 
+    //JobDetails Modal Display On click view button.
+    $('#jobViewModal').on('show.bs.modal', function (e) {
+        var button = $(e.relatedTarget);
+        var url = button.data('url');
+
+        // Clear old content before loading new
+        $('#viewModalContent').html('<p class="text-center">Loading...</p>');
+        $.ajax({
+            url: url,
+            type: "GET",
+            success: function (data) {
+                $('#viewModalContent').html(data);
+                tinymce.remove();
+                tinymce.init({ selector: 'textarea.tinymce-editor' });
+            },
+            error: function () {
+                $('#viewModalContent').html('<p class="text-danger">Failed to load form.</p>');
+            }
+        });
+    });
+    //Closing the modal
+    $('#jobViewModal').on('hidden.bs.modal', function () {
+        tinymce.remove();
+    });
 });
 
 //User Status Updating:
 $(document).on("submit", "#statusUpdateForm", function(e) {
     e.preventDefault();
     console.log("AJAX triggered from dynamic modal");
-
     const userId = $("#encId").val();
     const status = $("#statusSelect").val();
-
     $.ajax({
         url: "/admin/users/statusUpdate",
         type: "POST",
@@ -62,6 +83,45 @@ $(document).on("submit", "#statusUpdateForm", function(e) {
     });
 });
 
+//Job Detail Updating Submit:
+$(document).on("submit", "#jobUpdateForm", function(e) {
+    e.preventDefault();
+    console.log("AJAX triggered from dynamic modal");
+    $.ajax({
+        url: $(this).attr('action'),
+        type: "POST",
+        data: $(this).serialize(),
+        success: function(res) {
+           // $("#statusMessage").text("Job updated successfully!").show();
+            if (res.status === "success") {
+                showToast("Job updated successfully!", "success");
+            }else{
+                showToast("Failed to update job!", "error");
+            }
+
+        },
+        error: function() {
+            showToast("Bad Request!", "error");
+        }
+    });
+});
+
+// Toast function for global
+function showToast(message, type) {
+    let bg = type === "success" ? "bg-success" : "bg-danger";
+    let toastHtml = `
+            <div class="toast align-items-center text-white ${bg} border-0" role="alert" aria-live="assertive" aria-atomic="true">
+              <div class="d-flex">
+                <div class="toast-body">${message}</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+              </div>
+            </div>`;
+    $("#toastContainer").append(toastHtml);
+    let newToast = new bootstrap.Toast($("#toastContainer .toast").last()[0]);
+    newToast.show();
+}
+
+//Category Update Form
 $(document).ready(function () {
     // Handle form submit inside modal
     $(document).on('submit', '#categoryUpdateForm', function (e) {
@@ -83,7 +143,7 @@ $(document).ready(function () {
                     }
                 },
                 error: function () {
-                    showToast("❌ Something went wrong!", "error");
+                    showToast("Something went wrong!", "error");
                 }
             });
         });
