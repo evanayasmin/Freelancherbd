@@ -35,6 +35,11 @@ public class JobController {
         this.categoryService = categoryService;
     }
 
+    /*
+     * @author: evana
+     * @Desc: Job Creation form of a LoggedIn User as Employer
+     * @Date: 14-10-25
+     * */
     @GetMapping ("/employer/jobs/create_job")
     public String CreateJob(Model model) {
         List<Category> categories = categoryService.getAllCategories();
@@ -44,7 +49,11 @@ public class JobController {
         return "job_form";
     }
 
-    //Save new Category
+    /*
+     * @author: evana
+     * @Desc: Job Creation submit of a LoggedIn User as Employer
+     * @Date: 14-10-25
+     * */
     @PostMapping("/employer/job/submit_job")
     public String job_submit(@ModelAttribute Job job, Model model){
 
@@ -57,6 +66,11 @@ public class JobController {
         return "job_form";
     }
 
+    /*
+    * @author: evana
+    * @Desc: All job lists of LoggedIn User as Employer
+    * @Date: 15-10-25
+    * */
     @GetMapping("/employer/jobs/job_list")
     public String allJobList(@ModelAttribute("loggedUser") CustomUserDetail loggedUser, Model model) {
         log.info("Loggedin user=",loggedUser.getUser().getUsername());
@@ -68,6 +82,89 @@ public class JobController {
 
     }
 
+    /*
+     * @author: evana
+     * @Desc: Active job lists of LoggedIn User as Employer
+     * @Date: 15-10-25
+     * */
+    @GetMapping("/employer/jobs/active_jobs")
+    public String activeJobList(@ModelAttribute("loggedUser") CustomUserDetail loggedUser, Model model) {
+        log.info("Loggedin user=",loggedUser.getUser().getUsername());
+       // String statusStr = "IN_PROGRESS";
+       // JobStatus status = JobStatus.valueOf(statusStr);
+        List<Job> jobs = jobService.findByJobStatus(loggedUser.getUser(), JobStatus.IN_PROGRESS);
+        model.addAttribute("jobs", jobs);
+        model.addAttribute("statuses", UserStatus.values());
+        model.addAttribute("aesUtil", aesUtil);
+        return "active_jobs";
+    }
+
+    /*
+     * @author: evana
+     * @Desc: Posted job lists of LoggedIn User as Employer
+     * @Date: 15-10-25
+     * */
+    @GetMapping("/employer/jobs/posted_jobs")
+    public String postedJobList(@ModelAttribute("loggedUser") CustomUserDetail loggedUser, Model model) {
+        log.info("Loggedin user=",loggedUser.getUser().getUsername());
+        List<Job> jobs = jobService.findByJobStatus(loggedUser.getUser(),JobStatus.POSTED);
+        model.addAttribute("jobs", jobs);
+        model.addAttribute("statuses", UserStatus.values());
+        model.addAttribute("aesUtil", aesUtil);
+        return "posted_jobs";
+    }
+
+    /*
+     * @author: evana
+     * @Desc: Completed job lists of LoggedIn User as Employer
+     * @Date: 15-10-25
+     * */
+
+    @GetMapping("/employer/jobs/completed_jobs")
+    public String completeJobList(@ModelAttribute("loggedUser") CustomUserDetail loggedUser, Model model) {
+        log.info("Loggedin user=",loggedUser.getUser().getUsername());
+        List<Job> jobs = jobService.findByJobStatus(loggedUser.getUser(), JobStatus.COMPLETED);
+        model.addAttribute("jobs", jobs);
+        model.addAttribute("statuses", UserStatus.values());
+        model.addAttribute("aesUtil", aesUtil);
+        return "completed_jobs";
+    }
+
+    /*
+     * @author: evana
+     * @Desc: Pending job lists of LoggedIn User as Employer
+     * @Date: 15-10-25
+     * */
+    @GetMapping("/employer/jobs/pending_jobs")
+    public String pendingJobList(@ModelAttribute("loggedUser") CustomUserDetail loggedUser, Model model) {
+        log.info("Loggedin user=",loggedUser.getUser().getUsername());
+        List<Job> jobs = jobService.findByJobStatus(loggedUser.getUser(), JobStatus.PENDING);
+        model.addAttribute("jobs", jobs);
+        model.addAttribute("statuses", UserStatus.values());
+        model.addAttribute("aesUtil", aesUtil);
+        return "pending_jobs";
+    }
+
+    /*
+     * @author: evana
+     * @Desc: Closed job lists of LoggedIn User as Employer
+     * @Date: 15-10-25
+     * */
+    @GetMapping("/employer/jobs/closed_jobs")
+    public String closeJobList(@ModelAttribute("loggedUser") CustomUserDetail loggedUser, Model model) {
+        log.info("Loggedin user=",loggedUser.getUser().getUsername());
+        List<Job> jobs = jobService.findByJobStatus(loggedUser.getUser(), JobStatus.CANCELLED);
+        model.addAttribute("jobs", jobs);
+        model.addAttribute("statuses", UserStatus.values());
+        model.addAttribute("aesUtil", aesUtil);
+        return "closed_jobs";
+    }
+
+    /*
+     * @author: evana
+     * @Desc: Job Details of a specific job
+     * @Date: 15-10-25
+     * */
     @GetMapping("/employer/jobs/job_detail")
     public String jobDetail(@RequestParam("encId") String encId, Model model) {
         if (encId != null) {
@@ -86,6 +183,11 @@ public class JobController {
         return "fragments/job_detail :: jobDetail";
     }
 
+    /*
+     * @author: evana
+     * @Desc: Job Update of a specific job
+     * @Date: 15-10-25
+     * */
     @PostMapping("/employer/jobs/update")
     @ResponseBody
     public ResponseEntity<Map<String, String>> UserStatusUpdate(@ModelAttribute Job job)

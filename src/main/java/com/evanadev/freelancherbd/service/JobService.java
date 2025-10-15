@@ -40,6 +40,7 @@ public class JobService {
     public Job findById(Long id) {
         return jobRepository.findById(id).get();
     }
+
     public List<Job> findAllJobsWithCategory(User loggedInUser) {
         if (loggedInUser == null) {
             throw new IllegalArgumentException("Logged-in user cannot be null");
@@ -54,7 +55,7 @@ public class JobService {
         return jobRepository.findByJobType(jobType);
     }
 
-    public List<Job> findByJobStatus(JobStatus jobStatus) {
-        return jobRepository.findByJobStatus(jobStatus);
+    public List<Job> findByJobStatus(User loggedInUser, JobStatus jobStatus) {
+        return jobRepository.findByJobStatus(loggedInUser.getUsername(), jobStatus);
     }
 }

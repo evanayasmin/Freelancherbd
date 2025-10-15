@@ -13,7 +13,10 @@ import java.util.Optional;
 public interface JobRepository extends JpaRepository<Job, Long> {
 
     Optional<Job> findById(Long id);
-    List<Job> findByJobStatus(JobStatus jobStatus);
+
+    @Query("SELECT DISTINCT j FROM Job j JOIN FETCH j.category WHERE j.jobStatus = :jobStatus and j.CreatedBy = :createdBy")
+    List<Job> findByJobStatus(@Param("createdBy") String createdBy,  @Param("jobStatus") JobStatus jobStatus);
+
     List<Job> findByJobType(JobType jobType);
     List<Job> findByCategory(Category category);
     //Boolean findByJobId(Long id);

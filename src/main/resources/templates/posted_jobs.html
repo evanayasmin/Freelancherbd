@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <div th:replace="~{fragments/header :: header}"></div>
+    <script th:src="@{/assets/vendors/tinymce/tinymce.min.js}"></script>
+    <script th:src="@{/assets/vendors/tinymce/plugins/code/plugin.min.js}"></script>
+    <script>
+        tinymce.init({ selector: '#default' });
+        tinymce.init({ selector: '#required_skill' });
+        tinymce.init({ selector: '#dark', toolbar: 'undo redo styleselect bold italic alignleft aligncenter alignright bullist numlist outdent indent code', plugins: 'code' });
+    </script>
+    <link rel="stylesheet" th:href="@{/assets/vendors/simple-datatables/style.css}">
+</head>
+<body>
+<div id="app">
+    <div id="sidebar" class="active">
+        <div class="sidebar-wrapper active">
+            <div class="sidebar-header">
+                <div class="d-flex justify-content-between">
+                    <div class="logo">
+                        <a href="index.html"><img src="assets/images/logo/logo.png" alt="Logo" srcset=""></a>
+                    </div>
+                    <div class="toggler">
+                        <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div th:replace="~{fragments/navigation :: navigation}"></div>
+            <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
+        </div>
+    </div>
+    <div id="main" class='layout-navbar'>
+        <div th:replace="~{fragments/profile_header :: profile-header}"></div>
+        <div id="main-content">
+            <div class="page-heading">
+                <div class="page-title">
+                    <div class="row">
+                        <div class="col-12 col-md-6 order-md-1 order-last"></div>
+                        <div class="col-12 col-md-6 order-md-2 order-first">
+                            <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a th:href="@{/home}">Dashboard</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">Manage Job / Posted Job List</li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+                <section class="section">
+                    <div class="card">
+                        <div class="card-header">Posted Job List</div>
+                        <div class="card-body" id="freelancerCardBody">
+                            <table class="table table-striped" id="table1">
+                                <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Category</th>
+                                    <th>Job Type</th>
+                                    <th>Job Price</th>
+                                    <th>Deadline</th>
+                                    <th>Vacancy</th>
+                                    <th>Status</th>
+                                    <th>Created At</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="job : ${jobs}">
+                                    <td th:text="${job.title}"></td>
+                                    <td th:text="${job.getCategory().getCategoryName()}"></td>
+                                    <td th:text="${job.jobType}"></td>
+                                    <td th:text="${job.paymentAmount}"></td>
+                                    <td th:text="${#temporals.format(job.deadline, 'yyyy-MM-dd')}"></td>
+                                    <td th:text="${job.vacancy != null ? job.vacancy : ''}"></td>
+                                    <td>
+                                        <span th:if="${job.jobStatus.name() =='POSTED' }"
+                                              class="badge bg-primary">Posted</span>
+                                        <span th:if="${job.jobStatus.name() =='PENDING' }"
+                                              class="badge bg-warning">Pending</span>
+                                        <span th:if="${job.jobStatus.name() =='IN_PROGRESS' }"
+                                              class="badge bg-light-primary">IN PROGRESS</span>
+                                        <span th:if="${job.jobStatus.name() =='COMPLETED' }"
+                                              class="badge bg-success">COMPLETED</span>
+                                        <span th:if="${job.jobStatus.name() =='CANCELLED' }"
+                                              class="badge bg-danger">CANCELLED</span>
+                                    </td>
+                                    <td th:text="${#temporals.format(job.createdAt, 'yyyy-MM-dd')}"></td>
+                                    <td>
+                                        <button type="button"
+                                                class="btn btn-sm btn-outline-primary edit-btn"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#jobViewModal"
+                                                th:data-url="@{/employer/jobs/job_detail(encId=${@aesUtil.encryptId(job.id)})}">
+                                            <i class="bi bi-book"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+                <div class="modal fade" id="jobViewModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Job Details</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body rounded bg-white" id="viewModalContent">
+                                <!-- Form content will be loaded here -->
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Delete Confirmation Modal -->
+                <div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+
+                    </div>
+                </div>
+            </div>
+            <footer>
+                <div class="footer clearfix mb-0 text-muted">
+                    <div th:replace="~{fragments/footer :: footer}"></div>
+                    <script th:src="@{/assets/vendors/simple-datatables/simple-datatables.js}"></script>
+                    <script>
+                        // Simple Datatable
+                        let table1 = document.querySelector('#table1');
+                        let dataTable = new simpleDatatables.DataTable(table1);
+
+                    </script>
+
+                </div>
+            </footer>
+        </div>
+        <!-- Toast Container (GLOBAL) -->
+        <div id="toastContainer" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
+    </div>
+</div>
+</body>
+</html>
