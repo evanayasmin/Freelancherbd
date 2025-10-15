@@ -1,4 +1,4 @@
-<div class="sidebar-menu" th:fragment="navigation" xmlns:sec="http://www.w3.org/1999/xhtml">
+<div class="sidebar-menu" th:fragment="navigation" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <ul class="menu">
         <li class="sidebar-title">Quick Menu</li>
         <li class="sidebar-item active">
@@ -20,7 +20,7 @@
             <a href="#" class='sidebar-link'>
                 <i class="bi bi-collection-fill"></i>
                 <span>Find Work</span>
-            </a>
+            </a>-?
             <ul class="submenu ">
                 <li class="submenu-item ">
                     <a th:href="@{/new_jobs}">New Jobs</a>
