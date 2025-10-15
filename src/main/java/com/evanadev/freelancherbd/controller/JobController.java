@@ -9,16 +9,12 @@ import com.evanadev.freelancherbd.util.AESUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 public class JobController {
@@ -80,13 +76,31 @@ public class JobController {
             log.debug("Job details: {}", job);
             List<Category> categories = categoryService.getAllCategories();
             model.addAttribute("jobDetail", job);
-            model.addAttribute("statuses", JobStatus.values());
+            model.addAttribute("jobStatus", JobStatus.values());
             model.addAttribute("jobType", JobType.values());
             model.addAttribute("categories", categories);
+        }else{
+            model.addAttribute("message", "Job not available.");
         }
 
         return "fragments/job_detail :: jobDetail";
     }
 
+    @PostMapping("/employer/jobs/update")
+    @ResponseBody
+    public ResponseEntity<Map<String, String>> UserStatusUpdate(@ModelAttribute Job job)
+    {
+        Map<String, String> response = new HashMap<>();
+
+        Optional<Job> existingjob = jobRepository.findById(job.getId());
+            if (existingjob.isPresent()){
+                jobService.update_job(job);
+                response.put("status", "success");
+                return ResponseEntity.ok(response);
+            }
+
+        response.put("status", "failed");
+        return ResponseEntity.ok(response);
+    }
 
 }

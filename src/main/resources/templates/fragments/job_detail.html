@@ -1,8 +1,9 @@
 <!-- fragments/category_update_form.html -->
 <div th:fragment="jobDetail">
     <div class="modal-body">
-        <form id="jobUpdateForm" th:object="${jobDetail}" class="form form-vertical" th:action="@{/employer/job/update}" method="post">
+        <form id="jobUpdateForm" th:object="${jobDetail}" class="form form-vertical" th:action="@{/employer/jobs/update}" method="post">
             <div class="form-body">
+<!--                <input type="hidden" name="encId" th:value="${encId}"/>-->
                 <input type="hidden" th:field="*{id}"/>
                 <div class="row">
                     <div class="col-12">
@@ -43,6 +44,18 @@
                                 <option th:each="jt : ${jobType}"
                                         th:value="${jt.name()}"
                                         th:text="${jt.name()}">
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label class="form-label">Job Status</label>
+                            <select class="form-select" th:field="*{jobStatus}" required>
+                                <option th:each="jts : ${jobStatus}"
+                                        th:if="${jts.name() != 'POSTED'}"
+                                        th:value="${jts.name()}"
+                                        th:text="${jts.name()}">
                                 </option>
                             </select>
                         </div>
@@ -99,8 +112,6 @@
                     <div class="col-12">
                         <div class="form-group">
                             <label for="deadline">Deadline</label>
-<!--                            <input type="datetime-local" id="deadline" class="form-control"-->
-<!--                                    th:field="*{deadline}" required/>-->
                             <input type="datetime-local" id="deadline" class="form-control"
                                  th:value="${#temporals.format(jobDetail.deadline, 'yyyy-MM-dd''T''HH:mm')}"
                                  name="deadline" required />

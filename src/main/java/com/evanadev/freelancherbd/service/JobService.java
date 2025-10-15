@@ -28,6 +28,9 @@ public class JobService {
         existing.setRequiredLevel(job.getRequiredLevel());
         existing.setJobStatus(job.getJobStatus());
         existing.setDeadline(job.getDeadline());
+        existing.setAgeLimit(job.getAgeLimit());
+        existing.setVacancy(job.getVacancy());
+        existing.setExperience(job.getExperience());
         jobRepository.save(existing);
 
     }
