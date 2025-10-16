@@ -3,6 +3,7 @@ package com.evanadev.freelancherbd.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -41,7 +42,6 @@ private LocalDateTime updatedAt;
             joinColumns = @JoinColumn(name = "user_id"), //user_id
             inverseJoinColumns = @JoinColumn(name = "role_id") //role_id
     )
-
     private Set<Role> roles = new HashSet<>();
 
     public long getId() {

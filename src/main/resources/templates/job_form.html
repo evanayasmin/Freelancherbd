@@ -95,7 +95,7 @@
                                                         <div class="form-group">
                                                             <label class="form-label">Job Type</label>
                                                             <select class="form-select" th:field="*{jobType}" required>
-                                                                <option th:each="jt : ${jobTypes}"
+                                                                <option th:each="jt : ${jobType}"
                                                                         th:value="${jt.name()}"
                                                                         th:text="${jt.name()}">
                                                                 </option>

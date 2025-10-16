@@ -56,13 +56,19 @@ public class JobController {
      * @Date: 14-10-25
      * */
     @PostMapping("/employer/job/submit_job")
-    public String job_submit(@ModelAttribute Job job, Model model){
+    public String job_submit(@ModelAttribute Job job,  @ModelAttribute("loggedUser") CustomUserDetail loggedUserDetail, Model model){
 
+        if (loggedUserDetail == null) {
+            throw new RuntimeException("No logged-in user");
+        }
+        // Get the actual User entity
+        User user = loggedUserDetail.getUser();
         String message = "";
+        job.setUser(user);
         jobService.JobSave(job);
         message = "Your Job is created successfully. After Admin approval, it will be posted for Freelancer.";
         model.addAttribute("messsage", message);
-        model.addAttribute("jobTypes", JobType.values());
+        model.addAttribute("jobType", JobType.values());
         model.addAttribute("job", new Job());
         return "job_form";
     }
