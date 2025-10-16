@@ -29,10 +29,11 @@ public class JobController {
     @Autowired
     private AESUtil aesUtil;
 
-    public JobController(JobRepository jobRepository, JobService jobService, CategoryService categoryService) {
+    public JobController(JobRepository jobRepository, JobService jobService, CategoryService categoryService, AESUtil aesUtil) {
         this.jobRepository = jobRepository;
         this.jobService = jobService;
         this.categoryService = categoryService;
+        this.aesUtil = aesUtil;
     }
 
     /*
@@ -203,6 +204,50 @@ public class JobController {
 
         response.put("status", "failed");
         return ResponseEntity.ok(response);
+    }
+
+    /*
+     * @author: evana
+     * @Desc: Job list of a specific category
+     * @Date: 16-10-25
+     * */
+    @GetMapping("/jobs/category/{encId}")
+    public String getJobsByCategory(@PathVariable("encId") String encId, Model model) {
+        try {
+            Long did = aesUtil.decryptId(encId);
+            Category category = categoryService.findById(did);
+            if(category.getId() != null) {
+                List<Job> jobs = jobService.findByCategory(category);
+                model.addAttribute("category", category);
+                model.addAttribute("jobs", jobs);
+                return "category_jobs";
+            }
+            else{
+                model.addAttribute("message","Category not found.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Optionally, redirect to an error page or show a message
+            return "redirect:/error";
+        }
+        return "category_jobs";
+    }
+
+    @GetMapping("/jobs/job_detail/{encId}")
+    public String getJobDetail(@PathVariable("encId") String encId, Model model) {
+        try {
+            Long did = aesUtil.decryptId(encId);
+            Job job = jobService.findById(did);
+            if (job == null) {
+                return "redirect:jobs_not_found";
+            }
+            model.addAttribute("jobDetail", job);
+            return "categoryJob_detail";
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "redirect:error";
+        }
     }
 
 }
