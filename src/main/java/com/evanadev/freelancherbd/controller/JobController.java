@@ -223,7 +223,7 @@ public class JobController {
             Long did = aesUtil.decryptId(encId);
             Category category = categoryService.findById(did);
             if(category.getId() != null) {
-                List<Job> jobs = jobService.findByCategory(category);
+                List<Job> jobs = jobService.findByCategoryAndJobStatus(category);
                 model.addAttribute("category", category);
                 model.addAttribute("jobs", jobs);
                 return "category_jobs";

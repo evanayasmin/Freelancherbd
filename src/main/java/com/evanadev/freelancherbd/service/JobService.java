@@ -52,6 +52,10 @@ public class JobService {
         return jobRepository.findByCategory(category);
     }
 
+    public List<Job> findByCategoryAndJobStatus(Category category) {
+        return jobRepository.findByCategoryAndJobStatus(category);
+    }
+
     public List<Job> findByJobType(JobType jobType) {
         return jobRepository.findByJobType(jobType);
     }

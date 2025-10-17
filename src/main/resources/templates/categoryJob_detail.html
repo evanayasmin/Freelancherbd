@@ -47,12 +47,13 @@
                                   <div class="card-body">
                                   <p class="text-primary"><strong>Post: &nbsp; <span th:text="${jobDetail.title}"></span></strong></p>
                                   <div class="table-responsive">
-                                      <table class="table table-primary">
+                                      <table class="table table-secondary">
                                           <tbody>
                                           <tr>
                                               <td>Vacancy: <span th:text="${jobDetail.vacancy}"></span></td>
-                                              <td>Deadline: <span th:text="${jobDetail.deadline}"></span></td>
+                                              <td>Application Deadline: <span th:text="${jobDetail.deadline}"></span></td>
                                               <td>Experience: <span th:text="${jobDetail.experience}"></span></td>
+                                              <td>Payment: <span th:text="${jobDetail.paymentAmount}"></span></td>
                                           </tr>
                                           </tbody>
                                       </table>
@@ -92,9 +93,47 @@
                                           <td style="background-color: #f2f7ff;"><strong>Special Instruction</strong></td>
                                           <td><span th:text="${jobDetail.companyInstruction}"></span></td>
                                       </tr>
+                                      <tr><td colspan="2"><div th:align="center" sec:authorize="hasAnyRole('FREELANCER')">
+                                          <a th:href="@{'/jobs/apply/' + ${@aesUtil.encryptId(jobDetail.id)}}"
+                                             target="_parent"
+                                             class="btn btn-success">
+                                              Apply Now
+                                          </a>
+                                          &nbsp;
+                                          <a th:href="@{'/jobs/report/' + ${@aesUtil.encryptId(jobDetail.id)}}"
+                                             target="_parent"
+                                             class="btn btn-warning">
+                                              Report this Job
+                                          </a>
+                                      </div>
+                                         </td></tr>
                                      </tbody>
                                   </table>
                                   </div>
+                                      <div class="col-12 col-md-12 alert alert-light-primary color-light-info">
+                                          <h6 class="alert-heading"><i class="bi bi-building text-success fs-4 me-2"></i>Company Information</h6>
+                                          <p><span th:text="${jobDetail.getUser().getUserProfile().getCompanyName()}"></span></p>
+                                          <p>&nbsp;</p>
+                                          <h6 class="alert-heading">Company Address</h6>
+                                          <p><span th:text="${jobDetail.getUser().getUserProfile().getCompanyAddress()}"></span></p>
+                                          <p>&nbsp;</p>
+                                          <h6 class="alert-heading">Business</h6>
+                                          <p><span th:text="${jobDetail.getUser().getUserProfile().getCompanyBusiness()}"></span></p>
+                                          <p>&nbsp;</p>
+                                          <h6 class="alert-heading">Contact No.</h6>
+                                          <p>Phone: <span th:text="${jobDetail.getUser().getUserProfile().getCompanyPhone()}"></span>
+                                          Email: <span th:text="${jobDetail.getUser().getUserProfile().getCompanyEmail()}"></span></p>
+                                      </div>
+                                      <div class="col-12 col-md-12 alert alert-light-warning color-danger">
+                                          <h6 class="alert-heading">
+                                          <i class="bi bi-exclamation-triangle text-danger fs-4 me-2"></i> &nbsp;Report this Job!</h6>
+                                          <p class="card-body" style="font-size: smaller;">সতর্কীকরণ:
+                                          এই চাকরির বিজ্ঞাপনদাতা ব্যক্তি বা প্রতিষ্ঠান যদি কোনো অর্থ দাবি করে বা হয়রানিমূলক আচরণ করে, অনুগ্রহ করে দ্রুত জবটি রিপোর্ট করুন।
+                                          চাকরি পাওয়ার জন্য কোনো ব্যক্তি বা প্রতিষ্ঠানের কাছে অর্থ প্রদান করবেন না।
+                                          অর্থ লেনদেন বা নিয়োগদাতার হয়রানিমূলক আচরণের জন্য FreelancingBD দায়ী থাকবে না।
+                                          <br/><i class="bi bi-phone text-danger"></i> 01912000265, 01730909510
+                                              &nbsp; <i class="bi bi-envelope text-primary"></i> complain@freelancingBD.com</p>
+                                      </div>
                                   </div>
                             </div>
                         </div>
