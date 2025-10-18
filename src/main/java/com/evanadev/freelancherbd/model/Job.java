@@ -108,6 +108,7 @@ public class Job {
         return company;
     }
 
+
     public void setCompany(String company) {
         this.company = company;
     }

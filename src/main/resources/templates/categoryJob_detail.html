@@ -32,7 +32,7 @@
                             <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a th:href="@{/home}">Dashboard</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">Job Category / <span th:text="${jobDetail.getCategory().categoryName}"></span> / Job Details </li>
+                                    <li class="breadcrumb-item active" aria-current="page">Job Category / <a th:href="@{('/jobs/category/' + ${@aesUtil.encryptId(jobDetail.getCategory().getId())})}" th:text="${jobDetail.getCategory().categoryName}" th:target="_parent"></a> / Job Details </li>
                                 </ol>
                             </nav>
                         </div>
@@ -46,18 +46,24 @@
                                 <div class="card-content">
                                   <div class="card-body">
                                   <p class="text-primary"><strong>Post: &nbsp; <span th:text="${jobDetail.title}"></span></strong></p>
-                                  <div class="table-responsive">
-                                      <table class="table table-secondary">
-                                          <tbody>
-                                          <tr>
-                                              <td>Vacancy: <span th:text="${jobDetail.vacancy}"></span></td>
-                                              <td>Application Deadline: <span th:text="${jobDetail.deadline}"></span></td>
-                                              <td>Experience: <span th:text="${jobDetail.experience}"></span></td>
-                                              <td>Payment: <span th:text="${jobDetail.paymentAmount}"></span></td>
-                                          </tr>
-                                          </tbody>
-                                      </table>
-                                  </div>
+                                  <div class="row match-height alert alert-light-primary border-bottom">
+                                      <div class="col-md-2"><strong>Vacancy:</strong>&nbsp;<span th:text="${jobDetail.vacancy}"></span></div>
+                                      <div class="col-md-4"><strong>Deadline:</strong>&nbsp;<span th:text="${#temporals.format(jobDetail.deadline, 'yyyy-MM-dd')}"></span></div>
+                                      <div class="col-md-3"><strong>Experience:</strong>&nbsp;<span th:text="${jobDetail.experience}"></span></div>
+                                      <div class="col-md-3"><strong>Payment:</strong>&nbsp;<span th:text="${jobDetail.paymentAmount}"></span></div>
+                                  </div><hr/>
+<!--                                  <div class="table-responsive">-->
+<!--                                      <table class="table table-secondary">-->
+<!--                                          <tbody>-->
+<!--                                          <tr>-->
+<!--                                              <td>Vacancy: <span th:text="${jobDetail.vacancy}"></span></td>-->
+<!--                                              <td>Application Deadline: <span th:text="${jobDetail.deadline}"></span></td>-->
+<!--                                              <td>Experience: <span th:text="${jobDetail.experience}"></span></td>-->
+<!--                                              <td>Payment: <span th:text="${jobDetail.paymentAmount}"></span></td>-->
+<!--                                          </tr>-->
+<!--                                          </tbody>-->
+<!--                                      </table>-->
+<!--                                  </div>-->
                                   <div class="table-responsive">
                                   <table class="table table-lg">
                                       <tbody>
@@ -110,8 +116,8 @@
                                      </tbody>
                                   </table>
                                   </div>
-                                      <div class="col-12 col-md-12 alert alert-light-primary color-light-info">
-                                          <h6 class="alert-heading"><i class="bi bi-building text-success fs-4 me-2"></i>Company Information</h6>
+                                      <div class="col-12 col-md-12 alert alert-light-primary border-bottom">
+                                          <h6 class="alert-heading"><i class="bi bi-building text-primary fs-4 me-2"></i>Company Information</h6>
                                           <p><span th:text="${jobDetail.getUser().getUserProfile().getCompanyName()}"></span></p>
                                           <p>&nbsp;</p>
                                           <h6 class="alert-heading">Company Address</h6>
@@ -124,7 +130,7 @@
                                           <p>Phone: <span th:text="${jobDetail.getUser().getUserProfile().getCompanyPhone()}"></span>
                                           Email: <span th:text="${jobDetail.getUser().getUserProfile().getCompanyEmail()}"></span></p>
                                       </div>
-                                      <div class="col-12 col-md-12 alert alert-light-warning color-danger">
+                                      <div class="col-12 col-md-12 alert alert-light-warning border-bottom">
                                           <h6 class="alert-heading">
                                           <i class="bi bi-exclamation-triangle text-danger fs-4 me-2"></i> &nbsp;Report this Job!</h6>
                                           <p class="card-body" style="font-size: smaller;">সতর্কীকরণ:
@@ -132,7 +138,7 @@
                                           চাকরি পাওয়ার জন্য কোনো ব্যক্তি বা প্রতিষ্ঠানের কাছে অর্থ প্রদান করবেন না।
                                           অর্থ লেনদেন বা নিয়োগদাতার হয়রানিমূলক আচরণের জন্য FreelancingBD দায়ী থাকবে না।
                                           <br/><i class="bi bi-phone text-danger"></i> 01912000265, 01730909510
-                                              &nbsp; <i class="bi bi-envelope text-primary"></i> complain@freelancingBD.com</p>
+                                              &nbsp; <i class="bi bi-envelope text-primary"></i> complain@FreelancingBD.com</p>
                                       </div>
                                   </div>
                             </div>
