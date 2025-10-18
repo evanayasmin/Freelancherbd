@@ -35,6 +35,10 @@ public class Job {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     @Lob
     @Column(columnDefinition = "LONGTEXT", nullable = false)
     private String RequiredSkill;
@@ -68,6 +72,14 @@ public class Job {
     @Column(updatable = false)
     private String CreatedBy;
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public Long getId() {
         return id;
     }
@@ -95,6 +107,7 @@ public class Job {
     public String getCompany() {
         return company;
     }
+
 
     public void setCompany(String company) {
         this.company = company;

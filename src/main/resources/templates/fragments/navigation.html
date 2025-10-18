@@ -5,14 +5,12 @@
             <a href="/home" th:href="@{/home}" class='sidebar-link'><i class="bi bi-grid-fill"></i><span>Dashboard</span>
             </a>
         </li>
-        <li class="sidebar-item has-sub">
+        <li class="sidebar-item has-sub" sec:authorize="hasAnyRole('FREELANCER','EMPLOYER','ADMIN')">
             <a href="#" class='sidebar-link'><i class="bi bi-stack"></i><span>Job Category</span></a>
             <ul class="submenu ">
-
                 <li th:each="cat : ${categories}" class="submenu-item">
-                    <a th:href="@{'/admin/category/' + ${cat.id}}" th:text="${cat.categoryName}"></a>
+                    <a th:href="@{('/jobs/category/' + ${@aesUtil.encryptId(cat.id)})}" th:text="${cat.categoryName}"></a>
                 </li>
-
             </ul>
         </li>
 
@@ -20,7 +18,7 @@
             <a href="#" class='sidebar-link'>
                 <i class="bi bi-collection-fill"></i>
                 <span>Find Work</span>
-            </a>-?
+            </a>
             <ul class="submenu ">
                 <li class="submenu-item ">
                     <a th:href="@{/new_jobs}">New Jobs</a>

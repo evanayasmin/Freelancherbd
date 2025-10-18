@@ -13,6 +13,7 @@ public class JobService {
     private JobRepository jobRepository;
 
     public Job JobSave(Job job) {
+
         return jobRepository.save(job);
     }
 
@@ -49,6 +50,10 @@ public class JobService {
     }
     public List<Job> findByCategory(Category category) {
         return jobRepository.findByCategory(category);
+    }
+
+    public List<Job> findByCategoryAndJobStatus(Category category) {
+        return jobRepository.findByCategoryAndJobStatus(category);
     }
 
     public List<Job> findByJobType(JobType jobType) {

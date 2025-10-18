@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="~{fragments/header :: header}"></div>
+</head>
+<body>
+<div id="app">
+    <div id="sidebar" class="active">
+        <div class="sidebar-wrapper active">
+            <div class="sidebar-header">
+                <div class="d-flex justify-content-between">
+                    <div class="logo">
+                        <a href="index.html"><img src="assets/images/logo/logo.png" alt="Logo" srcset=""></a>
+                    </div>
+                    <div class="toggler">
+                        <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div th:replace="~{fragments/navigation :: navigation}"></div>
+            <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
+        </div>
+    </div>
+    <div id="main" class='layout-navbar'>
+        <div th:replace="~{fragments/profile_header :: profile-header}"></div>
+        <div id="main-content">
+            <div class="page-heading">
+                <div class="page-title">
+                    <div class="row">
+                        <div class="col-12 col-md-6 order-md-1 order-last"></div>
+                        <div class="col-12 col-md-6 order-md-2 order-first">
+                            <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a th:href="@{/home}">Dashboard</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">Job Category / <a th:href="@{('/jobs/category/' + ${@aesUtil.encryptId(jobDetail.getCategory().getId())})}" th:text="${jobDetail.getCategory().categoryName}" th:target="_parent"></a> / Job Details </li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+                <section id="basic-vertical-layouts">
+                    <div class="row match-height">
+                        <div class="col-md-12 col-12">
+                            <div class="card">
+                                <div class="card-header"><h4 class="card-title">Job Details of <span th:text="${jobDetail.title}"></span></h4></div>
+                                <div class="card-content">
+                                  <div class="card-body">
+                                  <p class="text-primary"><strong>Post: &nbsp; <span th:text="${jobDetail.title}"></span></strong></p>
+                                  <div class="row match-height alert alert-light-primary border-bottom">
+                                      <div class="col-md-2"><strong>Vacancy:</strong>&nbsp;<span th:text="${jobDetail.vacancy}"></span></div>
+                                      <div class="col-md-4"><strong>Deadline:</strong>&nbsp;<span th:text="${#temporals.format(jobDetail.deadline, 'yyyy-MM-dd')}"></span></div>
+                                      <div class="col-md-3"><strong>Experience:</strong>&nbsp;<span th:text="${jobDetail.experience}"></span></div>
+                                      <div class="col-md-3"><strong>Payment:</strong>&nbsp;<span th:text="${jobDetail.paymentAmount}"></span></div>
+                                  </div><hr/>
+<!--                                  <div class="table-responsive">-->
+<!--                                      <table class="table table-secondary">-->
+<!--                                          <tbody>-->
+<!--                                          <tr>-->
+<!--                                              <td>Vacancy: <span th:text="${jobDetail.vacancy}"></span></td>-->
+<!--                                              <td>Application Deadline: <span th:text="${jobDetail.deadline}"></span></td>-->
+<!--                                              <td>Experience: <span th:text="${jobDetail.experience}"></span></td>-->
+<!--                                              <td>Payment: <span th:text="${jobDetail.paymentAmount}"></span></td>-->
+<!--                                          </tr>-->
+<!--                                          </tbody>-->
+<!--                                      </table>-->
+<!--                                  </div>-->
+                                  <div class="table-responsive">
+                                  <table class="table table-lg">
+                                      <tbody>
+                                      <tr>
+                                          <td style="background-color: #f2f7ff"><strong>Job Description</strong></td>
+                                          <td><span  th:utext="${jobDetail.description}"></span></td>
+                                      </tr>
+                                      <tr>
+                                          <td style="background-color: #f2f7ff;"><strong>Required Skill</strong></td>
+                                          <td><span th:utext="${jobDetail.requiredSkill}"></span></td>
+                                      </tr>
+                                      <tr>
+                                          <td style="background-color: #f2f7ff;"><strong>Job Location</strong></td>
+                                          <td><span th:text="${jobDetail.jobLocation}"></span></td>
+                                      </tr>
+                                      <tr>
+                                          <td style="background-color: #f2f7ff;"><strong>Age Limit</strong></td>
+                                          <td><span th:text="${jobDetail.ageLimit}"></span></td>
+                                      </tr>
+                                      <tr>
+                                          <td style="background-color: #f2f7ff;"><strong>Required Experience</strong></td>
+                                          <td><span th:text="${jobDetail.experience}"></span></td>
+                                      </tr>
+                                      <tr>
+                                          <td style="background-color: #f2f7ff;"><strong>Payment</strong></td>
+                                          <td><span th:text="${jobDetail.paymentAmount}"></span></td>
+                                      </tr>
+                                      <tr>
+                                          <td style="background-color: #f2f7ff;"><strong>Company Name</strong></td>
+                                          <td><span th:text="${jobDetail.company}"></span></td>
+                                      </tr>
+                                      <tr>
+                                          <td style="background-color: #f2f7ff;"><strong>Special Instruction</strong></td>
+                                          <td><span th:text="${jobDetail.companyInstruction}"></span></td>
+                                      </tr>
+                                      <tr><td colspan="2"><div th:align="center" sec:authorize="hasAnyRole('FREELANCER')">
+                                          <a th:href="@{'/jobs/apply/' + ${@aesUtil.encryptId(jobDetail.id)}}"
+                                             target="_parent"
+                                             class="btn btn-success">
+                                              Apply Now
+                                          </a>
+                                          &nbsp;
+                                          <a th:href="@{'/jobs/report/' + ${@aesUtil.encryptId(jobDetail.id)}}"
+                                             target="_parent"
+                                             class="btn btn-warning">
+                                              Report this Job
+                                          </a>
+                                      </div>
+                                         </td></tr>
+                                     </tbody>
+                                  </table>
+                                  </div>
+                                      <div class="col-12 col-md-12 alert alert-light-primary border-bottom">
+                                          <h6 class="alert-heading"><i class="bi bi-building text-primary fs-4 me-2"></i>Company Information</h6>
+                                          <p><span th:text="${jobDetail.getUser().getUserProfile().getCompanyName()}"></span></p>
+                                          <p>&nbsp;</p>
+                                          <h6 class="alert-heading">Company Address</h6>
+                                          <p><span th:text="${jobDetail.getUser().getUserProfile().getCompanyAddress()}"></span></p>
+                                          <p>&nbsp;</p>
+                                          <h6 class="alert-heading">Business</h6>
+                                          <p><span th:text="${jobDetail.getUser().getUserProfile().getCompanyBusiness()}"></span></p>
+                                          <p>&nbsp;</p>
+                                          <h6 class="alert-heading">Contact No.</h6>
+                                          <p>Phone: <span th:text="${jobDetail.getUser().getUserProfile().getCompanyPhone()}"></span>
+                                          Email: <span th:text="${jobDetail.getUser().getUserProfile().getCompanyEmail()}"></span></p>
+                                      </div>
+                                      <div class="col-12 col-md-12 alert alert-light-warning border-bottom">
+                                          <h6 class="alert-heading">
+                                          <i class="bi bi-exclamation-triangle text-danger fs-4 me-2"></i> &nbsp;Report this Job!</h6>
+                                          <p class="card-body" style="font-size: smaller;">সতর্কীকরণ:
+                                          এই চাকরির বিজ্ঞাপনদাতা ব্যক্তি বা প্রতিষ্ঠান যদি কোনো অর্থ দাবি করে বা হয়রানিমূলক আচরণ করে, অনুগ্রহ করে দ্রুত জবটি রিপোর্ট করুন।
+                                          চাকরি পাওয়ার জন্য কোনো ব্যক্তি বা প্রতিষ্ঠানের কাছে অর্থ প্রদান করবেন না।
+                                          অর্থ লেনদেন বা নিয়োগদাতার হয়রানিমূলক আচরণের জন্য FreelancingBD দায়ী থাকবে না।
+                                          <br/><i class="bi bi-phone text-danger"></i> 01912000265, 01730909510
+                                              &nbsp; <i class="bi bi-envelope text-primary"></i> complain@FreelancingBD.com</p>
+                                      </div>
+                                  </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </section>
+
+            </div>
+            <footer>
+                <div class="footer clearfix mb-0 text-muted">
+                    <div th:replace="~{fragments/footer :: footer}"></div>
+                </div>
+            </footer>
+        </div>
+    </div>
+</div>
+</body>
+</html>
