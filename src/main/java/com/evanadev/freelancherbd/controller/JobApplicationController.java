@@ -82,5 +82,21 @@ public class JobApplicationController {
         return "jobApplication_submit";
     }
 
+    /*
+     * @author: evana
+     * @Desc: Proposals of LoggedIn User as Employer
+     * @Date: 19-10-25
+     * */
+
+    @GetMapping("/employer/jobs/proposals")
+    public String completeJobList(@ModelAttribute("loggedUser") CustomUserDetail loggedUser, Model model) {
+        log.info("Loggedin user=",loggedUser.getUser().getUsername());
+        List<JobApplication> jobApplication = jobApplicationService.findJobApplicationByEmployerId(loggedUser.getUser().getId());
+        model.addAttribute("proposals", jobApplication);
+        model.addAttribute("statuses", ApplicationStatus.values());
+        model.addAttribute("aesUtil", aesUtil);
+        return "open_proposals";
+    }
+
 
 }

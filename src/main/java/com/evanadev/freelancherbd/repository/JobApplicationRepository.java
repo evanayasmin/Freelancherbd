@@ -3,6 +3,7 @@ package com.evanadev.freelancherbd.repository;
 import com.evanadev.freelancherbd.model.ApplicationStatus;
 import com.evanadev.freelancherbd.model.JobApplication;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -19,4 +20,7 @@ public interface JobApplicationRepository extends JpaRepository<JobApplication, 
     List<JobApplication> findJobApplicationByUserId(long userId);
     List<JobApplication> findJobApplicationByJobId(Long jobId);
 
+    @Query("SELECT DISTINCT ja FROM JobApplication ja JOIN ja.job j WHERE j.user.id = :employerId " +
+            "AND ja.applicationStaus IN ('RECEIVED', 'VIEWED')")
+    List<JobApplication> findJobApplicationByEmployerId(long employerId);
 }

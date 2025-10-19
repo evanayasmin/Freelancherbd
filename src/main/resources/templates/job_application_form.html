@@ -53,8 +53,8 @@
                                 <div class="card-header"><h5 class="card-title">Application Form :&nbsp; <span th:text="${job.title}"></span></h5></div>
                                 <div class="card-content">
                                     <div class="card-body">
-                                        <div class="alert alert-light-danger color-danger" th:if="${cv == null}"><i class="bi bi-exclamation-circle"></i>
-                                            You have not uploaded your CV. Please upload your CV first and then apply.
+                                        <div class="alert alert-light-danger text-primary" th:if="${cv == null}"><i class="bi bi-exclamation-circle"></i>
+                                            You have not uploaded your CV. Please upload your CV first and apply.
                                         </div>
                                          <div class="row match-height alert alert-light-primary border-bottom">
                                             <div class="col-md-2"><strong>Vacancy:</strong>&nbsp;<span th:text="${job.vacancy}"></span></div>
@@ -63,7 +63,7 @@
                                             <div class="col-md-3"><strong>Payment:</strong>&nbsp;<span th:text="${job.paymentAmount}"></span></div>
                                         </div><hr/>
                                         <div class="alert alert-light-info color-danger" th:if="${application_message != null}">
-                                            <i class="bi bi-exclamation-circle"></i> <span th:text="${application_message}"></span>
+                                            <i class="bi bi-exclamation-circle"></i>&nbsp;<span class="text-primary" th:text="${application_message}"></span>
                                         </div>
                                         <div class="row" th:if="${application_message == null}">
                                         <form th:object="${JobApplication}" class="form form-vertical" th:action="@{/freelancer/jobs/application_submit}" method="post">
@@ -99,8 +99,6 @@
                                                 </div>
                                             </form>
                                         </div>
-
-
                                     </div>
                                 </div>
                             </div>

@@ -110,4 +110,9 @@ public class JobApplication {
     public void setUser(User user) {
         this.user = user;
     }
+
+    @PrePersist
+    protected void onCreate() {
+        this.applicationDate = LocalDateTime.now();
+    }
 }

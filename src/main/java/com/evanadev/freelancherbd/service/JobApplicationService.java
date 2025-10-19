@@ -42,4 +42,8 @@ public class JobApplicationService {
         return jobApplicationRepository.findJobApplicationByUserId(employeeId);
     }
 
+    public List<JobApplication> findJobApplicationByEmployerId(Long employerId) {
+        return jobApplicationRepository.findJobApplicationByEmployerId(employerId);
+    }
+
 }

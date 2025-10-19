@@ -53,7 +53,7 @@ public class JobService {
     }
 
     public List<Job> findByCategoryAndJobStatus(Category category) {
-        return jobRepository.findByCategoryAndJobStatus(category);
+        return jobRepository.findByCategoryAndJobStatus(category.getId());
     }
 
     public List<Job> findByJobType(JobType jobType) {

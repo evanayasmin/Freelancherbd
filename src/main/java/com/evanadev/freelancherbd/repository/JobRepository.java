@@ -20,9 +20,8 @@ public interface JobRepository extends JpaRepository<Job, Long> {
     List<Job> findByJobType(JobType jobType);
     List<Job> findByCategory(Category category);
 
-    @Query("SELECT DISTINCT j FROM Job j JOIN FETCH j.category WHERE j.jobStatus NOT in('PENDING', 'CANCELLED') ")
-    List<Job> findByCategoryAndJobStatus(Category category);
-    //Boolean findByJobId(Long id);
+    @Query("SELECT DISTINCT j FROM Job j JOIN FETCH j.category ct WHERE ct.id=:categoryId and j.jobStatus NOT in('PENDING', 'CANCELLED') ")
+    List<Job> findByCategoryAndJobStatus(@Param("categoryId") Long categoryId);
 
     @Query("SELECT DISTINCT j FROM Job j JOIN FETCH j.category WHERE j.CreatedBy = :createdBy")
     List<Job> findAllJobsWithCategory(@Param("createdBy") String createdBy);
