@@ -23,6 +23,7 @@ public SecurityFilterChain configure(HttpSecurity http) throws Exception {
     http.csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(request -> request.requestMatchers("/css/**", "/js/**", "/images/**", "/assets/**", "/webjars/**").permitAll()
             .requestMatchers("/register", "/login").permitAll()
+            .requestMatchers("/jobs/category/", "/jobs/job_detail/").permitAll()
             .requestMatchers("/admin/category/**").hasRole("ADMIN") //Only admin can access
             .requestMatchers("/admin/users/**").hasRole("ADMIN")      //Only admin can access
             .requestMatchers("/employer/jobs/**").hasRole("EMPLOYER")     //Only Employer can access

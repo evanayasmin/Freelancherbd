@@ -97,8 +97,6 @@ public class JobController {
     @GetMapping("/employer/jobs/active_jobs")
     public String activeJobList(@ModelAttribute("loggedUser") CustomUserDetail loggedUser, Model model) {
         log.info("Loggedin user=",loggedUser.getUser().getUsername());
-       // String statusStr = "IN_PROGRESS";
-       // JobStatus status = JobStatus.valueOf(statusStr);
         List<Job> jobs = jobService.findByJobStatus(loggedUser.getUser(), JobStatus.IN_PROGRESS);
         model.addAttribute("jobs", jobs);
         model.addAttribute("statuses", UserStatus.values());
