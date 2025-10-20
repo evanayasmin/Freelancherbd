@@ -127,6 +127,30 @@ $('#proposalViewModal').on('show.bs.modal', function (e) {
     });
 });
 
+//Proposal Update
+//Job Detail Updating Submit:
+$(document).on("submit", "#proposalUpdateForm", function(e) {
+    e.preventDefault();
+    console.log("AJAX triggered from dynamic modal");
+    $.ajax({
+        url: $(this).attr('action'),
+        type: "POST",
+        data: $(this).serialize(),
+        success: function(res) {
+            // $("#statusMessage").text("Job updated successfully!").show();
+            if (res.status === "success") {
+                showToast("Proposal updated successfully!", "success");
+            }else{
+                showToast("Failed to update Proposal!", "error");
+            }
+
+        },
+        error: function() {
+            showToast("Bad Request!", "error");
+        }
+    });
+});
+
 // Toast function for global
 function showToast(message, type) {
     let bg = type === "success" ? "bg-success" : "bg-danger";

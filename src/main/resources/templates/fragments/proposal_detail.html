@@ -11,21 +11,20 @@
                 <div class="col-md-12"><strong>Email: </strong> <span class="text-black-50" th:text="${applicant.email}"></span></div>
                 <div class="col-md-12"><label class="labels"><strong>Phone:</strong></label>&nbsp;<span th:text="${applicant.phone}"></span></div>
                 <div class="col-md-12"><label class="labels"><strong>Gender:</strong></label>&nbsp;<span th:text="${applicant.getUserProfile().gender !=null ? applicant.getUserProfile().gender : 'N/A'}"></span></div>
-                <div class="col-md-12"><label class="labels"><strong>NID:</strong></label>&nbsp;<span th:text="${applicant.nid}"></span></div>
+<!--                <div class="col-md-12"><label class="labels"><strong>NID:</strong></label>&nbsp;<span th:text="${applicant.nid}"></span></div>-->
                 <div class="col-md-12"><label class="labels"><strong>Country:</strong></label>&nbsp;<span th:text="${applicant.getUserProfile().country !=null ? applicant.getUserProfile().country :'N/A'}"></span></div>
                 <div class="col-md-12"><label class="labels"><strong>City:</strong></label>&nbsp;<span th:text="${applicant.getUserProfile().city !=null ? applicant.getUserProfile().city : 'N/A'}"></span></div>
                 <div class="col-md-12"><label class="labels"><strong>Github Url:</strong></label>&nbsp;<span th:text="${applicant.getUserProfile().githubUrl !=null ? applicant.getUserProfile().githubUrl : 'N/A'}"></span></div>
                 <div class="col-md-12"><label class="labels"><strong>Linkedin Url:</strong></label>&nbsp;<span th:text="${applicant.getUserProfile().linkedinUrl !=null ? applicant.getUserProfile().linkedinUrl : 'N/A'}"></span></div>
-                <div class="col-md-12"><label class="labels"><strong>Skills:</strong> </label>&nbsp;<span th:text="${applicant.getUserProfile().skills !=null ? applicant.getUserProfile().skills : 'N/A'}"></span></div>
+<!--                <div class="col-md-12"><label class="labels"><strong>Skills:</strong> </label>&nbsp;<span th:text="${applicant.getUserProfile().skills !=null ? applicant.getUserProfile().skills : 'N/A'}"></span></div>-->
                 <div class="col-md-12"><label class="labels"><strong>Resume:</strong> </label>&nbsp;
                     <span th:if="${applicant.getUserProfile().cv != null}">
                         <a th:href="@{'/' + ${applicant.getUserProfile().cv}}" target="_blank">Download CV</a></span></div>
-
             </div>
         </div>
         <div class="col-md-8 border-right">
              <h6 class="text-right">Applicantion Details</h6>
-                        <form id="proposalUpdateForm">
+                        <form id="proposalUpdateForm" class="form-control" th:action="@{/employer/proposals/update}" method="post">
                             <input type="hidden" name="encId" th:value="${encId}"/>
                             <div class="col-12">
                                 <div class="form-group">
@@ -41,6 +40,12 @@
                             </div>
                             <div class="col-12">
                                 <div class="form-group">
+                                    <label class="card-title">Skills: </label>
+                                    <span th:utext="${applicant.getUserProfile().skills}"></span>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
                                     <label class="card-title">Cover Letter: </label>
                                     <span th:utext="${jobApplication.coverLetter}"></span>
                                 </div>
@@ -49,6 +54,12 @@
                                 <div class="form-group">
                                     <label class="card-title">Expected Salary: </label>
                                     <span th:text="${jobApplication.expectedSalary}"></span>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label class="card-title">Application Date: </label>
+                                    <span th:text="${#temporals.format(jobApplication.applicationDate, 'yyyy-MM-dd')}"></span>
                                 </div>
                             </div>
                             <div class="col-12">
@@ -62,11 +73,16 @@
                                 </select>
                             </div>
                             </div>
+                            <div class="col-12 d-flex justify-content-end">
+                                <button th:if="${jobApplication.applicationStatus.name() != 'PAID'
+            and jobApplication.applicationStatus.name() != 'REPORT'}" type="submit" class="btn btn-primary me-1 mb-1">Update</button>
+                                <button type="reset" class="btn btn-light-secondary me-1 mb-1">Reset</button>
+                            </div>
                         </form>
                         <div id="statusMessage" class="mt-2 text-success" style="display:none;"></div>
 <!--                    </div>-->
-                </div>
 
+                </div>
         </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-light-secondary"
