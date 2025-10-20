@@ -69,19 +69,19 @@
                                     <td th:text="${jobp.getUser().fullname}"></td>
                                     <td th:text="${jobp.expectedSalary}"></td>
                                     <td>
-                                        <span th:if="${jobp.applicationStaus.name() =='RECEIVED' }"
-                                              class="badge bg-primary">RECEIVED</span>
-                                        <span th:if="${jobp.applicationStaus.name() =='VIEWED' }"
-                                              class="badge bg-info">VIEWED</span>
+                                    <span th:if="${jobp.applicationStatus.name() =='RECEIVED' }"
+                                          class="badge bg-primary">RECEIVED</span>
+                                    <span th:if="${jobp.applicationStatus.name() =='VIEWED' }"
+                                          class="badge bg-info">VIEWED</span>
                                     </td>
                                     <td th:text="${#temporals.format(jobp.applicationDate, 'yyyy-MM-dd')}"></td>
                                     <td>
                                         <button type="button"
-                                                class="btn btn-sm btn-outline-primary edit-btn"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#jobViewModal"
-                                                th:data-url="@{/employer/jobs/proposal_update(encId=${@aesUtil.encryptId(jobp.id)})}">
-                                            <i class="bi bi-book"></i>
+                                            class="btn btn-sm btn-outline-primary edit-btn"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#proposalViewModal"
+                                            th:data-url="@{/employer/jobs/proposal_details(encId=${@aesUtil.encryptId(jobp.id)})}">
+                                        <i class="bi bi-book"></i>
                                         </button>
                                     </td>
                                 </tr>
@@ -90,26 +90,20 @@
                         </div>
                     </div>
                 </section>
-                <div class="modal fade" id="jobViewModal" tabindex="-1" aria-hidden="true">
-                    <div class="modal-dialog modal-lg">
+                <div class="modal fade" id="proposalViewModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable modal-xl">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">Job Details</h5>
+                                <h5 class="modal-title">Proposal Details</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
                             <div class="modal-body rounded bg-white" id="viewModalContent">
                                 <!-- Form content will be loaded here -->
-
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- Delete Confirmation Modal -->
-                <div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
 
-                    </div>
-                </div>
             </div>
             <footer>
                 <div class="footer clearfix mb-0 text-muted">

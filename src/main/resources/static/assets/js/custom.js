@@ -106,6 +106,27 @@ $(document).on("submit", "#jobUpdateForm", function(e) {
     });
 });
 
+//Proposal Deatils Modal Display On click view button.
+$('#proposalViewModal').on('show.bs.modal', function (e) {
+    var button = $(e.relatedTarget);
+    var url = button.data('url');
+
+    // Clear old content before loading new
+    $('#viewModalContent').html('<p class="text-center">Loading...</p>');
+    $.ajax({
+        url: url,
+        type: "GET",
+        success: function (data) {
+            $('#viewModalContent').html(data);
+            tinymce.remove();
+            tinymce.init({ selector: 'textarea.tinymce-editor' });
+        },
+        error: function () {
+            $('#viewModalContent').html('<p class="text-danger">Failed to load form.</p>');
+        }
+    });
+});
+
 // Toast function for global
 function showToast(message, type) {
     let bg = type === "success" ? "bg-success" : "bg-danger";

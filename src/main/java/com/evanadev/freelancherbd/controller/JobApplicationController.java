@@ -76,7 +76,7 @@ public class JobApplicationController {
         Job job = jobService.findById(jobId);
         jobApplication.setJob(job);
 
-        jobApplication.setApplicationStaus(ApplicationStatus.RECEIVED);
+        jobApplication.setApplicationStatus(ApplicationStatus.RECEIVED);
         jobApplicationService.Application_submit(jobApplication);
         model.addAttribute("message", "Application submitted.");
         return "jobApplication_submit";
@@ -96,6 +96,28 @@ public class JobApplicationController {
         model.addAttribute("statuses", ApplicationStatus.values());
         model.addAttribute("aesUtil", aesUtil);
         return "open_proposals";
+    }
+
+    /*
+     * @author: evana
+     * @Desc: Proposal Details of a specific proposal
+     * @Date: 20-10-25
+     * */
+    @GetMapping("/employer/jobs/proposal_details")
+    public String proposalDetail(@RequestParam("encId") String encId, Model model) {
+        if (encId != null) {
+            Long did = aesUtil.decryptId(encId);
+            JobApplication jobApplication  = jobApplicationService.findById(did);
+            log.debug("Job details: {}", jobApplication);
+            User user = jobApplication.getUser();
+            model.addAttribute("applicant", user);
+            model.addAttribute("jobApplication", jobApplication);
+            model.addAttribute("jobStatus", JobStatus.values());
+            model.addAttribute("applicationStatus", ApplicationStatus.values());
+        }else{
+            model.addAttribute("message", "Application not available.");
+        }
+        return "fragments/proposal_detail :: proposalDetail";
     }
 
 

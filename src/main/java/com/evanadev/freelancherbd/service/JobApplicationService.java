@@ -25,7 +25,7 @@ public class JobApplicationService {
     public void update_application(JobApplication application) {
 
         JobApplication existing = jobApplicationRepository.findById(application.getId()).get();
-        existing.setApplicationStaus(application.getApplicationStaus());
+        existing.setApplicationStatus(application.getApplicationStatus());
         existing.setJobAssignedDate(application.getJobAssignedDate());
         jobApplicationRepository.save(application);
 

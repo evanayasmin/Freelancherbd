@@ -21,6 +21,6 @@ public interface JobApplicationRepository extends JpaRepository<JobApplication, 
     List<JobApplication> findJobApplicationByJobId(Long jobId);
 
     @Query("SELECT DISTINCT ja FROM JobApplication ja JOIN ja.job j WHERE j.user.id = :employerId " +
-            "AND ja.applicationStaus IN ('RECEIVED', 'VIEWED')")
+            "AND ja.applicationStatus IN ('RECEIVED', 'VIEWED')")
     List<JobApplication> findJobApplicationByEmployerId(long employerId);
 }
