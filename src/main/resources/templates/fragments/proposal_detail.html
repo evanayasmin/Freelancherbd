@@ -16,7 +16,6 @@
                 <div class="col-md-12"><label class="labels"><strong>City:</strong></label>&nbsp;<span th:text="${applicant.getUserProfile().city !=null ? applicant.getUserProfile().city : 'N/A'}"></span></div>
                 <div class="col-md-12"><label class="labels"><strong>Github Url:</strong></label>&nbsp;<span th:text="${applicant.getUserProfile().githubUrl !=null ? applicant.getUserProfile().githubUrl : 'N/A'}"></span></div>
                 <div class="col-md-12"><label class="labels"><strong>Linkedin Url:</strong></label>&nbsp;<span th:text="${applicant.getUserProfile().linkedinUrl !=null ? applicant.getUserProfile().linkedinUrl : 'N/A'}"></span></div>
-<!--                <div class="col-md-12"><label class="labels"><strong>Skills:</strong> </label>&nbsp;<span th:text="${applicant.getUserProfile().skills !=null ? applicant.getUserProfile().skills : 'N/A'}"></span></div>-->
                 <div class="col-md-12"><label class="labels"><strong>Resume:</strong> </label>&nbsp;
                     <span th:if="${applicant.getUserProfile().cv != null}">
                         <a th:href="@{'/' + ${applicant.getUserProfile().cv}}" target="_blank">Download CV</a></span></div>
@@ -25,7 +24,8 @@
         <div class="col-md-8 border-right">
              <h6 class="text-right">Applicantion Details</h6>
                         <form id="proposalUpdateForm" class="form-control" th:action="@{/employer/proposals/update}" method="post">
-                            <input type="hidden" name="encId" th:value="${encId}"/>
+                            <input type="hidden" th:field="*{id}"/>
+                            <input type="hidden" th:field="*{job.id}"/>
                             <div class="col-12">
                                 <div class="form-group">
                                     <label class="card-title">Job Title: </label>
@@ -53,7 +53,10 @@
                             <div class="col-12">
                                 <div class="form-group">
                                     <label class="card-title">Expected Salary: </label>
-                                    <span th:text="${jobApplication.expectedSalary}"></span>
+                                    <input type="text" class="form-control"
+                                            th:field="*{expectedSalary}" readonly />
+<!--                                    <input type="text" class="form-control" >-->
+<!--                                    <span th:text="${jobApplication.expectedSalary}"></span>-->
                                 </div>
                             </div>
                             <div class="col-12">
@@ -72,6 +75,12 @@
                                     </option>
                                 </select>
                             </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label class="card-title">Remarks: </label>
+                                    <span th:utext="${jobApplication.remarks}"></span>
+                                </div>
                             </div>
                             <div class="col-12 d-flex justify-content-end">
                                 <button th:if="${jobApplication.applicationStatus.name() != 'PAID'

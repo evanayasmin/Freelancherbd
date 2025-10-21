@@ -24,10 +24,10 @@ public class JobApplicationService {
 
     public void update_application(JobApplication application) {
 
-        JobApplication existing = jobApplicationRepository.findById(application.getId()).get();
+        JobApplication existing = jobApplicationRepository.findJobApplicationById(application.getId());
         existing.setApplicationStatus(application.getApplicationStatus());
         existing.setJobAssignedDate(application.getJobAssignedDate());
-        jobApplicationRepository.save(application);
+        jobApplicationRepository.save(existing);
 
     }
     public JobApplication findById(Long id) {

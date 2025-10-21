@@ -127,8 +127,7 @@ $('#proposalViewModal').on('show.bs.modal', function (e) {
     });
 });
 
-//Proposal Update
-//Job Detail Updating Submit:
+//Proposal Update submitting
 $(document).on("submit", "#proposalUpdateForm", function(e) {
     e.preventDefault();
     console.log("AJAX triggered from dynamic modal");

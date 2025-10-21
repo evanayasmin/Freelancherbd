@@ -8,11 +8,14 @@ import com.evanadev.freelancherbd.util.AESUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -87,7 +90,6 @@ public class JobApplicationController {
      * @Desc: Proposals of LoggedIn User as Employer
      * @Date: 19-10-25
      * */
-
     @GetMapping("/employer/jobs/proposals")
     public String completeJobList(@ModelAttribute("loggedUser") CustomUserDetail loggedUser, Model model) {
         log.info("Loggedin user=",loggedUser.getUser().getUsername());
@@ -118,6 +120,35 @@ public class JobApplicationController {
             model.addAttribute("message", "Application not available.");
         }
         return "fragments/proposal_detail :: proposalDetail";
+    }
+
+    /*
+     * @author: evana
+     * @Desc: Proposal Update of a specific application
+     * @Date: 21-10-25
+     * */
+    @PostMapping("/employer/proposals/update")
+    @ResponseBody
+    public ResponseEntity<Map<String, String>> UserStatusUpdate(@ModelAttribute JobApplication jobApplication)
+    {
+        Map<String, String> response = new HashMap<>();
+        log.debug("JobApplication details: {}", jobApplication.getId());
+        Optional<JobApplication> existingProposal = jobApplicationRepository.findById(jobApplication.getId());
+        if (existingProposal.isPresent()){
+            jobApplicationService.update_application(jobApplication);
+            if(jobApplication.getApplicationStatus().equals(ApplicationStatus.HIRED)){
+                jobApplication.setJobAssignedDate(jobApplication.getJobAssignedDate());
+                Job existingJob = jobService.findById(jobApplication.getJob().getId());
+                log.debug("Job details: {}", existingJob.getId());
+                existingJob.setJobStatus(JobStatus.IN_PROGRESS);
+                jobService.update_job(existingJob);
+            }
+            response.put("status", "success");
+            return ResponseEntity.ok(response);
+
+        }
+        response.put("status", "failed");
+        return ResponseEntity.ok(response);
     }
 
 
