@@ -29,7 +29,7 @@
                     <div class="col-12">
                         <div class="form-group">
                             <label class="form-label">Job Category</label>
-                            <select class="form-select" th:field="*{category}" required>
+                            <select id="category" class="form-select" th:field="*{category}" required>
                                 <option th:each="st : ${categories}"
                                         th:value="${st.id}"
                                         th:text="${st.categoryName}">
@@ -40,10 +40,10 @@
                     <div class="col-12">
                         <div class="form-group">
                             <label class="form-label">Job Type</label>
-                            <select class="form-select" th:field="*{jobType}" required>
+                            <select id="jobType" class="form-select" th:field="*{jobType}" required>
                                 <option th:each="jt : ${jobType}"
-                                        th:value="${jt.name()}"
-                                        th:text="${jt.name()}">
+                                        th:value="${jt}"
+                                        th:text="${jt}">
                                 </option>
                             </select>
                         </div>
@@ -51,11 +51,10 @@
                     <div class="col-12">
                         <div class="form-group">
                             <label class="form-label">Job Status</label>
-                            <select class="form-select" th:field="*{jobStatus}" required>
+                            <select id="jobStatus" class="form-select" th:field="*{jobStatus}" required>
                                 <option th:each="jts : ${jobStatus}"
-                                        th:if="${jts.name() != 'POSTED'}"
-                                        th:value="${jts.name()}"
-                                        th:text="${jts.name()}">
+                                        th:value="${jts}"
+                                        th:text="${jts}">
                                 </option>
                             </select>
                         </div>

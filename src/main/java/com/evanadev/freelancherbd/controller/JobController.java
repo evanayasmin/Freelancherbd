@@ -56,11 +56,12 @@ public class JobController {
      * @Date: 14-10-25
      * */
     @PostMapping("/employer/job/submit_job")
-    public String job_submit(@ModelAttribute Job job,  @ModelAttribute("loggedUser") CustomUserDetail loggedUserDetail, Model model){
+    public String job_submit(@ModelAttribute("job") Job job,  @ModelAttribute("loggedUser") CustomUserDetail loggedUserDetail, Model model){
 
         if (loggedUserDetail == null) {
             throw new RuntimeException("No logged-in user");
         }
+        log.debug("Job Type: {}", job.getJobType());
         // Get the actual User entity
         User user = loggedUserDetail.getUser();
         String message = "";
@@ -68,8 +69,8 @@ public class JobController {
         jobService.JobSave(job);
         message = "Your Job is created successfully. After Admin approval, it will be posted for Freelancer.";
         model.addAttribute("messsage", message);
-        model.addAttribute("jobType", JobType.values());
         model.addAttribute("job", new Job());
+        model.addAttribute("jobType", JobType.values());
         return "job_form";
     }
 
@@ -96,7 +97,7 @@ public class JobController {
      * */
     @GetMapping("/employer/jobs/active_jobs")
     public String activeJobList(@ModelAttribute("loggedUser") CustomUserDetail loggedUser, Model model) {
-        log.info("Loggedin user=",loggedUser.getUser().getUsername());
+        //log.info("Loggedin user=",loggedUser.getUser().getUsername());
         List<Job> jobs = jobService.findByJobStatus(loggedUser.getUser(), JobStatus.IN_PROGRESS);
         model.addAttribute("jobs", jobs);
         model.addAttribute("statuses", UserStatus.values());
@@ -195,13 +196,20 @@ public class JobController {
      * */
     @PostMapping("/employer/jobs/update")
     @ResponseBody
-    public ResponseEntity<Map<String, String>> UserStatusUpdate(@ModelAttribute Job job)
+    public ResponseEntity<Map<String, String>> JobStatusUpdate(@ModelAttribute("jobDetail") Job job,
+   @RequestParam JobStatus jobStatus, @RequestParam JobType jobType)
     {
         Map<String, String> response = new HashMap<>();
 
+        log.info("Job status: {}", jobStatus);
+        log.info("Job Type: {}", jobType);
         Optional<Job> existingjob = jobRepository.findById(job.getId());
             if (existingjob.isPresent()){
-                jobService.update_job(job);
+                //job.setJobStatus(jobStatus);
+                //job.setJobType(jobType);
+                //log.info("After set Job status: {}", job.getJobStatus());
+                //log.info("After Set Job Type: {}", job.getJobType());
+                jobService.update_job(job, jobStatus, jobType);
                 response.put("status", "success");
                 return ResponseEntity.ok(response);
             }

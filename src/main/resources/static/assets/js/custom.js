@@ -87,6 +87,11 @@ $(document).on("submit", "#statusUpdateForm", function(e) {
 $(document).on("submit", "#jobUpdateForm", function(e) {
     e.preventDefault();
     console.log("AJAX triggered from dynamic modal");
+    // Force selects to commit values
+    $('#jobType').trigger('change');
+    $('#jobStatus').trigger('change');
+    console.log($(this).serialize()); // Debug
+
     $.ajax({
         url: $(this).attr('action'),
         type: "POST",
@@ -136,7 +141,7 @@ $(document).on("submit", "#proposalUpdateForm", function(e) {
         type: "POST",
         data: $(this).serialize(),
         success: function(res) {
-            // $("#statusMessage").text("Job updated successfully!").show();
+            $('#proposalViewModal').modal('hide');
             if (res.status === "success") {
                 showToast("Proposal updated successfully!", "success");
             }else{
@@ -154,12 +159,12 @@ $(document).on("submit", "#proposalUpdateForm", function(e) {
 function showToast(message, type) {
     let bg = type === "success" ? "bg-success" : "bg-danger";
     let toastHtml = `
-            <div class="toast align-items-center text-white ${bg} border-0" role="alert" aria-live="assertive" aria-atomic="true">
-              <div class="d-flex">
-                <div class="toast-body">${message}</div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
-              </div>
-            </div>`;
+    <div class="toast align-items-center text-white ${bg} border-0" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body">${message}</div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+      </div>
+    </div>`;
     $("#toastContainer").append(toastHtml);
     let newToast = new bootstrap.Toast($("#toastContainer .toast").last()[0]);
     newToast.show();

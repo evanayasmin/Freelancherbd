@@ -3,8 +3,7 @@
     <div class="row" th:object="${jobApplication}">
         <div class="col-md-4 border-right">
             <div class="d-flex flex-column align-items-center text-center">
-                <img class="rounded-square"
-                     style="width:150px; height:170px; border-radius:8px;"
+                <img class="rounded-square" style="width:150px; height:170px; border-radius:8px;"
                      th:src="${applicant.getUserProfile().profilePicture != null
               ? '/'+applicant.getUserProfile().profilePicture : '/images/default.jpg'}" />
                 <div class="col-md-12"><strong>Name: </strong><span class="font-weight-bold" th:text="${applicant.fullname}"></span></div>
@@ -17,8 +16,8 @@
                 <div class="col-md-12"><label class="labels"><strong>Github Url:</strong></label>&nbsp;<span th:text="${applicant.getUserProfile().githubUrl !=null ? applicant.getUserProfile().githubUrl : 'N/A'}"></span></div>
                 <div class="col-md-12"><label class="labels"><strong>Linkedin Url:</strong></label>&nbsp;<span th:text="${applicant.getUserProfile().linkedinUrl !=null ? applicant.getUserProfile().linkedinUrl : 'N/A'}"></span></div>
                 <div class="col-md-12"><label class="labels"><strong>Resume:</strong> </label>&nbsp;
-                    <span th:if="${applicant.getUserProfile().cv != null}">
-                        <a th:href="@{'/' + ${applicant.getUserProfile().cv}}" target="_blank">Download CV</a></span></div>
+                <span th:if="${applicant.getUserProfile().cv != null}">
+                <a th:href="@{'/' + ${applicant.getUserProfile().cv}}" target="_blank">Download CV</a></span></div>
             </div>
         </div>
         <div class="col-md-8 border-right">
@@ -88,10 +87,7 @@
                                 <button type="reset" class="btn btn-light-secondary me-1 mb-1">Reset</button>
                             </div>
                         </form>
-                        <div id="statusMessage" class="mt-2 text-success" style="display:none;"></div>
-<!--                    </div>-->
-
-                </div>
+                    </div>
         </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-light-secondary"

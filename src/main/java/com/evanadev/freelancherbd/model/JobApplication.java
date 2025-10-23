@@ -28,8 +28,6 @@ public class JobApplication {
     private ApplicationStatus applicationStatus;
     private String remarks;
 
-    @LastModifiedDate
-    @Column(updatable = false)
     private LocalDateTime jobAssignedDate;
 
     @CreatedDate
@@ -115,4 +113,5 @@ public class JobApplication {
     protected void onCreate() {
         this.applicationDate = LocalDateTime.now();
     }
+
 }

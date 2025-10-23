@@ -91,13 +91,73 @@ public class JobApplicationController {
      * @Date: 19-10-25
      * */
     @GetMapping("/employer/jobs/proposals")
-    public String completeJobList(@ModelAttribute("loggedUser") CustomUserDetail loggedUser, Model model) {
+    public String openProposalList(@ModelAttribute("loggedUser") CustomUserDetail loggedUser, Model model) {
         log.info("Loggedin user=",loggedUser.getUser().getUsername());
         List<JobApplication> jobApplication = jobApplicationService.findJobApplicationByEmployerId(loggedUser.getUser().getId());
         model.addAttribute("proposals", jobApplication);
         model.addAttribute("statuses", ApplicationStatus.values());
         model.addAttribute("aesUtil", aesUtil);
         return "open_proposals";
+    }
+
+    /*
+     * @author: evana
+     * @Desc: Sortlisted Proposals of LoggedIn User as Employer
+     * @Date: 22-10-25
+     * */
+    @GetMapping("/employer/proposals/sortlisted")
+    public String sortlistedProposals(@ModelAttribute("loggedUser") CustomUserDetail loggedUser, Model model) {
+        log.info("Loggedin user=",loggedUser.getUser().getUsername());
+        List<JobApplication> jobApplication = jobApplicationService.findSortlistedApplicationByEmployerId(loggedUser.getUser().getId());
+        model.addAttribute("proposals", jobApplication);
+        model.addAttribute("statuses", ApplicationStatus.values());
+        model.addAttribute("aesUtil", aesUtil);
+        return "sortlisted_employee";
+    }
+
+    /*
+     * @author: evana
+     * @Desc: Hired Proposals of LoggedIn User as Employer
+     * @Date: 22-10-25
+     * */
+    @GetMapping("/employer/proposals/hired")
+    public String hiredProposals(@ModelAttribute("loggedUser") CustomUserDetail loggedUser, Model model) {
+        log.info("Loggedin user=",loggedUser.getUser().getUsername());
+        List<JobApplication> jobApplication = jobApplicationService.findHiredApplicationByEmployerId(loggedUser.getUser().getId());
+        model.addAttribute("proposals", jobApplication);
+        model.addAttribute("statuses", ApplicationStatus.values());
+        model.addAttribute("aesUtil", aesUtil);
+        return "hired_employee";
+    }
+
+    /*
+     * @author: evana
+     * @Desc: Declined Proposals of LoggedIn User as Employer
+     * @Date: 22-10-25
+     * */
+    @GetMapping("/employer/proposals/declined")
+    public String declinedProposals(@ModelAttribute("loggedUser") CustomUserDetail loggedUser, Model model) {
+        log.info("Loggedin user=",loggedUser.getUser().getUsername());
+        List<JobApplication> jobApplication = jobApplicationService.findDeclinedApplicationByEmployerId(loggedUser.getUser().getId());
+        model.addAttribute("proposals", jobApplication);
+        model.addAttribute("statuses", ApplicationStatus.values());
+        model.addAttribute("aesUtil", aesUtil);
+        return "decline_list";
+    }
+
+    /*
+     * @author: evana
+     * @Desc: Declined Proposals of LoggedIn User as Employer
+     * @Date: 22-10-25
+     * */
+    @GetMapping("/employer/proposals/paid")
+    public String paidProposals(@ModelAttribute("loggedUser") CustomUserDetail loggedUser, Model model) {
+        log.info("Loggedin user=",loggedUser.getUser().getUsername());
+        List<JobApplication> jobApplication = jobApplicationService.findPaidApplicationByEmployerId(loggedUser.getUser().getId());
+        model.addAttribute("proposals", jobApplication);
+        model.addAttribute("statuses", ApplicationStatus.values());
+        model.addAttribute("aesUtil", aesUtil);
+        return "paid_list";
     }
 
     /*
@@ -136,13 +196,6 @@ public class JobApplicationController {
         Optional<JobApplication> existingProposal = jobApplicationRepository.findById(jobApplication.getId());
         if (existingProposal.isPresent()){
             jobApplicationService.update_application(jobApplication);
-            if(jobApplication.getApplicationStatus().equals(ApplicationStatus.HIRED)){
-                jobApplication.setJobAssignedDate(jobApplication.getJobAssignedDate());
-                Job existingJob = jobService.findById(jobApplication.getJob().getId());
-                log.debug("Job details: {}", existingJob.getId());
-                existingJob.setJobStatus(JobStatus.IN_PROGRESS);
-                jobService.update_job(existingJob);
-            }
             response.put("status", "success");
             return ResponseEntity.ok(response);
 

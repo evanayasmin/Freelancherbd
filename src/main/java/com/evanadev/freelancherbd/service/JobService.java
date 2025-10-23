@@ -1,9 +1,13 @@
 package com.evanadev.freelancherbd.service;
 
+import com.evanadev.freelancherbd.controller.JobController;
 import com.evanadev.freelancherbd.model.*;
 import com.evanadev.freelancherbd.repository.JobRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -16,25 +20,41 @@ public class JobService {
 
         return jobRepository.save(job);
     }
+    private static final Logger log = LoggerFactory.getLogger(JobService.class);
 
-    public void update_job(Job job) {
+    public void update_job(Job job, JobStatus jobStatus, JobType jobType) {
 
-        Job existing = jobRepository.findById(job.getId()).get();
+        Job existing = jobRepository.findById(job.getId())
+                .orElseThrow(() -> new RuntimeException("Job not found"));
+        log.info("Before update: Status={}, Type={}", existing.getJobStatus(), existing.getJobType());
         existing.setTitle(job.getTitle());
         existing.setDescription(job.getDescription());
-        existing.setCategory(job.getCategory());
-        existing.setJobType(job.getJobType());
+
         existing.setPaymentAmount(job.getPaymentAmount());
         existing.setRequiredSkill(job.getRequiredSkill());
         existing.setRequiredLevel(job.getRequiredLevel());
-        existing.setJobStatus(job.getJobStatus());
+
         existing.setDeadline(job.getDeadline());
         existing.setAgeLimit(job.getAgeLimit());
         existing.setVacancy(job.getVacancy());
         existing.setExperience(job.getExperience());
+        existing.setCategory(job.getCategory());
+        existing.setJobStatus(jobStatus);
+        existing.setJobType(jobType);
+        log.info("After setting: Status={}, Type={}", existing.getJobStatus(), existing.getJobType());
         jobRepository.save(existing);
 
     }
+
+    public void updateJobStatus(Long jobId, JobStatus status) {
+        System.out.println("Job Id="+ jobId);
+        System.out.println("Job Status="+ status);
+        Job existing = jobRepository.findById(jobId)
+                .orElseThrow(() -> new RuntimeException("Job not found"));
+        existing.setJobStatus(status);
+        jobRepository.save(existing);
+    }
+
     public List<Job> findAll() {
         return jobRepository.findAll();
     }
