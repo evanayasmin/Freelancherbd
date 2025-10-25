@@ -262,6 +262,6 @@ public class Job {
     }
 
     public void setCreatedBy(String createdBy) {
-        CreatedBy = createdBy;
+        this.CreatedBy = createdBy;
     }
 }

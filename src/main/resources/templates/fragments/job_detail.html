@@ -42,8 +42,8 @@
                             <label class="form-label">Job Type</label>
                             <select id="jobType" class="form-select" th:field="*{jobType}" required>
                                 <option th:each="jt : ${jobType}"
-                                        th:value="${jt}"
-                                        th:text="${jt}">
+                                        th:value="${jt.name()}"
+                                        th:text="${jt.name()}">
                                 </option>
                             </select>
                         </div>
@@ -53,8 +53,8 @@
                             <label class="form-label">Job Status</label>
                             <select id="jobStatus" class="form-select" th:field="*{jobStatus}" required>
                                 <option th:each="jts : ${jobStatus}"
-                                        th:value="${jts}"
-                                        th:text="${jts}">
+                                        th:value="${jts.name()}"
+                                        th:text="${jts.name()}">
                                 </option>
                             </select>
                         </div>

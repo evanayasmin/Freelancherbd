@@ -52,18 +52,6 @@
                                       <div class="col-md-3"><strong>Experience:</strong>&nbsp;<span th:text="${jobDetail.experience}"></span></div>
                                       <div class="col-md-3"><strong>Payment:</strong>&nbsp;<span th:text="${jobDetail.paymentAmount}"></span></div>
                                   </div><hr/>
-<!--                                  <div class="table-responsive">-->
-<!--                                      <table class="table table-secondary">-->
-<!--                                          <tbody>-->
-<!--                                          <tr>-->
-<!--                                              <td>Vacancy: <span th:text="${jobDetail.vacancy}"></span></td>-->
-<!--                                              <td>Application Deadline: <span th:text="${jobDetail.deadline}"></span></td>-->
-<!--                                              <td>Experience: <span th:text="${jobDetail.experience}"></span></td>-->
-<!--                                              <td>Payment: <span th:text="${jobDetail.paymentAmount}"></span></td>-->
-<!--                                          </tr>-->
-<!--                                          </tbody>-->
-<!--                                      </table>-->
-<!--                                  </div>-->
                                   <div class="table-responsive">
                                   <table class="table table-lg">
                                       <tbody>
@@ -103,6 +91,8 @@
                                       <div th:align="center" sec:authorize="hasAnyRole('FREELANCER')">
                                           <a th:href="@{'/freelancer/jobs/application/' + ${@aesUtil.encryptId(jobDetail.id)}}"
                                              target="_parent" class="btn btn-success">Apply Now </a>&nbsp;
+                                          <a th:href="@{'/freelancer/jobs/saveJob/' + ${@aesUtil.encryptId(jobDetail.id)}}"
+                                             target="_parent" class="btn btn-secondary">Save </a>&nbsp;
                                           <a th:href="@{'/freelancer/jobs/reportApplication/' + ${@aesUtil.encryptId(jobDetail.id)}}"
                                              target="_parent" class="btn btn-warning">Report this Job </a>
 

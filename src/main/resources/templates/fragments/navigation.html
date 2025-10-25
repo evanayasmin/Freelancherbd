@@ -6,17 +6,21 @@
             </a>
         </li>
         <li class="sidebar-item has-sub" sec:authorize="hasAnyRole('FREELANCER','EMPLOYER','ADMIN')">
-            <a href="#" class='sidebar-link'><i class="bi bi-stack"></i><span>Job Category</span></a>
-            <ul class="submenu ">
-                <li th:each="cat : ${categories}" class="submenu-item">
-                    <a th:href="@{('/jobs/category/' + ${@aesUtil.encryptId(cat.id)})}" th:text="${cat.categoryName}"></a>
-                </li>
+            <a href="#" class='sidebar-link'><i class="bi bi-stack text-info"></i><span>Job Category</span></a>
+            <ul class="submenu">
+                <li th:each="cat : ${categories}" class="submenu-item"><a th:href="@{('/jobs/category/' + ${@aesUtil.encryptId(cat.id)})}" th:text="${cat.categoryName}"></a></li>
+<!--                <li th:each="cat : ${categories}" class="submenu-item ">-->
+<!--                    <a th:href="@{('/jobs/category/' + ${@aesUtil.encryptId(cat.id)})}">-->
+<!--                        <i class="bi bi-arrow-right-short"></i>-->
+<!--                        <span th:text="${cat.categoryName}"></span>-->
+<!--                    </a>-->
+<!--                </li>-->
             </ul>
         </li>
 
         <li class="sidebar-item  has-sub" sec:authorize="hasRole('FREELANCER')">
             <a href="#" class='sidebar-link'>
-                <i class="bi bi-collection-fill"></i>
+                <i class="bi bi-collection-fill text-success"></i>
                 <span>Find Work</span>
             </a>
             <ul class="submenu ">
@@ -43,10 +47,10 @@
 
         <li class="sidebar-item has-sub" sec:authorize="hasRole('FREELANCER')">
             <a href="#" class='sidebar-link'>
-                <i class="bi bi-grid-1x2-fill"></i>
+                <i class="bi bi-cash-stack text-danger"></i>
                 <span>Earnings</span>
             </a>
-            <ul class="submenu active">
+            <ul class="submenu">
                 <li class="submenu-item ">
                     <a th:href="@{/wallet_balance}">Wallet Balance</a>
                 </li>
@@ -63,10 +67,10 @@
         </li>
         <li class="sidebar-item has-sub" sec:authorize="hasRole('EMPLOYER')">
             <a href="#" class='sidebar-link'>
-                <i class="bi bi-grid-1x2-fill"></i>
+                <i class="bi bi-file-slides-fill text-success"></i>
                 <span>Proposals</span>
             </a>
-            <ul class="submenu active">
+            <ul class="submenu">
                 <li class="submenu-item ">
                     <a th:href="@{/employer/jobs/proposals}">New Proposals</a>
                 </li>
@@ -87,64 +91,10 @@
 
         <li class="sidebar-item has-sub" sec:authorize="hasRole('EMPLOYER')">
             <a href="#" class='sidebar-link'>
-                <i class="bi bi-grid-1x2-fill"></i>
-                <span>Contracts</span>
-            </a>
-            <ul class="submenu active">
-                <li class="submenu-item ">
-                    <a th:href="@{/onging_projects}">Ongoing Projects</a>
-                </li>
-                <li class="submenu-item ">
-                    <a th:href="@{/completed_projects}">Completed Projects</a>
-                </li>
-                <li class="submenu-item active">
-                    <a th:href="@{/disputes}">Disputes</a>
-                </li>
-            </ul>
-        </li>
-
-        <li class="sidebar-item has-sub" sec:authorize="hasRole('EMPLOYER')">
-            <a href="#" class='sidebar-link'>
-                <i class="bi bi-grid-1x2-fill"></i>
-                <span>Payments</span>
-            </a>
-            <ul class="submenu active">
-                <li class="submenu-item ">
-                    <a th:href="@{/pending_payments}">Pending Payments</a>
-                </li>
-                <li class="submenu-item ">
-                    <a th:href="@{/payment_history}">Payment History</a>
-                </li>
-                <li class="submenu-item active">
-                    <a th:href="@{/invoice_reports}">Invoice and Reports</a>
-                </li>
-            </ul>
-        </li>
-
-        <li class="sidebar-item has-sub" sec:authorize="hasRole('EMPLOYER')">
-            <a href="#" class='sidebar-link'>
-                <i class="bi bi-grid-1x2-fill"></i>
-                <span>Company Profile</span>
-            </a>
-            <ul class="submenu active">
-                <li class="submenu-item ">
-                    <a th:href="@{/company_profile}">View Profile</a>
-                </li>
-                <li class="submenu-item ">
-                    <a th:href="@{/edit_comprofile}">Edit Profile </a>
-                </li>
-                <li class="submenu-item active">
-                    <a th:href="@{/reviews_ratings}">Reviews and Ratings</a>
-                </li>
-            </ul>
-        </li>
-
-        <li class="sidebar-item has-sub" sec:authorize="hasRole('EMPLOYER')">
-            <a href="#" class='sidebar-link'>
-                <i class="bi bi-grid-1x2-fill"></i>
+                <i class="bi bi-briefcase-fill text-warning"></i>
                 <span>Post Job</span>
             </a>
-            <ul class="submenu active">
+            <ul class="submenu">
                 <li class="submenu-item ">
                     <a th:href="@{/employer/jobs/create_job}">Create New Job</a>
                 </li>
@@ -154,13 +104,12 @@
                 </li>
             </ul>
         </li>
-
         <li class="sidebar-item has-sub" sec:authorize="hasRole('EMPLOYER')">
             <a href="#" class='sidebar-link'>
-                <i class="bi bi-grid-1x2-fill"></i>
+                <i class="bi bi-card-checklist text-primary"></i>
                 <span>Manage Jobs</span>
             </a>
-            <ul class="submenu active">
+            <ul class="submenu">
                 <li class="submenu-item ">
                     <a th:href="@{/employer/jobs/active_jobs}">Active Jobs</a>
                 </li>
@@ -181,10 +130,65 @@
 
         <li class="sidebar-item has-sub" sec:authorize="hasRole('EMPLOYER')">
             <a href="#" class='sidebar-link'>
-                <i class="bi bi-person-badge-fill"></i>
+                <i class="bi bi-kanban text-danger"></i>
+                <span>Projects</span>
+            </a>
+            <ul class="submenu">
+                <li class="submenu-item ">
+                    <a th:href="@{/onging_projects}">Ongoing Projects</a>
+                </li>
+                <li class="submenu-item ">
+                    <a th:href="@{/completed_projects}">Completed Projects</a>
+                </li>
+                <li class="submenu-item active">
+                    <a th:href="@{/disputes}">Disputes</a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="sidebar-item has-sub" sec:authorize="hasRole('EMPLOYER')">
+            <a href="#" class='sidebar-link'>
+                <i class="bi bi-wallet-fill text-primary"></i>
+                <span>Payments</span>
+            </a>
+            <ul class="submenu">
+                <li class="submenu-item ">
+                    <a th:href="@{/pending_payments}">Pending Payments</a>
+                </li>
+                <li class="submenu-item ">
+                    <a th:href="@{/payment_history}">Payment History</a>
+                </li>
+                <li class="submenu-item active">
+                    <a th:href="@{/invoice_reports}">Invoice and Reports</a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="sidebar-item has-sub" sec:authorize="hasRole('EMPLOYER')">
+            <a href="#" class='sidebar-link'>
+                <i class="bi bi-building text-info"></i>
+                <span>Company Profile</span>
+            </a>
+            <ul class="submenu">
+                <li class="submenu-item ">
+                    <a th:href="@{/company_profile}">View Profile</a>
+                </li>
+                <li class="submenu-item ">
+                    <a th:href="@{/edit_comprofile}">Edit Profile </a>
+                </li>
+                <li class="submenu-item active">
+                    <a th:href="@{/reviews_ratings}">Reviews and Ratings</a>
+                </li>
+            </ul>
+        </li>
+
+
+        <li class="sidebar-item has-sub" sec:authorize="hasRole('EMPLOYER')">
+            <a href="#" class='sidebar-link'>
+                <i class="bi bi-person-badge-fill text-success"></i>
                 <span>Find Freelancer</span>
             </a>
-            <ul class="submenu active">
+            <ul class="submenu">
                 <li class="submenu-item ">
                     <a th:href="@{/skilled_freelancer}">Browse by Skills</a>
                 </li>
@@ -204,7 +208,7 @@
 
         <li class="sidebar-item  has-sub" sec:authorize="hasAnyRole('FREELANCER','EMPLOYER')">
             <a href="#" class='sidebar-link'>
-                <i class="bi bi-hexagon-fill"></i>
+                <i class="bi bi-hexagon-fill text-warning"></i>
                 <span>Support</span>
             </a>
             <ul class="submenu">
@@ -214,7 +218,7 @@
                 <li class="submenu-item">
                     <a th:href="@{/report_problem}">Report a Problem</a>
                 </li>
-                <li class="submenu-item">
+                <li class="submenu-item text-dark">
                     <a th:href="@{/contactus}">Contact Support</a>
                 </li>
             </ul>
@@ -266,7 +270,7 @@
                 <i class="bi bi-grid-1x2-fill"></i>
                 <span>Financial Management</span>
             </a>
-            <ul class="submenu active">
+            <ul class="submenu">
                 <li class="submenu-item">
                     <a th:href="@{/admin/platform_earnings}">Platform Earnings</a>
                 </li>
@@ -286,7 +290,7 @@
                 <i class="bi bi-grid-1x2-fill"></i>
                 <span>Content Management</span>
             </a>
-            <ul class="submenu active">
+            <ul class="submenu">
                 <li class="submenu-item" sec:authorize="hasRole('ADMIN')">
                     <a th:href="@{/admin/category/create}">Create Category</a>
                 </li>
@@ -307,7 +311,7 @@
                 <i class="bi bi-grid-1x2-fill"></i>
                 <span>Report & Analytics</span>
             </a>
-            <ul class="submenu active">
+            <ul class="submenu">
                 <li class="submenu-item">
                     <a th:href="@{/user_growth}">User Growth Reports.</a>
                 </li>
@@ -324,7 +328,7 @@
                 <i class="bi bi-grid-1x2-fill"></i>
                 <span>Support & Disputes</span>
             </a>
-            <ul class="submenu active">
+            <ul class="submenu">
                 <li class="submenu-item">
                     <a th:href="@{/ticket_management}">Ticket Management System</a>
                 </li>
@@ -338,7 +342,7 @@
                 <i class="bi bi-grid-1x2-fill"></i>
                 <span>System Settings</span>
             </a>
-            <ul class="submenu active">
+            <ul class="submenu">
                 <li class="submenu-item">
                     <a th:href="@{/platform_settings}">Platform Settings</a>
                 </li>
