@@ -63,6 +63,36 @@ $(document).ready(function() {
     });
 });
 
+// Job Status Update by Admin
+$('.statusBtn').on('click', function () {
+    let url = $(this).data('url');
+    $('#confirmStatusBtn').attr('href', url);
+});
+
+// When confirm update button in modal is clicked
+$('#confirmStatusBtn').on('click', function (e) {
+    e.preventDefault();
+    let url = $(this).attr('href');
+    //alert(url);
+    $.ajax({
+        url: url,
+        type: "GET",
+        success: function (response) {
+            $('#statusModal').modal('hide');  // close modal
+            if (response.status === "success") {
+                showToast("Job is posted!", "success");
+            }else{
+                showToast("Failed to post job!", "error");
+            }
+            //showToast(response, "success");
+            $('#pendingjobs').DataTable().ajax.reload(null, false); // refresh table
+        },
+        error: function () {
+            alert("Error deleting category");
+        }
+    });
+});
+
 //User Status Updating:
 $(document).on("submit", "#statusUpdateForm", function(e) {
     e.preventDefault();
@@ -111,7 +141,7 @@ $(document).on("submit", "#jobUpdateForm", function(e) {
     });
 });
 
-//Proposal Deatils Modal Display On click view button.
+//Proposal Details Modal Display On click view button.
 $('#proposalViewModal').on('show.bs.modal', function (e) {
     var button = $(e.relatedTarget);
     var url = button.data('url');

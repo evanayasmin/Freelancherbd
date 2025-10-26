@@ -50,7 +50,7 @@
                     <div class="card">
                         <div class="card-header">Pending Job List</div>
                         <div class="card-body" id="freelancerCardBody">
-                            <table class="table table-striped" id="table1">
+                            <table class="table table-striped" id="pendingjobs">
                                 <thead>
                                 <tr>
                                     <th>Title</th>
@@ -58,7 +58,6 @@
                                     <th>Job Type</th>
                                     <th>Job Price</th>
                                     <th>Deadline</th>
-                                    <th>Vacancy</th>
                                     <th>Status</th>
                                     <th>Created At</th>
                                     <th>Action</th>
@@ -71,7 +70,6 @@
                                     <td th:text="${job.jobType}"></td>
                                     <td th:text="${job.paymentAmount}"></td>
                                     <td th:text="${#temporals.format(job.deadline, 'yyyy-MM-dd')}"></td>
-                                    <td th:text="${job.vacancy != null ? job.vacancy : ''}"></td>
                                     <td><span class="badge bg-warning">Pending</span></td>
                                     <td th:text="${#temporals.format(job.createdAt, 'yyyy-MM-dd')}"></td>
                                     <td>
@@ -81,6 +79,12 @@
                                                 data-bs-target="#jobViewModal"
                                                 th:data-url="@{/admin/jobs/job_detail(encId=${@aesUtil.encryptId(job.id)})}">
                                             <i class="bi bi-book"></i>
+                                        </button> &nbsp;
+                                        <button type="button" class="btn btn-sm btn-outline-danger statusBtn"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#statusModal"
+                                                th:data-url="@{/admin/jobs/job_update(encId=${@aesUtil.encryptId(job.id)})}">
+                                            <i class="bi bi-pencil-fill"></i>
                                         </button>
                                     </td>
                                 </tr>
@@ -103,10 +107,22 @@
                         </div>
                     </div>
                 </div>
-                <!-- Delete Confirmation Modal -->
-                <div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                <!-- Status Update Confirmation Modal -->
+                <div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="statusModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
-
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Confirm Job Status Update</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to approve this job for posting?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <a id="confirmStatusBtn" class="btn btn-danger">Update</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

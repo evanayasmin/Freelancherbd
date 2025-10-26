@@ -282,7 +282,6 @@ public class JobController {
         return "fragments/job_detail :: jobDetail";
     }
 
-
     /*
      * @author: evana
      * @Desc: Job Update of a specific job
@@ -308,6 +307,27 @@ public class JobController {
                 return ResponseEntity.ok(response);
             }
 
+        response.put("status", "failed");
+        return ResponseEntity.ok(response);
+    }
+
+    /*
+     * @author: evana
+     * @Desc: Job Status Update of a specific job by Admin
+     * @Date: 26-10-25
+     * */
+    @GetMapping("/admin/jobs/job_update")
+    @ResponseBody
+    public ResponseEntity<Map<String, String>> JobStatusUpdateByAdmin(@RequestParam("encId") String encId) {
+        Map<String, String> response = new HashMap<>();
+        Long did = aesUtil.decryptId(encId);
+        Optional<Job> existingjob = jobRepository.findById(did);
+        if (existingjob.isPresent()){
+            log.info("JobId: {}", did);
+            jobService.updateJobStatus(did, JobStatus.POSTED);
+            response.put("status", "success");
+            return ResponseEntity.ok(response);
+        }
         response.put("status", "failed");
         return ResponseEntity.ok(response);
     }

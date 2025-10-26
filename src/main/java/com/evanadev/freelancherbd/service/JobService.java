@@ -47,8 +47,7 @@ public class JobService {
     }
 
     public void updateJobStatus(Long jobId, JobStatus status) {
-        System.out.println("Job Id="+ jobId);
-        System.out.println("Job Status="+ status);
+
         Job existing = jobRepository.findById(jobId)
                 .orElseThrow(() -> new RuntimeException("Job not found"));
         existing.setJobStatus(status);
