@@ -83,4 +83,9 @@ public class JobService {
     public List<Job> findByJobStatus(User loggedInUser, JobStatus jobStatus) {
         return jobRepository.findByJobStatus(loggedInUser.getUsername(), jobStatus);
     }
+    public List<Job> findByJobStatusForAdmin(JobStatus jobStatus) {
+        return jobRepository.findByJobStatusForAdmin(jobStatus);
+    }
+
+
 }

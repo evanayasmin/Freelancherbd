@@ -227,10 +227,10 @@
 <!--        Admin user menu-->
         <li class="sidebar-item has-sub" sec:authorize="hasRole('ADMIN')">
             <a href="#" class='sidebar-link'>
-                <i class="bi bi-grid-1x2-fill"></i>
+                <i class="bi bi-people-fill text-dark"></i>
                 <span>User Management</span>
             </a>
-            <ul class="submenu active">
+            <ul class="submenu">
                 <li class="submenu-item">
                     <a th:href="@{/admin/users/freelancer_list}">Freelancers</a>
                 </li>
@@ -244,15 +244,15 @@
         </li>
         <li class="sidebar-item has-sub" sec:authorize="hasRole('ADMIN')">
             <a href="#" class='sidebar-link'>
-                <i class="bi bi-grid-1x2-fill"></i>
-                <span>Projects Management</span>
+                <i class="bi bi-kanban-fill text-warning"></i>
+                <span>Project Management</span>
             </a>
-            <ul class="submenu active">
-                <li class="submenu-item">
-                    <a th:href="@{/admin/jobs/posted_jobs}">Posted Jobs</a>
-                </li>
+            <ul class="submenu">
                 <li class="submenu-item">
                     <a th:href="@{/admin/jobs/pending_jobs}">Pending Jobs</a>
+                </li>
+                <li class="submenu-item">
+                    <a th:href="@{/admin/jobs/posted_jobs}">Posted Jobs</a>
                 </li>
                 <li class="submenu-item">
                     <a th:href="@{/admin/jobs/active_jobs}">Active Jobs</a>
@@ -261,14 +261,17 @@
                     <a th:href="@{/admin/jobs/active_jobs}">Completed Jobs</a>
                 </li>
                 <li class="submenu-item">
+                    <a th:href="@{/admin/jobs/canceled_jobs}">Canceled Jobs</a>
+                </li>
+                <li class="submenu-item">
                     <a th:href="@{/admin/jobs/dispute_resolution}">Dispute Resolution</a>
                 </li>
             </ul>
         </li>
         <li class="sidebar-item has-sub" sec:authorize="hasRole('ADMIN')">
             <a href="#" class='sidebar-link'>
-                <i class="bi bi-grid-1x2-fill"></i>
-                <span>Financial Management</span>
+                <i class="bi bi-cash-stack text-danger"></i>
+                <span>Finance Management</span>
             </a>
             <ul class="submenu">
                 <li class="submenu-item">
@@ -287,7 +290,7 @@
         </li>
         <li class="sidebar-item has-sub" sec:authorize="hasRole('ADMIN')">
             <a href="#" class='sidebar-link'>
-                <i class="bi bi-grid-1x2-fill"></i>
+                <i class="bi bi-file-slides text-primary"></i>
                 <span>Content Management</span>
             </a>
             <ul class="submenu">
@@ -308,7 +311,7 @@
         </li>
         <li class="sidebar-item has-sub" sec:authorize="hasRole('ADMIN')">
             <a href="#" class='sidebar-link'>
-                <i class="bi bi-grid-1x2-fill"></i>
+                <i class="bi bi-bar-chart-line-fill text-info"></i>
                 <span>Report & Analytics</span>
             </a>
             <ul class="submenu">
@@ -325,7 +328,7 @@
         </li>
         <li class="sidebar-item has-sub" sec:authorize="hasRole('ADMIN')">
             <a href="#" class='sidebar-link'>
-                <i class="bi bi-grid-1x2-fill"></i>
+                <i class="bi bi-telephone-fill text-success"></i>
                 <span>Support & Disputes</span>
             </a>
             <ul class="submenu">
@@ -339,7 +342,7 @@
         </li>
         <li class="sidebar-item has-sub" sec:authorize="hasRole('ADMIN')">
             <a href="#" class='sidebar-link'>
-                <i class="bi bi-grid-1x2-fill"></i>
+                <i class="bi bi-gear-fill text-gray"></i>
                 <span>System Settings</span>
             </a>
             <ul class="submenu">

@@ -122,6 +122,76 @@ public class JobController {
 
     /*
      * @author: evana
+     * @Desc: Pending job lists of for admin to approve
+     * @Date: 26-10-25
+     * */
+    @GetMapping("/admin/jobs/pending_jobs")
+    public String pendingForAdminJobList(Model model) {
+        List<Job> jobs = jobService.findByJobStatusForAdmin(JobStatus.PENDING);
+        model.addAttribute("jobs", jobs);
+        model.addAttribute("statuses", UserStatus.values());
+        model.addAttribute("aesUtil", aesUtil);
+        return "admin_pending_jobs";
+    }
+
+    /*
+     * @author: evana
+     * @Desc: Pending job lists of for admin to approve
+     * @Date: 26-10-25
+     * */
+    @GetMapping("/admin/jobs/posted_jobs")
+    public String postedForAdminJobList(Model model) {
+        List<Job> jobs = jobService.findByJobStatusForAdmin(JobStatus.POSTED);
+        model.addAttribute("jobs", jobs);
+        model.addAttribute("statuses", UserStatus.values());
+        model.addAttribute("aesUtil", aesUtil);
+        return "admin_posted_jobs";
+    }
+
+    /*
+     * @author: evana
+     * @Desc: Canceled job lists of for admin to approve
+     * @Date: 26-10-25
+     * */
+    @GetMapping("/admin/jobs/canceled_jobs")
+    public String canceledForAdminJobList(Model model) {
+        List<Job> jobs = jobService.findByJobStatusForAdmin(JobStatus.CANCELLED);
+        model.addAttribute("jobs", jobs);
+        model.addAttribute("statuses", UserStatus.values());
+        model.addAttribute("aesUtil", aesUtil);
+        return "admin_canceled_jobs";
+    }
+
+    /*
+     * @author: evana
+     * @Desc: Active job lists of for admin to approve
+     * @Date: 26-10-25
+     * */
+    @GetMapping("/admin/jobs/active_jobs")
+    public String activeForAdminJobList(Model model) {
+        List<Job> jobs = jobService.findByJobStatusForAdmin(JobStatus.IN_PROGRESS);
+        model.addAttribute("jobs", jobs);
+        model.addAttribute("statuses", UserStatus.values());
+        model.addAttribute("aesUtil", aesUtil);
+        return "admin_active_jobs";
+    }
+
+    /*
+     * @author: evana
+     * @Desc: Completed job lists of for admin to approve
+     * @Date: 26-10-25
+     * */
+    @GetMapping("/admin/jobs/completed_jobs")
+    public String completeForAdminJobList(Model model) {
+        List<Job> jobs = jobService.findByJobStatusForAdmin(JobStatus.COMPLETED);
+        model.addAttribute("jobs", jobs);
+        model.addAttribute("statuses", UserStatus.values());
+        model.addAttribute("aesUtil", aesUtil);
+        return "admin_complete_jobs";
+    }
+
+    /*
+     * @author: evana
      * @Desc: Completed job lists of LoggedIn User as Employer
      * @Date: 15-10-25
      * */
@@ -188,6 +258,30 @@ public class JobController {
 
         return "fragments/job_detail :: jobDetail";
     }
+
+    /*
+     * @author: evana
+     * @Desc: Job Details of a specific job for Admin
+     * @Date: 26-10-25
+     * */
+    @GetMapping("/admin/jobs/job_detail")
+    public String adminJobDetail(@RequestParam("encId") String encId, Model model) {
+        if (encId != null) {
+            Long did = aesUtil.decryptId(encId);
+            Job job  = jobService.findById(did);
+            log.debug("Job details: {}", job);
+            List<Category> categories = categoryService.getAllCategories();
+            model.addAttribute("jobDetail", job);
+            model.addAttribute("jobStatus", JobStatus.values());
+            model.addAttribute("jobType", JobType.values());
+            model.addAttribute("categories", categories);
+        }else{
+            model.addAttribute("message", "Job not available.");
+        }
+
+        return "fragments/job_detail :: jobDetail";
+    }
+
 
     /*
      * @author: evana
