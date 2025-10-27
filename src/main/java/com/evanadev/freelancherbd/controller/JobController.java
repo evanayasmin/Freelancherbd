@@ -47,6 +47,7 @@ public class JobController {
         model.addAttribute("categories", categories);
         model.addAttribute("jobTypes", JobType.values());
         model.addAttribute("job", new Job());
+        model.addAttribute("currentPath", "/employer/jobs/create_job");
         return "job_form";
     }
 
@@ -86,6 +87,7 @@ public class JobController {
         model.addAttribute("jobs", jobs);
         model.addAttribute("statuses", UserStatus.values());
         model.addAttribute("aesUtil", aesUtil);
+        model.addAttribute("currentPath", "/employer/jobs/job_list");
         return "alljob_list";
 
     }
@@ -102,6 +104,8 @@ public class JobController {
         model.addAttribute("jobs", jobs);
         model.addAttribute("statuses", UserStatus.values());
         model.addAttribute("aesUtil", aesUtil);
+        model.addAttribute("currentPath", "/employer/jobs/active_job");
+
         return "active_jobs";
     }
 
@@ -117,6 +121,7 @@ public class JobController {
         model.addAttribute("jobs", jobs);
         model.addAttribute("statuses", UserStatus.values());
         model.addAttribute("aesUtil", aesUtil);
+        model.addAttribute("currentPath", "/employer/jobs/posted_job");
         return "posted_jobs";
     }
 
@@ -131,6 +136,8 @@ public class JobController {
         model.addAttribute("jobs", jobs);
         model.addAttribute("statuses", UserStatus.values());
         model.addAttribute("aesUtil", aesUtil);
+        model.addAttribute("currentPath", "/admin/jobs/pending_job");
+
         return "admin_pending_jobs";
     }
 
@@ -145,6 +152,8 @@ public class JobController {
         model.addAttribute("jobs", jobs);
         model.addAttribute("statuses", UserStatus.values());
         model.addAttribute("aesUtil", aesUtil);
+        model.addAttribute("currentPath", "/admin/jobs/posted_job");
+
         return "admin_posted_jobs";
     }
 
@@ -159,6 +168,8 @@ public class JobController {
         model.addAttribute("jobs", jobs);
         model.addAttribute("statuses", UserStatus.values());
         model.addAttribute("aesUtil", aesUtil);
+        model.addAttribute("currentPath", "/admin/jobs/canceled_job");
+
         return "admin_canceled_jobs";
     }
 
@@ -173,12 +184,14 @@ public class JobController {
         model.addAttribute("jobs", jobs);
         model.addAttribute("statuses", UserStatus.values());
         model.addAttribute("aesUtil", aesUtil);
+        model.addAttribute("currentPath", "/admin/jobs/active_job");
+
         return "admin_active_jobs";
     }
 
     /*
      * @author: evana
-     * @Desc: Completed job lists of for admin to approve
+     * @Desc: Completed job lists of for admin
      * @Date: 26-10-25
      * */
     @GetMapping("/admin/jobs/completed_jobs")
@@ -187,6 +200,8 @@ public class JobController {
         model.addAttribute("jobs", jobs);
         model.addAttribute("statuses", UserStatus.values());
         model.addAttribute("aesUtil", aesUtil);
+        model.addAttribute("currentPath", "/admin/jobs/completed_job");
+
         return "admin_complete_jobs";
     }
 
@@ -203,6 +218,8 @@ public class JobController {
         model.addAttribute("jobs", jobs);
         model.addAttribute("statuses", UserStatus.values());
         model.addAttribute("aesUtil", aesUtil);
+        model.addAttribute("currentPath", "/employer/jobs/completed_job");
+
         return "completed_jobs";
     }
 
@@ -218,6 +235,8 @@ public class JobController {
         model.addAttribute("jobs", jobs);
         model.addAttribute("statuses", UserStatus.values());
         model.addAttribute("aesUtil", aesUtil);
+        model.addAttribute("currentPath", "/employer/jobs/pending_job");
+
         return "pending_jobs";
     }
 
@@ -233,6 +252,8 @@ public class JobController {
         model.addAttribute("jobs", jobs);
         model.addAttribute("statuses", UserStatus.values());
         model.addAttribute("aesUtil", aesUtil);
+        model.addAttribute("currentPath", "/employer/jobs/closed_job");
+
         return "closed_jobs";
     }
 
@@ -252,8 +273,12 @@ public class JobController {
             model.addAttribute("jobStatus", JobStatus.values());
             model.addAttribute("jobType", JobType.values());
             model.addAttribute("categories", categories);
+            model.addAttribute("currentPath", "/employer/jobs/job_detail");
+
         }else{
             model.addAttribute("message", "Job not available.");
+            model.addAttribute("currentPath", "/employer/jobs/job_detail");
+
         }
 
         return "fragments/job_detail :: jobDetail";
@@ -275,6 +300,8 @@ public class JobController {
             model.addAttribute("jobStatus", JobStatus.values());
             model.addAttribute("jobType", JobType.values());
             model.addAttribute("categories", categories);
+            model.addAttribute("currentPath", "/admin/jobs/job_detail");
+
         }else{
             model.addAttribute("message", "Job not available.");
         }
@@ -346,6 +373,8 @@ public class JobController {
                 List<Job> jobs = jobService.findByCategoryAndJobStatus(category);
                 model.addAttribute("category", category);
                 model.addAttribute("jobs", jobs);
+                model.addAttribute("currentPath", "/jobs/category/{category.name}");
+
                 return "category_jobs";
             }
             else{
