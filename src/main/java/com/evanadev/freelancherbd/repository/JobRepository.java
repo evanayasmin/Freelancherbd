@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,4 +30,11 @@ public interface JobRepository extends JpaRepository<Job, Long> {
     @Query("SELECT DISTINCT j FROM Job j JOIN FETCH j.category WHERE j.jobStatus = :jobStatus")
     List<Job> findByJobStatusForAdmin(@Param("jobStatus") JobStatus jobStatus);
 
+    @Query("SELECT DISTINCT j FROM Job j JOIN FETCH j.category WHERE j.jobStatus = :jobStatus AND j.PostedAt BETWEEN :startOfWeek AND :endOfWeek")
+    List<Job> findByNewJobStatus(@Param("jobStatus") JobStatus jobStatus, @Param("startOfWeek") LocalDate startOfWeek,
+                                 @Param("endOfWeek") LocalDate endOfWeek);
+
+    @Query("SELECT DISTINCT j FROM Job j JOIN FETCH j.category WHERE j.jobStatus = :jobStatus")
+    List<Job> findByRecommendedJobStatus(@Param("jobStatus") JobStatus jobStatus);
 }
+

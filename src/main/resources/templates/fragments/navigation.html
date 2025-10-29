@@ -24,22 +24,22 @@
                 <span>Find Work</span>
             </a>
             <ul class="submenu" th:classappend="${currentPath != null and currentPath.startsWith('/employee/jobs')} ? ' active'">
-                <li class="submenu-item ">
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/employee/jobs/new')} ? ' active'">
                     <a th:href="@{/employee/jobs/new_jobs}">New Jobs</a>
                 </li>
-                <li class="submenu-item ">
-                    <a th:href="@{/employee/jobs/recommend_jobs}">Recommended Jobs</a>
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/employee/jobs/recommended')} ? ' active'">
+                    <a th:href="@{/employee/jobs/recommended_jobs}">Recommended Jobs</a>
                 </li>
-                <li class="submenu-item ">
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/employee/jobs/applied')} ? ' active'">
                     <a th:href="@{/employee/jobs/applied_jobs}">Applied Jobs</a>
                 </li>
-                <li class="submenu-item ">
-                    <a th:href="@{/employee/jobs/save_jobs}">Saved Jobs</a>
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/employee/jobs/saved')} ? ' active'">
+                    <a th:href="@{/employee/jobs/saved_jobs}">Saved Jobs</a>
                 </li>
-                <li class="submenu-item ">
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/employee/jobs/working')} ? ' active'">
                     <a th:href="@{/employee/jobs/working_jobs}">Work in Progress</a>
                 </li>
-                <li class="submenu-item ">
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/employee/jobs/completed')} ? ' active'">
                     <a th:href="@{/employee/jobs/completed_jobs}">Completed Jobs</a>
                 </li>
             </ul>

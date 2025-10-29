@@ -236,7 +236,6 @@ public class JobController {
         model.addAttribute("statuses", UserStatus.values());
         model.addAttribute("aesUtil", aesUtil);
         model.addAttribute("currentPath", "/employer/jobs/pending_job");
-
         return "pending_jobs";
     }
 
@@ -253,9 +252,40 @@ public class JobController {
         model.addAttribute("statuses", UserStatus.values());
         model.addAttribute("aesUtil", aesUtil);
         model.addAttribute("currentPath", "/employer/jobs/closed_job");
-
         return "closed_jobs";
     }
+
+    /*
+     * @author: evana
+     * @Desc: New job lists of LoggedIn User as Employee
+     * @Date: 28-10-25
+     * */
+
+    @GetMapping("/employee/jobs/new_jobs")
+    public String newJobList(@ModelAttribute("loggedUser") CustomUserDetail loggedUser, Model model) {
+        log.info("Loggedin user=",loggedUser.getUser().getUsername());
+        List<Job> jobs = jobService.findByNewJobStatus(JobStatus.POSTED);
+        model.addAttribute("jobs", jobs);
+        model.addAttribute("aesUtil", aesUtil);
+        return "employee_new_jobs";
+    }
+
+    /*
+     * @author: evana
+     * @Desc: Recommended jobs based on user skills of LoggedIn User as Employee
+     * @Date: 28-10-25
+     * */
+
+    @GetMapping("/employee/jobs/recommended_jobs")
+    public String recommendedJobList(@ModelAttribute("loggedUser") CustomUserDetail loggedUser, Model model) {
+        log.info("Loggedin user=",loggedUser.getUser().getUsername());
+        Long userId = loggedUser.getId();
+        List<Job> jobs = jobService.findByRecommendedJobStatus(JobStatus.POSTED, userId);
+        model.addAttribute("jobs", jobs);
+        model.addAttribute("aesUtil", aesUtil);
+        return "recommended_jobs";
+    }
+
 
     /*
      * @author: evana
@@ -273,14 +303,9 @@ public class JobController {
             model.addAttribute("jobStatus", JobStatus.values());
             model.addAttribute("jobType", JobType.values());
             model.addAttribute("categories", categories);
-            model.addAttribute("currentPath", "/employer/jobs/job_detail");
-
         }else{
             model.addAttribute("message", "Job not available.");
-            model.addAttribute("currentPath", "/employer/jobs/job_detail");
-
         }
-
         return "fragments/job_detail :: jobDetail";
     }
 

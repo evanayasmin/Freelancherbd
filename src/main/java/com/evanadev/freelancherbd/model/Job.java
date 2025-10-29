@@ -7,6 +7,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -66,6 +67,8 @@ public class Job {
 
     private LocalDateTime CompletedAt;
     private String CompletedBy;
+
+    private LocalDate PostedAt;
     private LocalDateTime CancelledAt;
 
     @CreatedBy
@@ -263,5 +266,13 @@ public class Job {
 
     public void setCreatedBy(String createdBy) {
         this.CreatedBy = createdBy;
+    }
+
+    public LocalDate getPostedAt() {
+        return PostedAt;
+    }
+
+    public void setPostedAt(LocalDate postedAt) {
+        this.PostedAt = postedAt;
     }
 }
