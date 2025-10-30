@@ -93,6 +93,28 @@ $('#confirmStatusBtn').on('click', function (e) {
     });
 });
 
+// Job Saved for an employee
+$(document).on('click', '#saveJobBtn', function(e) {
+    e.preventDefault();
+    const jobId = $(this).data('id');
+    //alert(jobId);
+    $.ajax({
+        url: '/freelancer/jobs/application_saved',
+        type: 'POST',
+        data: { jobId: jobId },
+        success: function(response) {
+        if (response.status === "success") {
+            showToast("Job is Saved Successfully!", "success");
+            }else{
+            showToast("Failed to Save the job!", "error");
+            }
+        },
+        error: function(xhr) {
+            alert('Error saving job: ' + xhr.responseText);
+        }
+    });
+});
+
 //User Status Updating:
 $(document).on("submit", "#statusUpdateForm", function(e) {
     e.preventDefault();
@@ -133,7 +155,6 @@ $(document).on("submit", "#jobUpdateForm", function(e) {
             }else{
                 showToast("Failed to update job!", "error");
             }
-
         },
         error: function() {
             showToast("Bad Request!", "error");

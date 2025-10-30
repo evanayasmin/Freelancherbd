@@ -76,13 +76,18 @@
                                     <td><span class="badge bg-primary">Posted</span></td>
                                     <td th:text="${#temporals.format(job.postedAt, 'yyyy-MM-dd')}"></td>
                                     <td>
-                                        <button type="button"
-                                                class="btn btn-sm btn-outline-primary edit-btn"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#jobViewModal"
-                                                th:data-url="@{/employee/jobs/job_detail(encId=${@aesUtil.encryptId(job.id)})}">
+                                        <a type="button" th:target="_blank"
+                                           class="btn btn-sm btn-outline-primary edit-btn"
+                                           th:href="@{('/jobs/job_detail/' + ${@aesUtil.encryptId(job.id)})}">
                                             <i class="bi bi-book"></i>
-                                        </button>
+                                        </a>
+<!--                                        <button type="button"-->
+<!--                                                class="btn btn-sm btn-outline-primary edit-btn"-->
+<!--                                                data-bs-toggle="modal"-->
+<!--                                                data-bs-target="#jobViewModal"-->
+<!--                                                th:data-url="@{/employee/jobs/job_detail(encId=${@aesUtil.encryptId(job.id)})}">-->
+<!--                                            <i class="bi bi-book"></i>-->
+<!--                                        </button>-->
                                     </td>
                                 </tr>
                                 </tbody>

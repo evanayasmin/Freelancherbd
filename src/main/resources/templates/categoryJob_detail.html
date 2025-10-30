@@ -91,8 +91,8 @@
                                       <div th:align="center" sec:authorize="hasAnyRole('FREELANCER')">
                                           <a th:href="@{'/freelancer/jobs/application/' + ${@aesUtil.encryptId(jobDetail.id)}}"
                                              target="_parent" class="btn btn-success">Apply Now </a>&nbsp;
-                                          <a th:href="@{'/freelancer/jobs/saveJob/' + ${@aesUtil.encryptId(jobDetail.id)}}"
-                                             target="_parent" class="btn btn-secondary">Save </a>&nbsp;
+                                          <a href="#" th:data-id="${@aesUtil.encryptId(jobDetail.id)}" id="saveJobBtn"
+                                             class="btn btn-secondary">Save </a>&nbsp;
                                           <a th:href="@{'/freelancer/jobs/reportApplication/' + ${@aesUtil.encryptId(jobDetail.id)}}"
                                              target="_parent" class="btn btn-warning">Report this Job </a>
 
@@ -131,7 +131,8 @@
                     </div>
                 </div>
                 </section>
-
+                <!-- Toast Container (GLOBAL) -->
+                <div id="toastContainer" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
             </div>
             <footer>
                 <div class="footer clearfix mb-0 text-muted">

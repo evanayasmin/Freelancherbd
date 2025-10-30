@@ -4,6 +4,7 @@ import com.evanadev.freelancherbd.model.*;
 import com.evanadev.freelancherbd.repository.JobApplicationRepository;
 import com.evanadev.freelancherbd.service.JobApplicationService;
 import com.evanadev.freelancherbd.service.JobService;
+import com.evanadev.freelancherbd.service.JobTrafficService;
 import com.evanadev.freelancherbd.util.AESUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,13 +28,17 @@ public class JobApplicationController {
     @Autowired
     JobService jobService ;
     @Autowired
+    JobTrafficService jobTrafficService;
+    @Autowired
     AESUtil aesUtil;
     private static final Logger log = LoggerFactory.getLogger(JobApplicationController.class);
 
-   public JobApplicationController(JobApplicationRepository jobApplicationRepository, JobApplicationService jobApplicationService, JobService jobService, AESUtil aesUtil){
-       this.jobApplicationRepository = jobApplicationRepository;
+   public JobApplicationController(JobApplicationRepository jobApplicationRepository, JobApplicationService jobApplicationService,
+        JobService jobService, JobTrafficService jobTrafficService, AESUtil aesUtil){
+        this.jobApplicationRepository = jobApplicationRepository;
         this.jobApplicationService = jobApplicationService;
         this.jobService = jobService;
+        this.jobTrafficService = jobTrafficService;
         this.aesUtil = aesUtil;
    }
 
@@ -78,12 +83,43 @@ public class JobApplicationController {
         jobApplication.setUser(user);
         Job job = jobService.findById(jobId);
         jobApplication.setJob(job);
-
         jobApplication.setApplicationStatus(ApplicationStatus.RECEIVED);
+
+        //JobTraffic Value Set ===
+        JobTraffic jobTraffic = new JobTraffic();
+        jobTraffic.setJob(job);
+        jobTraffic.setTrafficType(TrafficType.APPLIED);
+        jobTraffic.setUser(loggedUserDetail.getUser());
         jobApplicationService.Application_submit(jobApplication);
-        model.addAttribute("message", "Application submitted.");
+        jobTraffic = jobTrafficService.save(jobTraffic);
+        model.addAttribute("message", "Application has been submitted.");
         return "jobApplication_submit";
     }
+
+    /*
+     * @author: evana
+     * @Desc: Application Saved of a LoggedIn User as Employee
+     * @Date: 30-10-25
+     * */
+    @PostMapping("/freelancer/jobs/application_saved")
+    @ResponseBody
+    public ResponseEntity<Map<String, String>> SaveJob(@RequestParam("jobId") String encId, @ModelAttribute("loggedUser") CustomUserDetail loggedUserDetail, Model model) {
+        Map<String, String> response = new HashMap<>();
+        Long did = aesUtil.decryptId(encId);
+        User user = loggedUserDetail.getUser();
+        Job job = jobService.findById(did);
+
+        //JobTraffic Value Set ===
+        JobTraffic jobTraffic = new JobTraffic();
+        jobTraffic.setJob(job);
+        jobTraffic.setTrafficType(TrafficType.SAVED);
+        jobTraffic.setUser(loggedUserDetail.getUser());
+        jobTraffic = jobTrafficService.save(jobTraffic);
+
+        response.put("status", "success");
+        return ResponseEntity.ok(response);
+    }
+
 
     /*
      * @author: evana

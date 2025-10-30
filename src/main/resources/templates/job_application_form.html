@@ -46,7 +46,7 @@
                         </div>
                     </div>
                 </div>
-                <section id="basic-vertical-layouts">
+                <section id="basic-vertical-layouts" sec:authorize="hasRole('FREELANCER')">
                     <div class="row match-height">
                         <div class="col-md-12 col-12">
                             <div class="card">
@@ -62,10 +62,10 @@
                                             <div class="col-md-3"><strong>Experience:</strong>&nbsp;<span th:text="${job.experience}"></span></div>
                                             <div class="col-md-3"><strong>Payment:</strong>&nbsp;<span th:text="${job.paymentAmount}"></span></div>
                                         </div><hr/>
-                                        <div class="alert alert-light-info color-danger" th:if="${application_message != null}">
+                                        <div class="alert alert-light-info color-danger" th:if="${application_message != ''}">
                                             <i class="bi bi-exclamation-circle"></i>&nbsp;<span class="text-primary" th:text="${application_message}"></span>
                                         </div>
-                                        <div class="row" th:if="${application_message == null}">
+                                        <div class="row" th:if="${application_message == ''}">
                                         <form th:object="${JobApplication}" class="form form-vertical" th:action="@{/freelancer/jobs/application_submit}" method="post">
                                                 <div class="form-body">
                                                     <div class="row">
@@ -74,20 +74,20 @@
                                                         </div>
                                                         <div class="col-12">
                                                             <div class="form-group">
-                                                                <label for="default">Cover Letter</label>
+                                                                <label for="default">Cover Letter:</label>
                                                                 <textarea class="form-control" id="default" cols="30" rows="10" name="coverLetter" th:field="*{coverLetter}"></textarea>
                                                             </div>
                                                         </div>
                                                         <div class="col-12">
                                                             <div class="form-group">
-                                                                <label th:class="card-title">Expected Salary (Tk)</label>
+                                                                <label th:class="card-title">Expected Salary (Tk): </label>
                                                                 <input type="text" id="expectedSalary" class="form-control"
                                                                        placeholder="Expected Salary" th:field="*{expectedSalary}" required />
                                                             </div>
                                                         </div>
                                                         <div class="col-12">
                                                             <div class="form-group">
-                                                                <label for="remarks">Remarks</label>
+                                                                <label for="remarks">Remarks: </label>
                                                                 <textarea class="form-control" id="remarks" cols="30" rows="10" name="remarks" th:field="*{remarks}"></textarea>
                                                             </div>
                                                         </div>

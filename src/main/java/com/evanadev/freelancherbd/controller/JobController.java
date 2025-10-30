@@ -286,6 +286,22 @@ public class JobController {
         return "recommended_jobs";
     }
 
+    /*
+     * @author: evana
+     * @Desc: Saved jobs based on user skills of LoggedIn User as Employee
+     * @Date: 30-10-25
+     * */
+
+    @GetMapping("/employee/jobs/saved_jobs")
+    public String savedJobList(@ModelAttribute("loggedUser") CustomUserDetail loggedUser, Model model) {
+        log.info("Loggedin user=",loggedUser.getUser().getUsername());
+        Long userId = loggedUser.getId();
+        List<Job> jobs = jobService.findByRecommendedJobStatus(JobStatus.POSTED, userId);
+        model.addAttribute("jobs", jobs);
+        model.addAttribute("aesUtil", aesUtil);
+        return "saved_jobs";
+    }
+
 
     /*
      * @author: evana
