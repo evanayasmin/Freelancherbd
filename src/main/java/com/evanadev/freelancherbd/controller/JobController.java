@@ -296,10 +296,70 @@ public class JobController {
     public String savedJobList(@ModelAttribute("loggedUser") CustomUserDetail loggedUser, Model model) {
         log.info("Loggedin user=",loggedUser.getUser().getUsername());
         Long userId = loggedUser.getId();
-        List<Job> jobs = jobService.findByRecommendedJobStatus(JobStatus.POSTED, userId);
+        List<Job> jobs = jobService.findBySavedJobs(TrafficType.SAVED, userId);
         model.addAttribute("jobs", jobs);
         model.addAttribute("aesUtil", aesUtil);
         return "saved_jobs";
+    }
+
+    /*
+     * @author: evana
+     * @Desc: Applied jobs of LoggedIn User as Employee
+     * @Date: 31-10-25
+     * */
+    @GetMapping("/employee/jobs/applied_jobs")
+    public String appliedJobList(@ModelAttribute("loggedUser") CustomUserDetail loggedUser, Model model) {
+        log.info("Loggedin user=",loggedUser.getUser().getUsername());
+        Long userId = loggedUser.getId();
+        List<Job> jobs = jobService.findBySavedJobs(TrafficType.APPLIED, userId);
+        model.addAttribute("jobs", jobs);
+        model.addAttribute("aesUtil", aesUtil);
+        return "applied_jobs";
+    }
+
+    /*
+     * @author: evana
+     * @Desc: InProgress jobs of LoggedIn User as Employee
+     * @Date: 31-10-25
+     * */
+    @GetMapping("/employee/jobs/working_jobs")
+    public String workingJobList(@ModelAttribute("loggedUser") CustomUserDetail loggedUser, Model model) {
+        log.info("Loggedin user=",loggedUser.getUser().getUsername());
+        Long userId = loggedUser.getId();
+        List<Job> jobs = jobService.findBySavedJobs(TrafficType.WORKING, userId);
+        model.addAttribute("jobs", jobs);
+        model.addAttribute("aesUtil", aesUtil);
+        return "working_jobs";
+    }
+
+    /*
+     * @author: evana
+     * @Desc: Completed jobs of LoggedIn User as Employee
+     * @Date: 31-10-25
+     * */
+    @GetMapping("/employee/jobs/completed_jobs")
+    public String completedJobList(@ModelAttribute("loggedUser") CustomUserDetail loggedUser, Model model) {
+        log.info("Loggedin user=",loggedUser.getUser().getUsername());
+        Long userId = loggedUser.getId();
+        List<Job> jobs = jobService.findBySavedJobs(TrafficType.COMPLETED, userId);
+        model.addAttribute("jobs", jobs);
+        model.addAttribute("aesUtil", aesUtil);
+        return "employee_completed_jobs";
+    }
+
+    /*
+     * @author: evana
+     * @Desc: Reported jobs of LoggedIn User as Employee
+     * @Date: 31-10-25
+     * */
+    @GetMapping("/employee/jobs/reported_jobs")
+    public String reportedJobList(@ModelAttribute("loggedUser") CustomUserDetail loggedUser, Model model) {
+        log.info("Loggedin user=",loggedUser.getUser().getUsername());
+        Long userId = loggedUser.getId();
+        List<Job> jobs = jobService.findBySavedJobs(TrafficType.REPORT, userId);
+        model.addAttribute("jobs", jobs);
+        model.addAttribute("aesUtil", aesUtil);
+        return "reported_jobs";
     }
 
 

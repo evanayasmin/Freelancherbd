@@ -37,7 +37,10 @@ public interface JobRepository extends JpaRepository<Job, Long> {
     @Query("SELECT DISTINCT j FROM Job j JOIN FETCH j.category WHERE j.jobStatus = :jobStatus")
     List<Job> findByRecommendedJobStatus(@Param("jobStatus") JobStatus jobStatus);
 
-    @Query("SELECT DISTINCT j FROM Job j JOIN FETCH j.category WHERE j.jobStatus = :jobStatus")
-    List<Job> findByTrackingJobStatus(@Param("jobStatus") JobStatus jobStatus);
+    @Query("SELECT DISTINCT jb FROM JobTraffic jt " +
+            "JOIN jt.job jb " +
+            "JOIN FETCH jb.category " +
+            "WHERE jt.trafficType = :jobStatus AND jt.user.id = :userId")
+    List<Job> findByTrackingJobStatus(@Param("jobStatus") TrafficType jobStatus, @Param("userId") Long userId);
 }
 

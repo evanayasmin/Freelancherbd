@@ -42,6 +42,9 @@
                 <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/employee/jobs/completed')} ? ' active'">
                     <a th:href="@{/employee/jobs/completed_jobs}">Completed Jobs</a>
                 </li>
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/employee/jobs/reported')} ? ' active'">
+                    <a th:href="@{/employee/jobs/reported_jobs}">Reported Jobs</a>
+                </li>
             </ul>
         </li>
 

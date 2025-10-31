@@ -4,6 +4,7 @@ public enum TrafficType {
     VIEWED,
     SAVED,
     APPLIED,
+    WORKING,
     COMPLETED,
     PAID,
     REPORT

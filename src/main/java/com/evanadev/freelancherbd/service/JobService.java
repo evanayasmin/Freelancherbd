@@ -129,5 +129,8 @@ public class JobService {
                 .toList();
 
     }
+    public List<Job> findBySavedJobs(TrafficType jobStatus, Long userId) {
+        return jobRepository.findByTrackingJobStatus(jobStatus, userId);
+    }
 
 }
