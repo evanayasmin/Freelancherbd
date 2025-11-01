@@ -1,5 +1,5 @@
 <!-- fragments/category_update_form.html -->
-<div th:fragment="jobDetail">
+<div th:fragment="jobDetail" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <div class="modal-body">
         <form id="jobUpdateForm" th:object="${jobDetail}" class="form form-vertical" th:action="@{/employer/jobs/update}" method="post">
             <div class="form-body">
@@ -29,7 +29,7 @@
                     <div class="col-12">
                         <div class="form-group">
                             <label class="form-label">Job Category</label>
-                            <select class="form-select" th:field="*{category}" required>
+                            <select id="category" class="form-select" th:field="*{category}" required>
                                 <option th:each="st : ${categories}"
                                         th:value="${st.id}"
                                         th:text="${st.categoryName}">
@@ -40,7 +40,7 @@
                     <div class="col-12">
                         <div class="form-group">
                             <label class="form-label">Job Type</label>
-                            <select class="form-select" th:field="*{jobType}" required>
+                            <select id="jobType" class="form-select" th:field="*{jobType}" required>
                                 <option th:each="jt : ${jobType}"
                                         th:value="${jt.name()}"
                                         th:text="${jt.name()}">
@@ -51,9 +51,8 @@
                     <div class="col-12">
                         <div class="form-group">
                             <label class="form-label">Job Status</label>
-                            <select class="form-select" th:field="*{jobStatus}" required>
+                            <select id="jobStatus" class="form-select" th:field="*{jobStatus}" required>
                                 <option th:each="jts : ${jobStatus}"
-                                        th:if="${jts.name() != 'POSTED'}"
                                         th:value="${jts.name()}"
                                         th:text="${jts.name()}">
                                 </option>
@@ -130,7 +129,7 @@
                             <textarea id="specialInstruction" class="form-control tinymce-editor" cols="30" rows="5" name="companyInstruction" th:field="*{companyInstruction}"></textarea>
                         </div>
                     </div>
-                    <div class="col-12 d-flex justify-content-end">
+                    <div class="col-12 d-flex justify-content-end" sec:authorize="hasRole('EMPLOYER')">
                         <button th:if="${jobDetail != null and jobDetail.jobStatus.name() != 'COMPLETED'
     and jobDetail.jobStatus.name() != 'CANCELLED'}" type="submit" class="btn btn-primary me-1 mb-1">Update</button>
                         <button type="reset" class="btn btn-light-secondary me-1 mb-1">Reset</button>

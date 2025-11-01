@@ -20,15 +20,14 @@ public class JobApplication {
     @Lob
     @Column(columnDefinition = "LongText")
     private String coverLetter;
+
     @Column(nullable = false)
     private String expectedSalary;
 
     @Enumerated(EnumType.STRING)
-    private ApplicationStatus applicationStaus;
+    private ApplicationStatus applicationStatus;
     private String remarks;
 
-    @LastModifiedDate
-    @Column(updatable = false)
     private LocalDateTime jobAssignedDate;
 
     @CreatedDate
@@ -71,14 +70,13 @@ public class JobApplication {
         this.expectedSalary = expectedSalary;
     }
 
-    public ApplicationStatus getApplicationStaus() {
-        return applicationStaus;
+    public ApplicationStatus getApplicationStatus() {
+        return applicationStatus;
     }
 
-    public void setApplicationStaus(ApplicationStatus applicationStaus) {
-        this.applicationStaus = applicationStaus;
+    public void setApplicationStatus(ApplicationStatus applicationStatus) {
+        this.applicationStatus = applicationStatus;
     }
-
     public String getRemarks() {
         return remarks;
     }
@@ -110,4 +108,10 @@ public class JobApplication {
     public void setUser(User user) {
         this.user = user;
     }
+
+    @PrePersist
+    protected void onCreate() {
+        this.applicationDate = LocalDateTime.now();
+    }
+
 }

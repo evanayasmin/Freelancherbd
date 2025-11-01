@@ -6,5 +6,5 @@ public enum ApplicationStatus {
     SORTED,
     HIRED,
     PAID,
-    REPORT
+    DECLINED
 }

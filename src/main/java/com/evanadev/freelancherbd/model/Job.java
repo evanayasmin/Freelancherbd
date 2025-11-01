@@ -7,7 +7,9 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -23,7 +25,6 @@ public class Job {
     @Column(columnDefinition = "LONGTEXT", nullable = false)
     private String description;
 
-    @Column(nullable = false)
     private Integer vacancy;
     private String ageLimit;
     private String experience;
@@ -49,6 +50,7 @@ public class Job {
 
     @Enumerated(EnumType.STRING)
     private JobStatus jobStatus = JobStatus.PENDING;
+
     private String PaymentAmount;
 
     @Column(nullable = false)
@@ -66,6 +68,8 @@ public class Job {
 
     private LocalDateTime CompletedAt;
     private String CompletedBy;
+
+    private LocalDate PostedAt;
     private LocalDateTime CancelledAt;
 
     @CreatedBy
@@ -166,7 +170,7 @@ public class Job {
     }
 
     public void setRequiredSkill(String requiredSkill) {
-        RequiredSkill = requiredSkill;
+        this.RequiredSkill = requiredSkill;
     }
 
     public String getRequiredLevel() {
@@ -174,7 +178,7 @@ public class Job {
     }
 
     public void setRequiredLevel(String requiredLevel) {
-        RequiredLevel = requiredLevel;
+        this.RequiredLevel = requiredLevel;
     }
 
     public JobType getJobType() {
@@ -182,7 +186,7 @@ public class Job {
     }
 
     public void setJobType(JobType jobType) {
-        jobType = jobType;
+        this.jobType = jobType;
     }
 
     public JobStatus getJobStatus() {
@@ -190,7 +194,7 @@ public class Job {
     }
 
     public void setJobStatus(JobStatus jobStatus) {
-        jobStatus = jobStatus;
+        this.jobStatus = jobStatus;
     }
 
     public String getPaymentAmount() {
@@ -198,7 +202,7 @@ public class Job {
     }
 
     public void setPaymentAmount(String paymentAmount) {
-        PaymentAmount = paymentAmount;
+        this.PaymentAmount = paymentAmount;
     }
 
     public LocalDateTime getPaymentDate() {
@@ -206,7 +210,7 @@ public class Job {
     }
 
     public void setPaymentDate(LocalDateTime paymentDate) {
-        PaymentDate = paymentDate;
+        this.PaymentDate = paymentDate;
     }
 
     public String getPaymentMethod() {
@@ -214,7 +218,7 @@ public class Job {
     }
 
     public void setPaymentMethod(String paymentMethod) {
-        PaymentMethod = paymentMethod;
+        this.PaymentMethod = paymentMethod;
     }
 
     public LocalDateTime getDeadline() {
@@ -230,7 +234,7 @@ public class Job {
     }
 
     public void setCancelledAt(LocalDateTime cancelledAt) {
-        CancelledAt = cancelledAt;
+        this.CancelledAt = cancelledAt;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -238,7 +242,7 @@ public class Job {
     }
 
     public void setCreatedAt(LocalDateTime createdAt) {
-        CreatedAt = createdAt;
+        this.CreatedAt = createdAt;
     }
 
     public LocalDateTime getCompletedAt() {
@@ -246,7 +250,7 @@ public class Job {
     }
 
     public void setCompletedAt(LocalDateTime completedAt) {
-        CompletedAt = completedAt;
+        this.CompletedAt = completedAt;
     }
 
     public String getCompletedBy() {
@@ -254,7 +258,7 @@ public class Job {
     }
 
     public void setCompletedBy(String completedBy) {
-        CompletedBy = completedBy;
+        this.CompletedBy = completedBy;
     }
 
     public String getCreatedBy() {
@@ -262,6 +266,14 @@ public class Job {
     }
 
     public void setCreatedBy(String createdBy) {
-        CreatedBy = createdBy;
+        this.CreatedBy = createdBy;
+    }
+
+    public LocalDate getPostedAt() {
+        return PostedAt;
+    }
+
+    public void setPostedAt(LocalDate postedAt) {
+        this.PostedAt = postedAt;
     }
 }

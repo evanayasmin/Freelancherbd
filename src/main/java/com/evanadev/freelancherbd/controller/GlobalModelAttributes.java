@@ -8,6 +8,7 @@ import com.evanadev.freelancherbd.repository.CategoryRepository;
 import com.evanadev.freelancherbd.repository.UserProfileRepository;
 import com.evanadev.freelancherbd.repository.UserRepository;
 import com.evanadev.freelancherbd.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,11 @@ public class GlobalModelAttributes {
     private CategoryRepository categoryRepository;
     private UserProfileRepository userProfileRepository;
     private static final Logger log = LoggerFactory.getLogger(GlobalModelAttributes.class);
+
+    @ModelAttribute("currentPath")
+    public String getCurrentPath(HttpServletRequest request) {
+        return request.getRequestURI();
+    }
 
     @ModelAttribute("categories")
     public List<Category> categories() {

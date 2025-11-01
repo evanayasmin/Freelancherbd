@@ -41,7 +41,7 @@
                             <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a th:href="@{/home}">Dashboard</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">Job</li>
+                                    <li class="breadcrumb-item active" aria-current="page">Create New Job</li>
                                 </ol>
                             </nav>
                         </div>
@@ -49,7 +49,7 @@
                 </div>
                 <section id="basic-vertical-layouts">
                     <div class="row match-height">
-                        <div class="col-md-8 col-12">
+                        <div class="col-md-10 col-12">
                             <div class="card">
                                 <div class="card-header"><h4 class="card-title">Job Create Form</h4></div>
                                 <div class="card-content">
@@ -63,27 +63,27 @@
                                                     <div class="col-12">
                                                         <div class="form-group">
                                                             <label for="job_title">Job Title</label>
-                                                            <input type="text" id="job_title" class="form-control"
+                                                            <input type="text" id="job_title" th:name="jobTitle" class="form-control"
                                                                    placeholder="Job Title" th:field="*{title}" required />
                                                         </div>
                                                     </div>
                                                     <div class="col-12">
                                                         <div class="form-group">
                                                             <label for="default">Job Description</label>
-                                                            <textarea class="form-control" id="default" cols="30" rows="10" name="description" th:field="*{description}"></textarea>
+                                                            <textarea class="form-control" id="default" cols="30" rows="10" th:name="description" th:field="*{description}"></textarea>
                                                         </div>
                                                    </div>
                                                     <div class="col-12">
                                                         <div class="form-group">
                                                             <label for="company">Company Name</label>
-                                                            <input type="text" id="company" class="form-control"
+                                                            <input type="text" id="company" th:name="company" class="form-control"
                                                                    placeholder="Company" th:field="*{company}" required />
                                                         </div>
                                                     </div>
                                                     <div class="col-12">
                                                         <div class="form-group">
                                                             <label class="form-label">Job Category</label>
-                                                            <select class="form-select" th:field="*{category}" required>
+                                                            <select class="form-select" th:name="category_id" th:field="*{category}" required>
                                                                 <option th:each="st : ${categories}"
                                                                         th:value="${st.id}"
                                                                         th:text="${st.categoryName}">
@@ -94,8 +94,8 @@
                                                     <div class="col-12">
                                                         <div class="form-group">
                                                             <label class="form-label">Job Type</label>
-                                                            <select class="form-select" th:field="*{jobType}" required>
-                                                                <option th:each="jt : ${jobType}"
+                                                            <select th:name="jobType" class="form-select" th:field="*{jobType}">
+                                                                <option th:each="jt : ${jobTypes}"
                                                                         th:value="${jt.name()}"
                                                                         th:text="${jt.name()}">
                                                                 </option>
@@ -105,7 +105,7 @@
                                                     <div class="col-12">
                                                         <div class="form-group">
                                                             <label for="dark">Required Skill</label>
-                                                            <textarea class="form-control" id="dark" cols="30" rows="10" name="requiredSkill" th:field="*{requiredSkill}"></textarea>
+                                                            <textarea class="form-control" id="dark" cols="30" rows="10" th:name="requiredSkill" th:field="*{requiredSkill}"></textarea>
                                                         </div>
                                                     </div>
                                                     <div class="col-12">
@@ -126,42 +126,42 @@
                                                     <div class="col-12">
                                                         <div class="form-group">
                                                             <label for="vacancy">Vacancy</label>
-                                                            <input type="number" id="vacancy" class="form-control"
+                                                            <input type="number" id="vacancy" th:name="vacanccy" class="form-control"
                                                                    placeholder="Vacancy" th:field="*{vacancy}" />
                                                         </div>
                                                     </div>
                                                     <div class="col-12">
                                                         <div class="form-group">
                                                             <label for="age_limit">Vacancy</label>
-                                                            <input type="text" id="age_limit" class="form-control"
+                                                            <input type="text" th:name="ageLimit" id="age_limit" class="form-control"
                                                                    placeholder="Age Limit" th:field="*{ageLimit}" />
                                                         </div>
                                                     </div>
                                                     <div class="col-12">
                                                         <div class="form-group">
                                                             <label for="experience">Required Experience</label>
-                                                            <input type="text" id="experience" class="form-control"
+                                                            <input type="text" id="experience" th:name="experience" class="form-control"
                                                                    placeholder="Required Experience" th:field="*{experience}" />
                                                         </div>
                                                     </div>
                                                     <div class="col-12">
                                                         <div class="form-group">
                                                             <label for="payment">Payment(Tk.)</label>
-                                                            <input type="text" id="payment" class="form-control"
+                                                            <input type="text" id="payment" name="payment" class="form-control"
                                                                    placeholder="Job Price" th:field="*{paymentAmount}" required/>
                                                         </div>
                                                     </div>
                                                     <div class="col-12">
                                                         <div class="form-group">
                                                             <label for="deadline">Deadline</label>
-                                                            <input type="datetime-local" id="deadline" class="form-control"
+                                                            <input type="datetime-local" id="deadline" name="deadline" class="form-control"
                                                                    placeholder="Deadline" th:field="*{deadline}" required/>
                                                         </div>
                                                     </div>
                                                     <div class="col-12">
                                                         <div class="form-group">
                                                             <label for="job_locatiob">Job Location</label>
-                                                            <input type="text" id="job_locatiob" class="form-control"
+                                                            <input type="text" id="job_locatiob" class="form-control" name="jobLocation"
                                                                    placeholder="Job Location" th:field="*{jobLocation}" required/>
                                                         </div>
                                                     </div>

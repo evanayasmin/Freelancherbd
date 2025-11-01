@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <div th:replace="~{fragments/header :: header}"></div>
     <script th:src="@{/assets/vendors/tinymce/tinymce.min.js}"></script>
@@ -40,7 +40,7 @@
                             <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a th:href="@{/home}">Dashboard</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">Job Category / <span th:text="${category.categoryName}"></span></li>
+                                    <li class="breadcrumb-item active" aria-current="page">Proposals / Hired proposal</li>
                                 </ol>
                             </nav>
                         </div>
@@ -48,45 +48,36 @@
                 </div>
                 <section class="section">
                     <div class="card">
-                        <div class="card-header">Job List : <span th:text="${category.categoryName}"></span></div>
+                        <div class="card-header">Hired Proposal</div>
                         <div class="card-body" id="freelancerCardBody">
                             <table class="table table-striped" id="table1">
                                 <thead>
                                 <tr>
-                                    <th>Title</th>
+                                    <th>Job Title</th>
                                     <th>Category</th>
-                                    <th>Job Price</th>
-                                    <th>Deadline</th>
+                                    <th>Applicant Name</th>
+                                    <th>Expected Salary</th>
                                     <th>Status</th>
-                                    <th>Created At</th>
+                                    <th>Applied At</th>
                                     <th>Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="job : ${jobs}">
-                                    <td th:text="${job.title}"></td>
-                                    <td th:text="${job.getCategory().getCategoryName()}"></td>
-                                     <td th:text="${job.paymentAmount}"></td>
-                                    <td th:text="${#temporals.format(job.deadline, 'yyyy-MM-dd')}"></td>
+                                <tr th:each="jobp : ${proposals}">
+                                    <td th:text="${jobp.getJob().title}"></td>
+                                    <td th:text="${jobp.getJob().getCategory().categoryName}"></td>
+                                    <td th:text="${jobp.getUser().fullname}"></td>
+                                    <td th:text="${jobp.expectedSalary}"></td>
+                                    <td><span class="badge bg-primary">HIRED</span></td>
+                                    <td th:text="${#temporals.format(jobp.applicationDate, 'yyyy-MM-dd')}"></td>
                                     <td>
-                                        <span th:if="${job.jobStatus.name() =='POSTED' }"
-                                              class="badge bg-primary">Open</span>
-                                        <span th:if="${job.jobStatus.name() =='PENDING' }"
-                                              class="badge bg-warning">Pending</span>
-                                        <span th:if="${job.jobStatus.name() =='IN_PROGRESS' }"
-                                              class="badge bg-light-primary">IN PROGRESS</span>
-                                        <span th:if="${job.jobStatus.name() =='COMPLETED' }"
-                                              class="badge bg-success">COMPLETED</span>
-                                        <span th:if="${job.jobStatus.name() =='CANCELLED' }"
-                                              class="badge bg-danger">CANCELLED</span>
-                                    </td>
-                                    <td th:text="${#temporals.format(job.createdAt, 'yyyy-MM-dd')}"></td>
-                                    <td>
-                                        <a type="button" th:target="_blank"
-                                           class="btn btn-sm btn-outline-primary edit-btn"
-                                           th:href="@{('/jobs/job_detail/' + ${@aesUtil.encryptId(job.id)})}">
-                                            <i class="bi bi-book"></i>
-                                        </a>
+                                        <button type="button"
+                                        class="btn btn-sm btn-outline-primary edit-btn"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#proposalViewModal"
+                                        th:data-url="@{/employer/jobs/proposal_details(encId=${@aesUtil.encryptId(jobp.id)})}">
+                                        <i class="bi bi-book"></i>
+                                        </button>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -94,6 +85,21 @@
                         </div>
                     </div>
                 </section>
+                <div class="modal fade" id="proposalViewModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                        <div class="modal-content">
+                            <div class="modal-header bg-light-primary">
+                                <h5 class="modal-title">Job Proposal Details</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body rounded bg-white" id="viewModalContent">
+                                <!-- Form content will be loaded here -->
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
             </div>
             <footer>
                 <div class="footer clearfix mb-0 text-muted">
@@ -114,4 +120,5 @@
     </div>
 </div>
 </body>
+
 </html>

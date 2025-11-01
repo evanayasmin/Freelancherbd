@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="~{fragments/header :: header}"></div>
+    <script th:src="@{/assets/vendors/tinymce/tinymce.min.js}"></script>
+    <script th:src="@{/assets/vendors/tinymce/plugins/code/plugin.min.js}"></script>
+    <script>
+        tinymce.init({ selector: 'textarea.tinymce-editor' });
+        tinymce.init({ selector: '#default' });
+        tinymce.init({ selector: '#remarks' });
+        //tinymce.init({ selector: '#dark', toolbar: 'undo redo styleselect bold italic alignleft aligncenter alignright bullist numlist outdent indent code', plugins: 'code' });
+    </script>
+</head>
+<body>
+<div id="app">
+    <div id="sidebar" class="active">
+        <div class="sidebar-wrapper active">
+            <div class="sidebar-header">
+                <div class="d-flex justify-content-between">
+                    <div class="logo">
+                        <a href="index.html"><img src="assets/images/logo/logo.png" alt="Logo" srcset=""></a>
+                    </div>
+                    <div class="toggler">
+                        <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div th:replace="~{fragments/navigation :: navigation}"></div>
+            <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
+        </div>
+    </div>
+    <div id="main" class='layout-navbar'>
+        <div th:replace="~{fragments/profile_header :: profile-header}"></div>
+        <div id="main-content">
+            <div class="page-heading">
+                <div class="page-title">
+                    <div class="row">
+                        <div class="col-12 col-md-6 order-md-1 order-last"></div>
+                        <div class="col-12 col-md-6 order-md-2 order-first">
+                            <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a th:href="@{/home}">Dashboard</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">Job Category / <a th:href="@{('/jobs/category/' + ${@aesUtil.encryptId(job.getCategory().getId())})}" th:text="${job.getCategory().categoryName}" th:target="_parent"></a></li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+                <section id="basic-vertical-layouts" sec:authorize="hasRole('FREELANCER')">
+                    <div class="row match-height">
+                        <div class="col-md-12 col-12">
+                            <div class="card">
+                                <div class="card-header"><h5 class="card-title">Application Form :&nbsp; <span th:text="${job.title}"></span></h5></div>
+                                <div class="card-content">
+                                    <div class="card-body">
+                                        <div class="alert alert-light-danger text-primary" th:if="${cv == null}"><i class="bi bi-exclamation-circle"></i>
+                                            You have not uploaded your CV. Please upload your CV first and apply.
+                                        </div>
+                                         <div class="row match-height alert alert-light-primary border-bottom">
+                                            <div class="col-md-2"><strong>Vacancy:</strong>&nbsp;<span th:text="${job.vacancy}"></span></div>
+                                            <div class="col-md-4"><strong>Deadline:</strong>&nbsp;<span th:text="${#temporals.format(job.deadline, 'yyyy-MM-dd')}"></span></div>
+                                            <div class="col-md-3"><strong>Experience:</strong>&nbsp;<span th:text="${job.experience}"></span></div>
+                                            <div class="col-md-3"><strong>Payment:</strong>&nbsp;<span th:text="${job.paymentAmount}"></span></div>
+                                        </div><hr/>
+                                        <div class="alert alert-light-info color-danger" th:if="${application_message != ''}">
+                                            <i class="bi bi-exclamation-circle"></i>&nbsp;<span class="text-primary" th:text="${application_message}"></span>
+                                        </div>
+                                        <div class="row" th:if="${application_message == ''}">
+                                        <form th:object="${JobApplication}" class="form form-vertical" th:action="@{/freelancer/jobs/application_submit}" method="post">
+                                                <div class="form-body">
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <div class="form-group"><input type="hidden" name="jobId" th:value="${job.id}"></div>
+                                                        </div>
+                                                        <div class="col-12">
+                                                            <div class="form-group">
+                                                                <label for="default">Cover Letter:</label>
+                                                                <textarea class="form-control" id="default" cols="30" rows="10" name="coverLetter" th:field="*{coverLetter}"></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12">
+                                                            <div class="form-group">
+                                                                <label th:class="card-title">Expected Salary (Tk): </label>
+                                                                <input type="text" id="expectedSalary" class="form-control"
+                                                                       placeholder="Expected Salary" th:field="*{expectedSalary}" required />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12">
+                                                            <div class="form-group">
+                                                                <label for="remarks">Remarks: </label>
+                                                                <textarea class="form-control" id="remarks" cols="30" rows="10" name="remarks" th:field="*{remarks}"></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12 d-flex justify-content-end" th:if="${cv !=null}">
+                                                            <button type="submit" class="btn btn-primary me-1 mb-1">Submit</button>
+                                                            <button type="reset" class="btn btn-light-secondary me-1 mb-1">Reset</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+            <footer>
+                <div class="footer clearfix mb-0 text-muted">
+                    <div th:replace="~{fragments/footer :: footer}"></div>
+                </div>
+            </footer>
+        </div>
+    </div>
+</div>
+</body>
+</html>

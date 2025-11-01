@@ -63,6 +63,58 @@ $(document).ready(function() {
     });
 });
 
+// Job Status Update by Admin
+$('.statusBtn').on('click', function () {
+    let url = $(this).data('url');
+    $('#confirmStatusBtn').attr('href', url);
+});
+
+// When confirm update button in modal is clicked
+$('#confirmStatusBtn').on('click', function (e) {
+    e.preventDefault();
+    let url = $(this).attr('href');
+    //alert(url);
+    $.ajax({
+        url: url,
+        type: "GET",
+        success: function (response) {
+            $('#statusModal').modal('hide');  // close modal
+            if (response.status === "success") {
+                showToast("Job is posted!", "success");
+            }else{
+                showToast("Failed to post job!", "error");
+            }
+            //showToast(response, "success");
+            $('#pendingjobs').DataTable().ajax.reload(null, false); // refresh table
+        },
+        error: function () {
+            alert("Error deleting category");
+        }
+    });
+});
+
+// Job Saved for an employee
+$(document).on('click', '#saveJobBtn', function(e) {
+    e.preventDefault();
+    const jobId = $(this).data('id');
+    //alert(jobId);
+    $.ajax({
+        url: '/freelancer/jobs/application_saved',
+        type: 'POST',
+        data: { jobId: jobId },
+        success: function(response) {
+        if (response.status === "success") {
+            showToast("Job is Saved Successfully!", "success");
+            }else{
+            showToast("Failed to Save the job!", "error");
+            }
+        },
+        error: function(xhr) {
+            alert('Error saving job: ' + xhr.responseText);
+        }
+    });
+});
+
 //User Status Updating:
 $(document).on("submit", "#statusUpdateForm", function(e) {
     e.preventDefault();
@@ -87,6 +139,11 @@ $(document).on("submit", "#statusUpdateForm", function(e) {
 $(document).on("submit", "#jobUpdateForm", function(e) {
     e.preventDefault();
     console.log("AJAX triggered from dynamic modal");
+    // Force selects to commit values
+    $('#jobType').trigger('change');
+    $('#jobStatus').trigger('change');
+    console.log($(this).serialize()); // Debug
+
     $.ajax({
         url: $(this).attr('action'),
         type: "POST",
@@ -97,6 +154,49 @@ $(document).on("submit", "#jobUpdateForm", function(e) {
                 showToast("Job updated successfully!", "success");
             }else{
                 showToast("Failed to update job!", "error");
+            }
+        },
+        error: function() {
+            showToast("Bad Request!", "error");
+        }
+    });
+});
+
+//Proposal Details Modal Display On click view button.
+$('#proposalViewModal').on('show.bs.modal', function (e) {
+    var button = $(e.relatedTarget);
+    var url = button.data('url');
+
+    // Clear old content before loading new
+    $('#viewModalContent').html('<p class="text-center">Loading...</p>');
+    $.ajax({
+        url: url,
+        type: "GET",
+        success: function (data) {
+            $('#viewModalContent').html(data);
+            tinymce.remove();
+            tinymce.init({ selector: 'textarea.tinymce-editor' });
+        },
+        error: function () {
+            $('#viewModalContent').html('<p class="text-danger">Failed to load form.</p>');
+        }
+    });
+});
+
+//Proposal Update submitting
+$(document).on("submit", "#proposalUpdateForm", function(e) {
+    e.preventDefault();
+    console.log("AJAX triggered from dynamic modal");
+    $.ajax({
+        url: $(this).attr('action'),
+        type: "POST",
+        data: $(this).serialize(),
+        success: function(res) {
+            $('#proposalViewModal').modal('hide');
+            if (res.status === "success") {
+                showToast("Proposal updated successfully!", "success");
+            }else{
+                showToast("Failed to update Proposal!", "error");
             }
 
         },
@@ -110,12 +210,12 @@ $(document).on("submit", "#jobUpdateForm", function(e) {
 function showToast(message, type) {
     let bg = type === "success" ? "bg-success" : "bg-danger";
     let toastHtml = `
-            <div class="toast align-items-center text-white ${bg} border-0" role="alert" aria-live="assertive" aria-atomic="true">
-              <div class="d-flex">
-                <div class="toast-body">${message}</div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
-              </div>
-            </div>`;
+    <div class="toast align-items-center text-white ${bg} border-0" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body">${message}</div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+      </div>
+    </div>`;
     $("#toastContainer").append(toastHtml);
     let newToast = new bootstrap.Toast($("#toastContainer .toast").last()[0]);
     newToast.show();

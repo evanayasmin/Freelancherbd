@@ -52,18 +52,6 @@
                                       <div class="col-md-3"><strong>Experience:</strong>&nbsp;<span th:text="${jobDetail.experience}"></span></div>
                                       <div class="col-md-3"><strong>Payment:</strong>&nbsp;<span th:text="${jobDetail.paymentAmount}"></span></div>
                                   </div><hr/>
-<!--                                  <div class="table-responsive">-->
-<!--                                      <table class="table table-secondary">-->
-<!--                                          <tbody>-->
-<!--                                          <tr>-->
-<!--                                              <td>Vacancy: <span th:text="${jobDetail.vacancy}"></span></td>-->
-<!--                                              <td>Application Deadline: <span th:text="${jobDetail.deadline}"></span></td>-->
-<!--                                              <td>Experience: <span th:text="${jobDetail.experience}"></span></td>-->
-<!--                                              <td>Payment: <span th:text="${jobDetail.paymentAmount}"></span></td>-->
-<!--                                          </tr>-->
-<!--                                          </tbody>-->
-<!--                                      </table>-->
-<!--                                  </div>-->
                                   <div class="table-responsive">
                                   <table class="table table-lg">
                                       <tbody>
@@ -99,20 +87,17 @@
                                           <td style="background-color: #f2f7ff;"><strong>Special Instruction</strong></td>
                                           <td><span th:text="${jobDetail.companyInstruction}"></span></td>
                                       </tr>
-                                      <tr><td colspan="2"><div th:align="center" sec:authorize="hasAnyRole('FREELANCER')">
-                                          <a th:href="@{'/jobs/apply/' + ${@aesUtil.encryptId(jobDetail.id)}}"
-                                             target="_parent"
-                                             class="btn btn-success">
-                                              Apply Now
-                                          </a>
-                                          &nbsp;
-                                          <a th:href="@{'/jobs/report/' + ${@aesUtil.encryptId(jobDetail.id)}}"
-                                             target="_parent"
-                                             class="btn btn-warning">
-                                              Report this Job
-                                          </a>
+                                      <tr><td colspan="2">
+                                      <div th:align="center" sec:authorize="hasAnyRole('FREELANCER')">
+                                          <a th:href="@{'/freelancer/jobs/application/' + ${@aesUtil.encryptId(jobDetail.id)}}"
+                                             target="_parent" class="btn btn-success">Apply Now </a>&nbsp;
+                                          <a href="#" th:data-id="${@aesUtil.encryptId(jobDetail.id)}" id="saveJobBtn"
+                                             class="btn btn-secondary">Save </a>&nbsp;
+                                          <a th:href="@{'/freelancer/jobs/reportApplication/' + ${@aesUtil.encryptId(jobDetail.id)}}"
+                                             target="_parent" class="btn btn-warning">Report this Job </a>
+
                                       </div>
-                                         </td></tr>
+                                     </td></tr>
                                      </tbody>
                                   </table>
                                   </div>
@@ -146,7 +131,8 @@
                     </div>
                 </div>
                 </section>
-
+                <!-- Toast Container (GLOBAL) -->
+                <div id="toastContainer" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
             </div>
             <footer>
                 <div class="footer clearfix mb-0 text-muted">

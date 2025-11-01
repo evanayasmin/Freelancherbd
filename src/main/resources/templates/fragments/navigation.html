@@ -6,142 +6,97 @@
             </a>
         </li>
         <li class="sidebar-item has-sub" sec:authorize="hasAnyRole('FREELANCER','EMPLOYER','ADMIN')">
-            <a href="#" class='sidebar-link'><i class="bi bi-stack"></i><span>Job Category</span></a>
-            <ul class="submenu ">
-                <li th:each="cat : ${categories}" class="submenu-item">
-                    <a th:href="@{('/jobs/category/' + ${@aesUtil.encryptId(cat.id)})}" th:text="${cat.categoryName}"></a>
-                </li>
+            <a href="#" class='sidebar-link'><i class="bi bi-stack text-info"></i><span>Job Category</span></a>
+            <ul class="submenu" th:classappend="${currentPath != null and currentPath.startsWith('/jobs/category')} ? ' active'">
+                <li th:each="cat : ${categories}" class="submenu-item"><a th:href="@{('/jobs/category/' + ${@aesUtil.encryptId(cat.id)})}" th:text="${cat.categoryName}"></a></li>
+<!--                <li th:each="cat : ${categories}" class="submenu-item ">-->
+<!--                    <a th:href="@{('/jobs/category/' + ${@aesUtil.encryptId(cat.id)})}">-->
+<!--                        <i class="bi bi-arrow-right-short"></i>-->
+<!--                        <span th:text="${cat.categoryName}"></span>-->
+<!--                    </a>-->
+<!--                </li>-->
             </ul>
         </li>
 
         <li class="sidebar-item  has-sub" sec:authorize="hasRole('FREELANCER')">
             <a href="#" class='sidebar-link'>
-                <i class="bi bi-collection-fill"></i>
+                <i class="bi bi-collection-fill text-success"></i>
                 <span>Find Work</span>
             </a>
-            <ul class="submenu ">
-                <li class="submenu-item ">
-                    <a th:href="@{/new_jobs}">New Jobs</a>
+            <ul class="submenu" th:classappend="${currentPath != null and currentPath.startsWith('/employee/jobs')} ? ' active'">
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/employee/jobs/new')} ? ' active'">
+                    <a th:href="@{/employee/jobs/new_jobs}">New Jobs</a>
                 </li>
-                <li class="submenu-item ">
-                    <a th:href="@{/recommend_jobs}">Recommended Jobs</a>
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/employee/jobs/recommended')} ? ' active'">
+                    <a th:href="@{/employee/jobs/recommended_jobs}">Recommended Jobs</a>
                 </li>
-                <li class="submenu-item ">
-                    <a th:href="@{/applied_jobs}">Applied Jobs</a>
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/employee/jobs/applied')} ? ' active'">
+                    <a th:href="@{/employee/jobs/applied_jobs}">Applied Jobs</a>
                 </li>
-                <li class="submenu-item ">
-                    <a th:href="@{/save_jobs}">Saved Jobs</a>
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/employee/jobs/saved')} ? ' active'">
+                    <a th:href="@{/employee/jobs/saved_jobs}">Saved Jobs</a>
                 </li>
-                <li class="submenu-item ">
-                    <a th:href="@{/working_jobs}">Work in Progress</a>
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/employee/jobs/working')} ? ' active'">
+                    <a th:href="@{/employee/jobs/working_jobs}">Work in Progress</a>
                 </li>
-                <li class="submenu-item ">
-                    <a th:href="@{/completed_jobs}">Completed Jobs</a>
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/employee/jobs/completed')} ? ' active'">
+                    <a th:href="@{/employee/jobs/completed_jobs}">Completed Jobs</a>
+                </li>
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/employee/jobs/reported')} ? ' active'">
+                    <a th:href="@{/employee/jobs/reported_jobs}">Reported Jobs</a>
                 </li>
             </ul>
         </li>
 
         <li class="sidebar-item has-sub" sec:authorize="hasRole('FREELANCER')">
             <a href="#" class='sidebar-link'>
-                <i class="bi bi-grid-1x2-fill"></i>
+                <i class="bi bi-cash-stack text-danger"></i>
                 <span>Earnings</span>
             </a>
-            <ul class="submenu active">
-                <li class="submenu-item ">
-                    <a th:href="@{/wallet_balance}">Wallet Balance</a>
+            <ul class="submenu" th:classappend="${currentPath != null and currentPath.startsWith('/employee/earnings')} ? ' active'">
+                <li class="submenu-item">
+                    <a th:href="@{/employee/earnings/wallet_balance}">Wallet Balance</a>
                 </li>
                 <li class="submenu-item ">
-                    <a th:href="@{/withdrwal}">Withdrawal</a>
+                    <a th:href="@{/employee/earnings/withdrwal}">Withdrawal</a>
                 </li>
                 <li class="submenu-item active">
-                    <a th:href="@{/transaction_history}">Transaction History</a>
+                    <a th:href="@{/employee/earnings/transaction_history}">Transaction History</a>
                 </li>
                 <li class="submenu-item ">
-                    <a th:href="@{/employer_reports}">Reports</a>
+                    <a th:href="@{/employee/earnings/employer_reports}">Reports</a>
                 </li>
             </ul>
         </li>
         <li class="sidebar-item has-sub" sec:authorize="hasRole('EMPLOYER')">
             <a href="#" class='sidebar-link'>
-                <i class="bi bi-grid-1x2-fill"></i>
+                <i class="bi bi-file-slides-fill text-success"></i>
                 <span>Proposals</span>
             </a>
-            <ul class="submenu active">
+            <ul class="submenu" th:classappend="${currentPath != null and currentPath.startsWith('/employer/proposals')} ? ' active'">
                 <li class="submenu-item ">
-                    <a th:href="@{/new_proposal}">New Proposals</a>
+                    <a th:href="@{/employer/jobs/proposals}">New Proposals</a>
                 </li>
                 <li class="submenu-item ">
-                    <a th:href="@{/shortlisted}">Shortlisted</a>
+                    <a th:href="@{/employer/proposals/sortlisted}">Sortlisted</a>
                 </li>
                 <li class="submenu-item active">
-                    <a th:href="@{/hired_employee}">Hired</a>
+                    <a th:href="@{/employer/proposals/hired}">Hired</a>
                 </li>
                 <li class="submenu-item ">
-                    <a th:href="@{/declined_employee}">Decline</a>
+                    <a th:href="@{/employer/proposals/declined}">Decline</a>
+                </li>
+                <li class="submenu-item ">
+                    <a th:href="@{/employer/proposals/paid}">Paid</a>
                 </li>
             </ul>
         </li>
-
         <li class="sidebar-item has-sub" sec:authorize="hasRole('EMPLOYER')">
             <a href="#" class='sidebar-link'>
-                <i class="bi bi-grid-1x2-fill"></i>
-                <span>Contracts</span>
+                <i class="bi bi-card-checklist text-primary"></i>
+                <span>Manage Jobs</span>
             </a>
-            <ul class="submenu active">
-                <li class="submenu-item ">
-                    <a th:href="@{/onging_projects}">Ongoing Projects</a>
-                </li>
-                <li class="submenu-item ">
-                    <a th:href="@{/completed_projects}">Completed Projects</a>
-                </li>
-                <li class="submenu-item active">
-                    <a th:href="@{/disputes}">Disputes</a>
-                </li>
-            </ul>
-        </li>
-
-        <li class="sidebar-item has-sub" sec:authorize="hasRole('EMPLOYER')">
-            <a href="#" class='sidebar-link'>
-                <i class="bi bi-grid-1x2-fill"></i>
-                <span>Payments</span>
-            </a>
-            <ul class="submenu active">
-                <li class="submenu-item ">
-                    <a th:href="@{/pending_payments}">Pending Payments</a>
-                </li>
-                <li class="submenu-item ">
-                    <a th:href="@{/payment_history}">Payment History</a>
-                </li>
-                <li class="submenu-item active">
-                    <a th:href="@{/invoice_reports}">Invoice and Reports</a>
-                </li>
-            </ul>
-        </li>
-
-        <li class="sidebar-item has-sub" sec:authorize="hasRole('EMPLOYER')">
-            <a href="#" class='sidebar-link'>
-                <i class="bi bi-grid-1x2-fill"></i>
-                <span>Company Profile</span>
-            </a>
-            <ul class="submenu active">
-                <li class="submenu-item ">
-                    <a th:href="@{/company_profile}">View Profile</a>
-                </li>
-                <li class="submenu-item ">
-                    <a th:href="@{/edit_comprofile}">Edit Profile </a>
-                </li>
-                <li class="submenu-item active">
-                    <a th:href="@{/reviews_ratings}">Reviews and Ratings</a>
-                </li>
-            </ul>
-        </li>
-
-        <li class="sidebar-item has-sub" sec:authorize="hasRole('EMPLOYER')">
-            <a href="#" class='sidebar-link'>
-                <i class="bi bi-grid-1x2-fill"></i>
-                <span>Post Job</span>
-            </a>
-            <ul class="submenu active">
+            <ul class="submenu" th:classappend="${currentPath != null and currentPath.startsWith('/employer/jobs')} ? ' active'">
                 <li class="submenu-item ">
                     <a th:href="@{/employer/jobs/create_job}">Create New Job</a>
                 </li>
@@ -149,15 +104,7 @@
                 <li class="submenu-item">
                     <a th:href="@{/employer/jobs/job_list}">All Job List</a>
                 </li>
-            </ul>
-        </li>
 
-        <li class="sidebar-item has-sub" sec:authorize="hasRole('EMPLOYER')">
-            <a href="#" class='sidebar-link'>
-                <i class="bi bi-grid-1x2-fill"></i>
-                <span>Manage Jobs</span>
-            </a>
-            <ul class="submenu active">
                 <li class="submenu-item ">
                     <a th:href="@{/employer/jobs/active_jobs}">Active Jobs</a>
                 </li>
@@ -178,21 +125,76 @@
 
         <li class="sidebar-item has-sub" sec:authorize="hasRole('EMPLOYER')">
             <a href="#" class='sidebar-link'>
-                <i class="bi bi-person-badge-fill"></i>
+                <i class="bi bi-kanban text-danger"></i>
+                <span>Projects</span>
+            </a>
+            <ul class="submenu" th:classappend="${currentPath != null and currentPath.startsWith('/employer/projects')} ? ' active'">
+                <li class="submenu-item ">
+                    <a th:href="@{/employer/projects/onging_projects}">Ongoing Projects</a>
+                </li>
+                <li class="submenu-item ">
+                    <a th:href="@{/employer/projects/completed_projects}">Completed Projects</a>
+                </li>
+                <li class="submenu-item active">
+                    <a th:href="@{/employer/projects/disputes}">Disputes</a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="sidebar-item has-sub" sec:authorize="hasRole('EMPLOYER')">
+            <a href="#" class='sidebar-link'>
+                <i class="bi bi-wallet-fill text-primary"></i>
+                <span>Payments</span>
+            </a>
+            <ul class="submenu" th:classappend="${currentPath != null and currentPath.startsWith('/employer/payments')} ? ' active'">
+                <li class="submenu-item ">
+                    <a th:href="@{/employer/payments/pending_payments}">Pending Payments</a>
+                </li>
+                <li class="submenu-item ">
+                    <a th:href="@{/employer/payments/payment_history}">Payment History</a>
+                </li>
+                <li class="submenu-item active">
+                    <a th:href="@{/employer/payments/invoice_reports}">Invoice and Reports</a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="sidebar-item has-sub" sec:authorize="hasRole('EMPLOYER')">
+            <a href="#" class='sidebar-link'>
+                <i class="bi bi-building text-info"></i>
+                <span>Company Profile</span>
+            </a>
+            <ul class="submenu" th:classappend="${currentPath != null and currentPath.startsWith('/employer/company')} ? ' active'">
+                <li class="submenu-item ">
+                    <a th:href="@{/employer/company/company_profile}">View Profile</a>
+                </li>
+                <li class="submenu-item ">
+                    <a th:href="@{/employer/company/edit_comprofile}">Edit Profile </a>
+                </li>
+                <li class="submenu-item active">
+                    <a th:href="@{/employer/company/reviews_ratings}">Reviews and Ratings</a>
+                </li>
+            </ul>
+        </li>
+
+
+        <li class="sidebar-item has-sub" sec:authorize="hasRole('EMPLOYER')">
+            <a href="#" class='sidebar-link'>
+                <i class="bi bi-person-badge-fill text-success"></i>
                 <span>Find Freelancer</span>
             </a>
-            <ul class="submenu active">
+            <ul class="submenu" th:classappend="${currentPath != null and currentPath.startsWith('/employer/freelancer')} ? ' active'">
                 <li class="submenu-item ">
-                    <a th:href="@{/skilled_freelancer}">Browse by Skills</a>
+                    <a th:href="@{/employer/freelancer/skilled_freelancer}">Browse by Skills</a>
                 </li>
                 <li class="submenu-item ">
-                    <a th:href="@{/top_rated}">Top Rated Freelancers</a>
+                    <a th:href="@{/employer/freelancer/top_rated}">Top Rated Freelancers</a>
                 </li>
                 <li class="submenu-item ">
-                    <a th:href="@{/recommended_freelancer}">Recommended Freelancers</a>
+                    <a th:href="@{/employer/freelancer/recommended_freelancer}">Recommended Freelancers</a>
                 </li>
                 <li class="submenu-item ">
-                    <a th:href="@{/saved_freelancer}">Saved Freelancers</a>
+                    <a th:href="@{/employer/freelancer/saved_freelancer}">Saved Freelancers</a>
                 </li>
             </ul>
         </li>
@@ -201,18 +203,18 @@
 
         <li class="sidebar-item  has-sub" sec:authorize="hasAnyRole('FREELANCER','EMPLOYER')">
             <a href="#" class='sidebar-link'>
-                <i class="bi bi-hexagon-fill"></i>
+                <i class="bi bi-hexagon-fill text-warning"></i>
                 <span>Support</span>
             </a>
-            <ul class="submenu">
+            <ul class="submenu" th:classappend="${currentPath != null and currentPath.startsWith('/user/support')} ? ' active'">
                 <li class="submenu-item">
-                    <a th:href="@{/help_center}">Help Center</a>
+                    <a th:href="@{/user/support/help_center}">Help Center</a>
                 </li>
                 <li class="submenu-item">
-                    <a th:href="@{/report_problem}">Report a Problem</a>
+                    <a th:href="@{/user/suport/report_problem}">Report a Problem</a>
                 </li>
-                <li class="submenu-item">
-                    <a th:href="@{/contactus}">Contact Support</a>
+                <li class="submenu-item text-dark">
+                    <a th:href="@{/user/support/contactus}">Contact Support</a>
                 </li>
             </ul>
         </li>
@@ -220,10 +222,10 @@
 <!--        Admin user menu-->
         <li class="sidebar-item has-sub" sec:authorize="hasRole('ADMIN')">
             <a href="#" class='sidebar-link'>
-                <i class="bi bi-grid-1x2-fill"></i>
+                <i class="bi bi-people-fill text-dark"></i>
                 <span>User Management</span>
             </a>
-            <ul class="submenu active">
+            <ul class="submenu" th:classappend="${currentPath != null and currentPath.startsWith('/admin/users')} ? ' active'">
                 <li class="submenu-item">
                     <a th:href="@{/admin/users/freelancer_list}">Freelancers</a>
                 </li>
@@ -237,112 +239,106 @@
         </li>
         <li class="sidebar-item has-sub" sec:authorize="hasRole('ADMIN')">
             <a href="#" class='sidebar-link'>
-                <i class="bi bi-grid-1x2-fill"></i>
-                <span>Projects Management</span>
+                <i class="bi bi-kanban-fill text-warning"></i>
+                <span>Project Management</span>
             </a>
-            <ul class="submenu active">
-                <li class="submenu-item">
-                    <a th:href="@{/admin/jobs/posted_jobs}">Posted Jobs</a>
-                </li>
-                <li class="submenu-item">
+            <ul class="submenu" th:classappend="${currentPath != null and currentPath.startsWith('/admin/jobs')} ? ' active'">
+                <li class="submenu-item" th:classappend="${currentPath.startsWith('/admin/jobs/pending')} ? ' active'">
                     <a th:href="@{/admin/jobs/pending_jobs}">Pending Jobs</a>
                 </li>
-                <li class="submenu-item">
+                <li class="submenu-item" th:classappend="${currentPath.startsWith('/admin/jobs/posted')} ? ' active'">
+                    <a th:href="@{/admin/jobs/posted_jobs}">Posted Jobs</a>
+                </li>
+                <li class="submenu-item" th:classappend="${currentPath.startsWith('/admin/jobs/active')} ? ' active'">
                     <a th:href="@{/admin/jobs/active_jobs}">Active Jobs</a>
                 </li>
-                <li class="submenu-item">
-                    <a th:href="@{/admin/jobs/active_jobs}">Completed Jobs</a>
+                <li class="submenu-item" th:classappend="${currentPath.startsWith('/admin/jobs/completed')} ? ' active'">
+                    <a th:href="@{/admin/jobs/completed_jobs}">Completed Jobs</a>
                 </li>
-                <li class="submenu-item">
-                    <a th:href="@{/admin/jobs/dispute_resolution}">Dispute Resolution</a>
-                </li>
-            </ul>
-        </li>
-        <li class="sidebar-item has-sub" sec:authorize="hasRole('ADMIN')">
-            <a href="#" class='sidebar-link'>
-                <i class="bi bi-grid-1x2-fill"></i>
-                <span>Financial Management</span>
-            </a>
-            <ul class="submenu active">
-                <li class="submenu-item">
-                    <a th:href="@{/admin/platform_earnings}">Platform Earnings</a>
-                </li>
-                <li class="submenu-item">
-                    <a th:href="@{/admin/freelancer_withdrawals}">Freelancer withdrawals</a>
-                </li>
-                <li class="submenu-item">
-                    <a th:href="@{/admin/transacction_history}">Transaction History</a>
-                </li>
-                <li class="submenu-item">
-                    <a th:href="@{/admin/refund_request}">Refund Request</a>
+                <li class="submenu-item" th:classappend="${currentPath.startsWith('/admin/jobs/canceled')} ? ' active'">
+                    <a th:href="@{/admin/jobs/canceled_jobs}">Canceled Jobs</a>
                 </li>
             </ul>
         </li>
         <li class="sidebar-item has-sub" sec:authorize="hasRole('ADMIN')">
             <a href="#" class='sidebar-link'>
-                <i class="bi bi-grid-1x2-fill"></i>
-                <span>Content Management</span>
+                <i class="bi bi-cash-stack text-danger"></i>
+                <span>Finance Management</span>
             </a>
-            <ul class="submenu active">
+            <ul class="submenu" th:classappend="${currentPath != null and currentPath.startsWith('/admin/finance')} ? ' active'">
+                <li class="submenu-item">
+                    <a th:href="@{/admin/finance/platform_earnings}">Platform Earnings</a>
+                </li>
+                <li class="submenu-item">
+                    <a th:href="@{/admin/finance/freelancer_withdrawals}">Freelancer withdrawals</a>
+                </li>
+                <li class="submenu-item">
+                    <a th:href="@{/admin/finance/transacction_history}">Transaction History</a>
+                </li>
+                <li class="submenu-item">
+                    <a th:href="@{/admin/finance/refund_request}">Refund Request</a>
+                </li>
+            </ul>
+        </li>
+        <li class="sidebar-item has-sub" sec:authorize="hasRole('ADMIN')">
+            <a href="#" class='sidebar-link'>
+                <i class="bi bi-file-slides text-primary"></i>
+                <span>Category Management</span>
+            </a>
+            <ul class="submenu" th:classappend="${currentPath != null and currentPath.startsWith('/admin/category')} ? ' active'">
                 <li class="submenu-item" sec:authorize="hasRole('ADMIN')">
                     <a th:href="@{/admin/category/create}">Create Category</a>
                 </li>
                 <li class="submenu-item" sec:authorize="hasRole('ADMIN')">
                     <a th:href="@{/admin/category/category_list}">Category List</a>
                 </li>
-
-                <li class="submenu-item">
-                    <a th:href="@{/admin/transacction_history}">Transaction History</a>
-                </li>
-                <li class="submenu-item">
-                    <a th:href="@{/admin/refund_request}">Refund Request</a>
-                </li>
             </ul>
         </li>
         <li class="sidebar-item has-sub" sec:authorize="hasRole('ADMIN')">
             <a href="#" class='sidebar-link'>
-                <i class="bi bi-grid-1x2-fill"></i>
+                <i class="bi bi-bar-chart-line-fill text-info"></i>
                 <span>Report & Analytics</span>
             </a>
-            <ul class="submenu active">
+            <ul class="submenu" th:classappend="${currentPath != null and currentPath.startsWith('/admin/reports')} ? ' active'">
                 <li class="submenu-item">
-                    <a th:href="@{/user_growth}">User Growth Reports.</a>
+                    <a th:href="@{/admin/reports/user_growth}">User Growth Reports.</a>
                 </li>
                 <li class="submenu-item">
-                    <a th:href="@{/top_earning_user}">Top Earning User</a>
+                    <a th:href="@{/admin/reports/top_earning_user}">Top Earning User</a>
                 </li>
                 <li class="submenu-item">
-                    <a th:href="@{/revenue_analytics}">Revenue Analytics</a>
+                    <a th:href="@{/admin/reports/revenue_analytics}">Revenue Analytics</a>
                 </li>
                </ul>
         </li>
         <li class="sidebar-item has-sub" sec:authorize="hasRole('ADMIN')">
             <a href="#" class='sidebar-link'>
-                <i class="bi bi-grid-1x2-fill"></i>
+                <i class="bi bi-telephone-fill text-success"></i>
                 <span>Support & Disputes</span>
             </a>
-            <ul class="submenu active">
+            <ul class="submenu" th:classappend="${currentPath != null and currentPath.startsWith('/admin/support')} ? ' active'">
                 <li class="submenu-item">
-                    <a th:href="@{/ticket_management}">Ticket Management System</a>
+                    <a th:href="@{/admin/support/ticket_management}">Ticket Management System</a>
                 </li>
                 <li class="submenu-item">
-                    <a th:href="@{/dispute_resolution_panel}">Dispute Resolution Panel</a>
+                    <a th:href="@{/admin/support/dispute_resolution_panel}">Dispute Resolution Panel</a>
                 </li>
             </ul>
         </li>
         <li class="sidebar-item has-sub" sec:authorize="hasRole('ADMIN')">
             <a href="#" class='sidebar-link'>
-                <i class="bi bi-grid-1x2-fill"></i>
+                <i class="bi bi-gear-fill text-gray"></i>
                 <span>System Settings</span>
             </a>
-            <ul class="submenu active">
+            <ul class="submenu" th:classappend="${currentPath != null and currentPath.startsWith('/admin/settings')} ? ' active'">
                 <li class="submenu-item">
-                    <a th:href="@{/platform_settings}">Platform Settings</a>
+                    <a th:href="@{/admin/settings/platform_settings}">Platform Settings</a>
                 </li>
                 <li class="submenu-item">
-                    <a th:href="@{/notification_templates}">Notification/email templates</a>
+                    <a th:href="@{/admin/settings/notification_templates}">Notification/email templates</a>
                 </li>
             </ul>
         </li>
     </ul>
 </div>
+<!-- temporary — use to inspect values -->
