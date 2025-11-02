@@ -2,11 +2,9 @@ package com.evanadev.freelancherbd.controller;
 
 import com.evanadev.freelancherbd.model.*;
 import com.evanadev.freelancherbd.repository.JobReportRepository;
-import com.evanadev.freelancherbd.service.JobReportService;
-import com.evanadev.freelancherbd.service.JobService;
-import com.evanadev.freelancherbd.service.JobTrafficService;
-import com.evanadev.freelancherbd.service.UserService;
+import com.evanadev.freelancherbd.service.*;
 import com.evanadev.freelancherbd.util.AESUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,14 +19,17 @@ public class JobReportController {
     private final UserService userService;
     private final JobReportService jobReportService;
     private final JobTrafficService  jobTrafficService;
+    private final NotificationService notificationService;
     private AESUtil aesUtil;
 
-    public JobReportController(JobReportRepository jobReportRepository, JobService jobService, UserService userService, JobReportService jobReportService, JobTrafficService jobTrafficService, AESUtil aesUtil) {
+    @Autowired
+    public JobReportController(JobReportRepository jobReportRepository, JobService jobService, UserService userService, JobReportService jobReportService, JobTrafficService jobTrafficService, NotificationService notificationService, AESUtil aesUtil) {
         this.jobReportRepository = jobReportRepository;
         this.jobService = jobService;
         this.userService = userService;
         this.jobReportService = jobReportService;
         this.jobTrafficService = jobTrafficService;
+        this.notificationService = notificationService;
         this.aesUtil = aesUtil;
     }
 
@@ -51,7 +52,7 @@ public class JobReportController {
         Long did = aesUtil.decryptId(id);
         String userEmail = loggedUser.getUser().getEmail();
         Job job = jobService.findById(did);
-
+        Long jobId = job.getId();
         JobReport report = new JobReport();
         report.setJob(job);
         report.setUser(loggedUser.getUser());
@@ -64,6 +65,14 @@ public class JobReportController {
         jobTraffic.setUser(loggedUser.getUser());
         jobTraffic.setTrafficType(TrafficType.REPORT);
         jobTrafficService.save(jobTraffic);
+
+        //String jobId = "";
+        Notification notification = new Notification();
+        notification.setTitle("Job Reported");
+        notification.setMessage("A job with ID " + jobId + " has been reported. Reason: " + reason);
+        notification.setType("REPORT");
+        notificationService.sendNotification(notification);
+
 
         //return "redirect:/freelancer/jobs/" + id + "/report";
         return "jobReport_submit";
