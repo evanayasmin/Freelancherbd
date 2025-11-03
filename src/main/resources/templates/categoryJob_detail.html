@@ -90,12 +90,12 @@
                                       <tr><td colspan="2">
                                       <div th:align="center" sec:authorize="hasAnyRole('FREELANCER')">
                                           <a th:href="@{'/freelancer/jobs/application/' + ${@aesUtil.encryptId(jobDetail.id)}}"
-                                             target="_parent" class="btn btn-success">Apply Now </a>&nbsp;
+                                             target="_parent" class="btn btn-outline-success"><i class="bi bi-arrow-up-right"></i>  Apply Now </a>&nbsp;
                                           <a href="#" th:data-id="${@aesUtil.encryptId(jobDetail.id)}" id="saveJobBtn"
-                                             class="btn btn-secondary">Save </a>&nbsp;
-                                          <a th:href="@{'/freelancer/jobs/reportApplication/' + ${@aesUtil.encryptId(jobDetail.id)}}"
-                                             target="_parent" class="btn btn-warning">Report this Job </a>
-
+                                             class="btn btn-outline-secondary"><i class="bi bi-save"></i> Save </a>&nbsp;
+                                          <a th:href="@{'/freelancer/jobs/' + ${@aesUtil.encryptId(jobDetail.id)} + '/report'}" class="btn btn-outline-danger">
+                                              <i class="bi bi-flag"></i> Report Job
+                                          </a>
                                       </div>
                                      </td></tr>
                                      </tbody>

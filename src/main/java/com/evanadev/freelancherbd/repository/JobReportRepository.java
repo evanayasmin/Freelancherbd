@@ -1,0 +1,8 @@
+package com.evanadev.freelancherbd.repository;
+
+import com.evanadev.freelancherbd.model.JobReport;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface JobReportRepository extends JpaRepository<JobReport, Long> {
+
+}

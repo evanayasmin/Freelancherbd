@@ -1,11 +1,13 @@
 package com.evanadev.freelancherbd.service;
 
 import com.evanadev.freelancherbd.model.JobTraffic;
+import com.evanadev.freelancherbd.model.TrafficType;
 import com.evanadev.freelancherbd.repository.JobTrafficRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class JobTrafficService {
@@ -23,5 +25,9 @@ public class JobTrafficService {
     }
     public List<JobTraffic> findAll(){
         return jobTrafficRepository.findAll();
+    }
+
+    public Optional<JobTraffic> findByUserIdJobId(Long userId, Long jobId, TrafficType trafficType){
+        return jobTrafficRepository.findByUserIdJobId(userId, jobId, trafficType);
     }
 }

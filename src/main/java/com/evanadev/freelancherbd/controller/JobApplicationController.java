@@ -110,11 +110,19 @@ public class JobApplicationController {
         Job job = jobService.findById(did);
 
         //JobTraffic Value Set ===
-        JobTraffic jobTraffic = new JobTraffic();
-        jobTraffic.setJob(job);
-        jobTraffic.setTrafficType(TrafficType.SAVED);
-        jobTraffic.setUser(loggedUserDetail.getUser());
-        jobTraffic = jobTrafficService.save(jobTraffic);
+        Optional<JobTraffic> existing = jobTrafficService.findByUserIdJobId(user.getId(), did,TrafficType.SAVED);
+        System.out.println("Existing record found: " + existing.isPresent());
+        if(existing.isPresent()){
+            JobTraffic jobTraffic = existing.get();
+            jobTraffic.setTrafficType(TrafficType.SAVED);
+            jobTrafficService.save(jobTraffic);
+        }else{
+            JobTraffic jobTraffic = new JobTraffic();
+            jobTraffic.setJob(job);
+            jobTraffic.setTrafficType(TrafficType.SAVED);
+            jobTraffic.setUser(loggedUserDetail.getUser());
+            jobTrafficService.save(jobTraffic);
+        }
 
         response.put("status", "success");
         return ResponseEntity.ok(response);
