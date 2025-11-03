@@ -43,4 +43,14 @@ public interface UserRepository extends JpaRepository<User,Long> {
     WHERE u.id = :userid
     """)
     Optional<User> findUserDetails(@Param("userid") Long userid);
+
+    User findByEmail(String email);
+
+    @Query("""
+    SELECT u
+    FROM User u
+    JOIN u.roles r
+    WHERE r.name = 'ROLE_ADMIN'
+    """)
+    Optional<User> findAdminUser();
 }

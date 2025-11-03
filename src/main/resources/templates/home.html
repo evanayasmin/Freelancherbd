@@ -45,6 +45,13 @@
                     <div class="card">
                         <div class="card-header">
                             <h4 class="card-title">Example Content</h4>
+
+                        </div>
+                        <div class="notifications">
+                            <h5>Live Notifications</h5>
+                            <ul id="notificationList">
+                                <li>Waiting for new notifications...</li>
+                            </ul>
                         </div>
                         <div class="card-body">
                             Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur quas omnis
@@ -59,6 +66,39 @@
             <footer>
                 <div class="footer clearfix mb-0 text-muted">
                     <div th:replace="~{fragments/footer :: footer}"></div>
+                    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+                    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+                    <script>
+                        stompClient.subscribe('/topic/admin', function(msg) {
+                            const data = JSON.parse(msg.body);
+                            showNotification(data.title, data.message);
+                        });
+
+                        let socket = new SockJS('/ws');
+                        let stompClient = Stomp.over(socket);
+
+                        stompClient.connect({}, function (frame) {
+                            console.log("Connected: " + frame);
+                            // Subscribe to admin topic
+                            stompClient.subscribe('/topic/admin', function (notification) {
+                                const data = JSON.parse(notification.body);
+                                console.log("Notification data=", data);
+                                showNotification(data.title, data.message);
+                            });
+                        });
+
+                        function showNotification(title, message) {
+                            const list = document.getElementById('notificationList');
+                            const li = document.createElement('li');
+                            li.innerHTML = `<strong>${title}</strong>: ${message}`;
+                            list.prepend(li);
+
+                            // Optional: Alert popup for attention
+                            alert(`🔔 ${title}\n${message}`);
+                        }
+
+                    </script>
+
                 </div>
             </footer>
         </div>

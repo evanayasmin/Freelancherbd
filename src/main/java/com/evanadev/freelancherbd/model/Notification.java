@@ -22,6 +22,11 @@ public class Notification {
     @JoinColumn(name = "user_id")
     private User recipient;
 
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sender_id")
+    private User sender;
+
     public Long getId() {
         return id;
     }
@@ -76,5 +81,13 @@ public class Notification {
 
     public void setRecipient(User recipient) {
         this.recipient = recipient;
+    }
+
+    public User getSender() {
+        return sender;
+    }
+
+    public void setSender(User sender) {
+        this.sender = sender;
     }
 }

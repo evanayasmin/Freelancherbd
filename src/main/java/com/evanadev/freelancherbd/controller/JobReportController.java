@@ -1,15 +1,18 @@
 package com.evanadev.freelancherbd.controller;
 
+import com.evanadev.freelancherbd.dto.NotificationDTO;
 import com.evanadev.freelancherbd.model.*;
 import com.evanadev.freelancherbd.repository.JobReportRepository;
 import com.evanadev.freelancherbd.service.*;
 import com.evanadev.freelancherbd.util.AESUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/freelancer/jobs")
@@ -21,6 +24,9 @@ public class JobReportController {
     private final JobTrafficService  jobTrafficService;
     private final NotificationService notificationService;
     private AESUtil aesUtil;
+
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
 
     @Autowired
     public JobReportController(JobReportRepository jobReportRepository, JobService jobService, UserService userService, JobReportService jobReportService, JobTrafficService jobTrafficService, NotificationService notificationService, AESUtil aesUtil) {
@@ -50,7 +56,7 @@ public class JobReportController {
                                @ModelAttribute("loggedUser") CustomUserDetail loggedUser) {
 
         Long did = aesUtil.decryptId(id);
-        String userEmail = loggedUser.getUser().getEmail();
+        String userEmail = loggedUser.getUser().getUsername();
         Job job = jobService.findById(did);
         Long jobId = job.getId();
         JobReport report = new JobReport();
@@ -66,16 +72,34 @@ public class JobReportController {
         jobTraffic.setTrafficType(TrafficType.REPORT);
         jobTrafficService.save(jobTraffic);
 
-        //String jobId = "";
+
+        Optional<User> user = userService.findAdminUser();
         Notification notification = new Notification();
         notification.setTitle("Job Reported");
         notification.setMessage("A job with ID " + jobId + " has been reported. Reason: " + reason);
         notification.setType("REPORT");
+        notification.setSender(user.get());
+        notification.setRecipient(user.get());
         notificationService.sendNotification(notification);
 
 
         //return "redirect:/freelancer/jobs/" + id + "/report";
         return "jobReport_submit";
+    }
+
+    @GetMapping("/test-notification")
+    public String testNotification() {
+        NotificationDTO dto = new NotificationDTO(
+                "Test Notification",
+                "Hello Admin! This is a test.",
+                "TEST",
+                "System",
+                1L,
+                LocalDateTime.now()
+        );
+
+        messagingTemplate.convertAndSend("/topic/admin", dto);
+        return "Sent";
     }
 
 
