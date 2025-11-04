@@ -74,19 +74,19 @@
                 <span>Proposals</span>
             </a>
             <ul class="submenu" th:classappend="${currentPath != null and currentPath.startsWith('/employer/proposals')} ? ' active'">
-                <li class="submenu-item ">
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/employer/jobs/proposals')} ? ' active'">
                     <a th:href="@{/employer/jobs/proposals}">New Proposals</a>
                 </li>
-                <li class="submenu-item ">
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/employer/proposals/sortlisted')} ? ' active'">
                     <a th:href="@{/employer/proposals/sortlisted}">Sortlisted</a>
                 </li>
-                <li class="submenu-item active">
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/employer/proposals/hired')} ? ' active'">
                     <a th:href="@{/employer/proposals/hired}">Hired</a>
                 </li>
-                <li class="submenu-item ">
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/employer/proposals/declined')} ? ' active'">
                     <a th:href="@{/employer/proposals/declined}">Decline</a>
                 </li>
-                <li class="submenu-item ">
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/employer/proposals/paid')} ? ' active'">
                     <a th:href="@{/employer/proposals/paid}">Paid</a>
                 </li>
             </ul>
@@ -97,27 +97,27 @@
                 <span>Manage Jobs</span>
             </a>
             <ul class="submenu" th:classappend="${currentPath != null and currentPath.startsWith('/employer/jobs')} ? ' active'">
-                <li class="submenu-item ">
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/employer/jobs/create')} ? ' active'">
                     <a th:href="@{/employer/jobs/create_job}">Create New Job</a>
                 </li>
 
-                <li class="submenu-item">
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/employer/jobs/job')} ? ' active'">
                     <a th:href="@{/employer/jobs/job_list}">All Job List</a>
                 </li>
 
-                <li class="submenu-item ">
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/employer/jobs/active')} ? ' active'">
                     <a th:href="@{/employer/jobs/active_jobs}">Active Jobs</a>
                 </li>
-                <li class="submenu-item ">
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/employer/jobs/pending')} ? ' active'">
                     <a th:href="@{/employer/jobs/pending_jobs}">Pending Jobs</a>
                 </li>
-                <li class="submenu-item ">
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/employer/jobs/posted')} ? ' active'">
                     <a th:href="@{/employer/jobs/posted_jobs}">Posted Jobs</a>
                 </li>
-                <li class="submenu-item ">
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/employer/jobs/completed')} ? ' active'">
                     <a th:href="@{/employer/jobs/completed_jobs}">Completed Jobs</a>
                 </li>
-                <li class="submenu-item ">
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/employer/jobs/closed')} ? ' active'">
                     <a th:href="@{/employer/jobs/closed_jobs}">Closed Jobs</a>
                 </li>
             </ul>
@@ -129,7 +129,7 @@
                 <span>Projects</span>
             </a>
             <ul class="submenu" th:classappend="${currentPath != null and currentPath.startsWith('/employer/projects')} ? ' active'">
-                <li class="submenu-item ">
+                <li class="submenu-item">
                     <a th:href="@{/employer/projects/onging_projects}">Ongoing Projects</a>
                 </li>
                 <li class="submenu-item ">
@@ -147,13 +147,13 @@
                 <span>Payments</span>
             </a>
             <ul class="submenu" th:classappend="${currentPath != null and currentPath.startsWith('/employer/payments')} ? ' active'">
-                <li class="submenu-item ">
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/employer/payments/pending')} ? ' active'">
                     <a th:href="@{/employer/payments/pending_payments}">Pending Payments</a>
                 </li>
-                <li class="submenu-item ">
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/employer/payments/payment')} ? ' active'">
                     <a th:href="@{/employer/payments/payment_history}">Payment History</a>
                 </li>
-                <li class="submenu-item active">
+                <li class="submenu-item active" th:classappend="${currentPath != null and currentPath.startsWith('/employer/payments/invoice')} ? ' active'">
                     <a th:href="@{/employer/payments/invoice_reports}">Invoice and Reports</a>
                 </li>
             </ul>
@@ -165,7 +165,7 @@
                 <span>Company Profile</span>
             </a>
             <ul class="submenu" th:classappend="${currentPath != null and currentPath.startsWith('/employer/company')} ? ' active'">
-                <li class="submenu-item ">
+                <li class="submenu-item">
                     <a th:href="@{/employer/company/company_profile}">View Profile</a>
                 </li>
                 <li class="submenu-item ">
@@ -184,16 +184,16 @@
                 <span>Find Freelancer</span>
             </a>
             <ul class="submenu" th:classappend="${currentPath != null and currentPath.startsWith('/employer/freelancer')} ? ' active'">
-                <li class="submenu-item ">
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/employer/freelancer/skilled')} ? ' active'">
                     <a th:href="@{/employer/freelancer/skilled_freelancer}">Browse by Skills</a>
                 </li>
-                <li class="submenu-item ">
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/employer/freelancer/top')} ? ' active'">
                     <a th:href="@{/employer/freelancer/top_rated}">Top Rated Freelancers</a>
                 </li>
-                <li class="submenu-item ">
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/employer/freelancer/recommended')} ? ' active'">
                     <a th:href="@{/employer/freelancer/recommended_freelancer}">Recommended Freelancers</a>
                 </li>
-                <li class="submenu-item ">
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/employer/freelancer/saved')} ? ' active'">
                     <a th:href="@{/employer/freelancer/saved_freelancer}">Saved Freelancers</a>
                 </li>
             </ul>
@@ -207,13 +207,13 @@
                 <span>Support</span>
             </a>
             <ul class="submenu" th:classappend="${currentPath != null and currentPath.startsWith('/user/support')} ? ' active'">
-                <li class="submenu-item">
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/user/support/help')} ? ' active'">
                     <a th:href="@{/user/support/help_center}">Help Center</a>
                 </li>
-                <li class="submenu-item">
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/user/support/report')} ? ' active'">
                     <a th:href="@{/user/suport/report_problem}">Report a Problem</a>
                 </li>
-                <li class="submenu-item text-dark">
+                <li class="submenu-item text-dark" th:classappend="${currentPath != null and currentPath.startsWith('/user/support/contactus')} ? ' active'">
                     <a th:href="@{/user/support/contactus}">Contact Support</a>
                 </li>
             </ul>
@@ -226,10 +226,10 @@
                 <span>User Management</span>
             </a>
             <ul class="submenu" th:classappend="${currentPath != null and currentPath.startsWith('/admin/users')} ? ' active'">
-                <li class="submenu-item">
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/admin/users/freelancer')} ? ' active'">
                     <a th:href="@{/admin/users/freelancer_list}">Freelancers</a>
                 </li>
-                <li class="submenu-item">
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/admin/users/client')} ? ' active'">
                     <a th:href="@{/admin/users/client_list}">Clients</a>
                 </li>
 <!--                <li class="submenu-item active">-->
@@ -266,16 +266,16 @@
                 <span>Finance Management</span>
             </a>
             <ul class="submenu" th:classappend="${currentPath != null and currentPath.startsWith('/admin/finance')} ? ' active'">
-                <li class="submenu-item">
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/admin/finance/platform')} ? ' active'">
                     <a th:href="@{/admin/finance/platform_earnings}">Platform Earnings</a>
                 </li>
-                <li class="submenu-item">
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/admin/finance/freelancer')} ? ' active'">
                     <a th:href="@{/admin/finance/freelancer_withdrawals}">Freelancer withdrawals</a>
                 </li>
-                <li class="submenu-item">
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/admin/finance/transaction')} ? ' active'">
                     <a th:href="@{/admin/finance/transacction_history}">Transaction History</a>
                 </li>
-                <li class="submenu-item">
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/admin/finance/refund')} ? ' active'">
                     <a th:href="@{/admin/finance/refund_request}">Refund Request</a>
                 </li>
             </ul>
@@ -286,10 +286,10 @@
                 <span>Category Management</span>
             </a>
             <ul class="submenu" th:classappend="${currentPath != null and currentPath.startsWith('/admin/category')} ? ' active'">
-                <li class="submenu-item" sec:authorize="hasRole('ADMIN')">
+                <li class="submenu-item" sec:authorize="hasRole('ADMIN')" th:classappend="${currentPath != null and currentPath.startsWith('/admin/category/create')} ? ' active'">
                     <a th:href="@{/admin/category/create}">Create Category</a>
                 </li>
-                <li class="submenu-item" sec:authorize="hasRole('ADMIN')">
+                <li class="submenu-item" sec:authorize="hasRole('ADMIN')" th:classappend="${currentPath != null and currentPath.startsWith('/admin/category/category')} ? ' active'">
                     <a th:href="@{/admin/category/category_list}">Category List</a>
                 </li>
             </ul>
@@ -300,13 +300,13 @@
                 <span>Report & Analytics</span>
             </a>
             <ul class="submenu" th:classappend="${currentPath != null and currentPath.startsWith('/admin/reports')} ? ' active'">
-                <li class="submenu-item">
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/admin/reports/user')} ? ' active'">
                     <a th:href="@{/admin/reports/user_growth}">User Growth Reports.</a>
                 </li>
-                <li class="submenu-item">
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/admin/reports/top')} ? ' active'">
                     <a th:href="@{/admin/reports/top_earning_user}">Top Earning User</a>
                 </li>
-                <li class="submenu-item">
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/admin/reports/revenue')} ? ' active'">
                     <a th:href="@{/admin/reports/revenue_analytics}">Revenue Analytics</a>
                 </li>
                </ul>
@@ -317,10 +317,10 @@
                 <span>Support & Disputes</span>
             </a>
             <ul class="submenu" th:classappend="${currentPath != null and currentPath.startsWith('/admin/support')} ? ' active'">
-                <li class="submenu-item">
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/admin/support/ticket')} ? ' active'">
                     <a th:href="@{/admin/support/ticket_management}">Ticket Management System</a>
                 </li>
-                <li class="submenu-item">
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/admin/support/dispute')} ? ' active'">
                     <a th:href="@{/admin/support/dispute_resolution_panel}">Dispute Resolution Panel</a>
                 </li>
             </ul>
@@ -331,10 +331,10 @@
                 <span>System Settings</span>
             </a>
             <ul class="submenu" th:classappend="${currentPath != null and currentPath.startsWith('/admin/settings')} ? ' active'">
-                <li class="submenu-item">
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/admin/settings/platform')} ? ' active'">
                     <a th:href="@{/admin/settings/platform_settings}">Platform Settings</a>
                 </li>
-                <li class="submenu-item">
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/admin/settings/notification')} ? ' active'">
                     <a th:href="@{/admin/settings/notification_templates}">Notification/email templates</a>
                 </li>
             </ul>
