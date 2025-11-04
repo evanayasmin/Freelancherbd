@@ -42,5 +42,8 @@ public interface JobRepository extends JpaRepository<Job, Long> {
             "JOIN FETCH jb.category " +
             "WHERE jt.trafficType = :jobStatus AND jt.user.id = :userId")
     List<Job> findByTrackingJobStatus(@Param("jobStatus") TrafficType jobStatus, @Param("userId") Long userId);
+
+
+
 }
 

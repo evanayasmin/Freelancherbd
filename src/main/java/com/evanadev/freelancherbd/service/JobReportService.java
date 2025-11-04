@@ -25,4 +25,8 @@ public class JobReportService {
         jobReportRepository.deleteById(id);
     }
 
+    public List<JobReport> findByReportJob( Long userId) {
+        return jobReportRepository.findByReportJob(userId);
+    }
+
 }

@@ -40,6 +40,9 @@ public class Job {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @OneToMany(mappedBy = "job")
+    private List<JobTraffic> jobTraffic;
+
     @Lob
     @Column(columnDefinition = "LONGTEXT", nullable = false)
     private String RequiredSkill;
@@ -275,5 +278,45 @@ public class Job {
 
     public void setPostedAt(LocalDate postedAt) {
         this.PostedAt = postedAt;
+    }
+
+    public List<JobTraffic> getJobTraffic() {
+        return jobTraffic;
+    }
+
+    public void setJobTraffic(List<JobTraffic> jobTraffic) {
+        this.jobTraffic = jobTraffic;
+    }
+
+    @Override
+    public String toString() {
+        return "Job{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", vacancy=" + vacancy +
+                ", ageLimit='" + ageLimit + '\'' +
+                ", experience='" + experience + '\'' +
+                ", company='" + company + '\'' +
+                ", companyInstruction='" + companyInstruction + '\'' +
+                ", category=" + category +
+                ", user=" + user +
+                ", jobTraffic=" + jobTraffic +
+                ", RequiredSkill='" + RequiredSkill + '\'' +
+                ", RequiredLevel='" + RequiredLevel + '\'' +
+                ", jobType=" + jobType +
+                ", jobStatus=" + jobStatus +
+                ", PaymentAmount='" + PaymentAmount + '\'' +
+                ", jobLocation='" + jobLocation + '\'' +
+                ", PaymentDate=" + PaymentDate +
+                ", PaymentMethod='" + PaymentMethod + '\'' +
+                ", deadline=" + deadline +
+                ", CreatedAt=" + CreatedAt +
+                ", CompletedAt=" + CompletedAt +
+                ", CompletedBy='" + CompletedBy + '\'' +
+                ", PostedAt=" + PostedAt +
+                ", CancelledAt=" + CancelledAt +
+                ", CreatedBy='" + CreatedBy + '\'' +
+                '}';
     }
 }
