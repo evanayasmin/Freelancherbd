@@ -72,17 +72,16 @@ public class JobReportController {
         jobTraffic.setTrafficType(TrafficType.REPORT);
         jobTrafficService.save(jobTraffic);
 
-
-        Optional<User> user = userService.findAdminUser();
-        Notification notification = new Notification();
-        notification.setTitle("Job Reported");
-        notification.setMessage("A job with ID " + jobId + " has been reported. Reason: " + reason);
-        notification.setType("REPORT");
-        notification.setSender(user.get());
-        notification.setRecipient(user.get());
-        notificationService.sendNotification(notification);
-
-
+        Optional<User> adminUser = userService.findAdminUser();
+        if(adminUser.isPresent()){
+            Notification notification = new Notification();
+            notification.setTitle("Job Reported");
+            notification.setMessage("A job with Title: " + job.getTitle() + " has been reported. Reason: " + reason);
+            notification.setType("REPORT");
+            notification.setSender(loggedUser.getUser());
+            notification.setRecipient(adminUser.get());
+            notificationService.sendNotification(notification, adminUser.get());
+        }
         //return "redirect:/freelancer/jobs/" + id + "/report";
         return "jobReport_submit";
     }
