@@ -4,6 +4,7 @@ import com.evanadev.freelancherbd.model.*;
 import com.evanadev.freelancherbd.repository.CategoryRepository;
 import com.evanadev.freelancherbd.repository.JobRepository;
 import com.evanadev.freelancherbd.service.CategoryService;
+import com.evanadev.freelancherbd.service.JobReportService;
 import com.evanadev.freelancherbd.service.JobService;
 import com.evanadev.freelancherbd.util.AESUtil;
 import org.slf4j.Logger;
@@ -28,12 +29,15 @@ public class JobController {
 
     @Autowired
     private AESUtil aesUtil;
+    @Autowired
+    private JobReportService jobReportService;
 
-    public JobController(JobRepository jobRepository, JobService jobService, CategoryService categoryService, AESUtil aesUtil) {
+    public JobController(JobRepository jobRepository, JobService jobService, CategoryService categoryService, AESUtil aesUtil, JobReportService jobReportService) {
         this.jobRepository = jobRepository;
         this.jobService = jobService;
         this.categoryService = categoryService;
         this.aesUtil = aesUtil;
+        this.jobReportService = jobReportService;
     }
 
     /*
@@ -356,8 +360,8 @@ public class JobController {
     public String reportedJobList(@ModelAttribute("loggedUser") CustomUserDetail loggedUser, Model model) {
         log.info("Loggedin user=",loggedUser.getUser().getUsername());
         Long userId = loggedUser.getId();
-        List<Job> jobs = jobService.findBySavedJobs(TrafficType.REPORT, userId);
-        model.addAttribute("jobs", jobs);
+        List<JobReport> reports = jobReportService.findByReportJob(userId);
+        model.addAttribute("jobReports", reports);
         model.addAttribute("aesUtil", aesUtil);
         return "reported_jobs";
     }

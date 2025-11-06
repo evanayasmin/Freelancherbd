@@ -114,4 +114,18 @@ public class JobApplication {
         this.applicationDate = LocalDateTime.now();
     }
 
+    @Override
+    public String toString() {
+        return "JobApplication{" +
+                "Id=" + Id +
+                ", job=" + job +
+                ", coverLetter='" + coverLetter + '\'' +
+                ", expectedSalary='" + expectedSalary + '\'' +
+                ", applicationStatus=" + applicationStatus +
+                ", remarks='" + remarks + '\'' +
+                ", jobAssignedDate=" + jobAssignedDate +
+                ", applicationDate=" + applicationDate +
+                ", user=" + user +
+                '}';
+    }
 }

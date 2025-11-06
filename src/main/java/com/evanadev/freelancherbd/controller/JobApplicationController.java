@@ -239,14 +239,20 @@ public class JobApplicationController {
         log.debug("JobApplication details: {}", jobApplication.getId());
         Optional<JobApplication> existingProposal = jobApplicationRepository.findById(jobApplication.getId());
         if (existingProposal.isPresent()){
+            JobApplication existProposal = existingProposal.get();
             jobApplicationService.update_application(jobApplication);
+            if(jobApplication.getApplicationStatus() == ApplicationStatus.HIRED){
+                JobTraffic jobTraffic = new JobTraffic();
+                jobTraffic.setJob(jobApplication.getJob());
+                jobTraffic.setTrafficType(TrafficType.WORKING);
+                jobTraffic.setUser(existProposal.getUser());
+                jobTrafficService.save(jobTraffic);
+            }
             response.put("status", "success");
             return ResponseEntity.ok(response);
-
         }
         response.put("status", "failed");
         return ResponseEntity.ok(response);
     }
-
 
 }

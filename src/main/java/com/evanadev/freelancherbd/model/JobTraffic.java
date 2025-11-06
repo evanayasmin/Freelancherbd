@@ -22,6 +22,7 @@ public class JobTraffic {
     private User user;
 
     @Enumerated(EnumType.STRING)
+    @Column(length = 50)
     private TrafficType trafficType;
 
     @CreatedDate

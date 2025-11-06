@@ -87,6 +87,7 @@
                                           <td style="background-color: #f2f7ff;"><strong>Special Instruction</strong></td>
                                           <td><span th:text="${jobDetail.companyInstruction}"></span></td>
                                       </tr>
+
                                       <tr><td colspan="2">
                                       <div th:align="center" sec:authorize="hasAnyRole('FREELANCER')">
                                           <a th:href="@{'/freelancer/jobs/application/' + ${@aesUtil.encryptId(jobDetail.id)}}"

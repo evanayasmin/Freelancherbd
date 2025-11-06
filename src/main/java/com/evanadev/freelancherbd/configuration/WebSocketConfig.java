@@ -22,36 +22,17 @@ public class WebSocketConfig  implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
+        // The endpoint clients connect to
         registry.addEndpoint("/ws")
-                .setAllowedOriginPatterns("*") // allow from all origins
-                .withSockJS(); // enable SockJS fallback
+                .setAllowedOriginPatterns("*")
+                .withSockJS();
     }
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.enableSimpleBroker("/topic","/queue"); //for receiving message
-        registry.setApplicationDestinationPrefixes("/app"); // for sending messages
-        registry.setUserDestinationPrefix("/user"); // for private notification
-    }
-
-    @Override
-    public void configureClientInboundChannel(ChannelRegistration registration) {
-        registration.interceptors(new ChannelInterceptor() {
-            @Override
-            public Message<?> preSend(Message<?> message, MessageChannel channel) {
-                StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
-                if (StompCommand.SUBSCRIBE.equals(accessor.getCommand())) {
-                    String destination = accessor.getDestination();
-                    Authentication user = (Authentication) accessor.getUser();
-
-                    // Only allow admins to subscribe to /topic/admin
-                    if ("/topic/admin".equals(destination) &&
-                            !user.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
-                        throw new AccessDeniedException("Only admins can subscribe here");
-                    }
-                }
-                return message;
-            }
-        });
+        // Enable simple broker for both public (/topic) and private (/user)
+        registry.enableSimpleBroker("/topic", "/queue");
+        registry.setApplicationDestinationPrefixes("/app");
+        registry.setUserDestinationPrefix("/user");
     }
 }
