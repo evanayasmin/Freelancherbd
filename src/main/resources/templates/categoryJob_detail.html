@@ -42,7 +42,24 @@
                     <div class="row match-height">
                         <div class="col-md-12 col-12">
                             <div class="card">
-                                <div class="card-header"><h4 class="card-title">Job Details of <span th:text="${jobDetail.title}"></span></h4></div>
+                                <div class="card-header">
+                                  <div class="row" th:align="right">
+                                      <div class="col-md-3">&nbsp;</div>
+                                      <div class="col-md-3">&nbsp;</div>
+                                      <div class="col-md-2" th:if="${saveStatus != null}">
+                                          <strong>Saved:</strong> &nbsp;
+                                          <i class="bi bi-save-fill text-info fs-4"></i>
+                                      </div>
+                                      <div class="col-md-2" th:if="${applyStatus != null}">
+                                          <strong>Applied:</strong>&nbsp;
+                                          <i class="bi bi-file-check-fill text-success fs-4"></i>
+                                      </div>
+                                      <div class="col-md-2" th:if="${reportStatus != null}">
+                                          <strong>Reported:</strong> &nbsp;
+                                          <i class="bi bi-flag-fill text-danger fs-4"></i>
+                                      </div>
+                                  </div>
+                                </div>
                                 <div class="card-content">
                                   <div class="card-body">
                                   <p class="text-primary"><strong>Post: &nbsp; <span th:text="${jobDetail.title}"></span></strong></p>
@@ -88,17 +105,22 @@
                                           <td><span th:text="${jobDetail.companyInstruction}"></span></td>
                                       </tr>
 
-                                      <tr><td colspan="2">
+                                      <tr>
+                                          <td colspan="2">
                                       <div th:align="center" sec:authorize="hasAnyRole('FREELANCER')">
-                                          <a th:href="@{'/freelancer/jobs/application/' + ${@aesUtil.encryptId(jobDetail.id)}}"
+                                          <a th:if="${applyStatus == null or applyStatus != 'Applied'}" th:href="@{'/freelancer/jobs/application/' + ${@aesUtil.encryptId(jobDetail.id)}}"
                                              target="_parent" class="btn btn-outline-success"><i class="bi bi-arrow-up-right"></i>  Apply Now </a>&nbsp;
-                                          <a href="#" th:data-id="${@aesUtil.encryptId(jobDetail.id)}" id="saveJobBtn"
-                                             class="btn btn-outline-secondary"><i class="bi bi-save"></i> Save </a>&nbsp;
-                                          <a th:href="@{'/freelancer/jobs/' + ${@aesUtil.encryptId(jobDetail.id)} + '/report'}" class="btn btn-outline-danger">
+                                          <a th:if="${saveStatus == null or saveStatus != 'Saved'}" href="#" th:data-id="${@aesUtil.encryptId(jobDetail.id)}" id="saveJobBtn"
+                                             class="btn btn-outline-info"><i class="bi bi-save"></i> Save </a>&nbsp;
+                                          <a th:if="${reportStatus == null or reportStatus != 'Reported'}" th:href="@{'/freelancer/jobs/' + ${@aesUtil.encryptId(jobDetail.id)} + '/report'}" class="btn btn-outline-danger">
                                               <i class="bi bi-flag"></i> Report Job
                                           </a>
                                       </div>
-                                     </td></tr>
+                                     </td>
+                                      </tr>
+                                      <tr th:if="${applyStatus != '' and applyStatus == 'Applied'}">
+                                          <td colspan="2" class="alert alert-light-primary" th:align="center"><h5>You have already applied for this post.</h5></td>
+                                      </tr>
                                      </tbody>
                                   </table>
                                   </div>

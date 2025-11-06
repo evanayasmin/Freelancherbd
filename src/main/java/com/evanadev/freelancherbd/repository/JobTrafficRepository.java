@@ -26,4 +26,16 @@ public interface JobTrafficRepository extends JpaRepository<JobTraffic, Long> {
             @Param("userId") Long userId,
             @Param("jobId") Long jobId,
             @Param("trafficType") TrafficType trafficType
-    );}
+    );
+
+    @Query("""
+    SELECT DISTINCT t
+    FROM JobTraffic t
+    WHERE t.user.id = :userId 
+      AND t.job.id = :jobId 
+    """)
+    List<JobTraffic> findJobTrafficByUserIdJobId(
+            @Param("userId") Long userId,
+            @Param("jobId") Long jobId
+    );
+}
