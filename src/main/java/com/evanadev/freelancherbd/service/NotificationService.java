@@ -47,4 +47,8 @@ public class NotificationService {
 
 
     }
+
+    public void markAllAsRead(Long userId) {
+        notificationRepository.markAllAsReadByReceiptId(userId);
+    }
 }

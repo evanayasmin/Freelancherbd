@@ -287,6 +287,86 @@ $(document).ready(function () {
         let newToast = new bootstrap.Toast($("#toastContainer .toast").last()[0]);
         newToast.show();
     }
+
+    // Function to update the badge
+    function updateNotificationCount() {
+        $.ajax({
+            url: '/notifications/count', // backend endpoint
+            method: 'GET',
+            success: function (count) {
+                const badge = $('#notificationCount');
+                if (count > 0) {
+                    badge.text(count);
+                    badge.show();
+                } else {
+                    badge.hide();
+                }
+            },
+            error: function () {
+                console.error("Failed to load notification count.");
+            }
+        });
+    }
+
+    // Function to load notifications in dropdown
+    function loadNotifications() {
+        $.ajax({
+            url: '/notifications/list', // backend endpoint
+            method: 'GET',
+            success: function (data) {
+                const list = $('#notificationList');
+                list.empty();
+                if (data.length > 0) {
+                    data.forEach(n => {
+                        list.append(`<li><a class="dropdown-item">${n.message}</a></li>`);
+                    });
+                } else {
+                    list.append('<li><a class="dropdown-item text-muted">No notification available</a></li>');
+                }
+            },
+            error: function () {
+                console.error("Failed to load notifications.");
+            }
+        });
+    }
+
+    // Refresh every 20 seconds
+    setInterval(updateNotificationCount, 20000);
+
+    // Initial load
+    $(document).ready(function () {
+        updateNotificationCount();
+        loadNotifications();
+    });
+
+    // When user clicks dropdown, reload list
+    $('.nav-link.dropdown-toggle').on('click', function() {
+        loadNotifications();
+    });
+
+    // Mark all unread flag read.
+    $(document).ready(function() {
+
+        var notificationIcon = $('#notificationIcon');
+
+        notificationIcon.on('show.bs.dropdown', function (e) {
+            // This triggers right before the dropdown opens
+            console.log('Dropdown opening - marking notifications as read');
+
+            $.ajax({
+                url: '/notifications/mark-as-read',
+                type: 'POST',
+                success: function (response) {
+                    console.log('Notifications marked as read');
+                    $('#notificationCount').hide(); // hide the badge
+                },
+                error: function (xhr) {
+                    console.error('Failed to mark notifications as read', xhr);
+                }
+            });
+        });
+
+    });
 });
 
 
