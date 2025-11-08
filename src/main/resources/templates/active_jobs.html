@@ -55,10 +55,8 @@
                                 <tr>
                                     <th>Title</th>
                                     <th>Category</th>
-                                    <th>Job Type</th>
                                     <th>Job Price</th>
                                     <th>Deadline</th>
-                                    <th>Vacancy</th>
                                     <th>Status</th>
                                     <th>Created At</th>
                                     <th>Action</th>
@@ -68,10 +66,8 @@
                                 <tr th:each="job : ${jobs}">
                                     <td th:text="${job.title}"></td>
                                     <td th:text="${job.getCategory().getCategoryName()}"></td>
-                                    <td th:text="${job.jobType}"></td>
                                     <td th:text="${job.paymentAmount}"></td>
                                     <td th:text="${#temporals.format(job.deadline, 'yyyy-MM-dd')}"></td>
-                                    <td th:text="${job.vacancy != null ? job.vacancy : ''}"></td>
                                     <td>
                                         <span th:if="${job.jobStatus.name() =='POSTED' }"
                                               class="badge bg-primary">Posted</span>
