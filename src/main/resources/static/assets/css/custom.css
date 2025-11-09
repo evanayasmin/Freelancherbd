@@ -1,0 +1,10 @@
+.card:hover {
+    transform: translateY(-5px);
+    transition: 0.3s ease;
+}
+
+.badge {
+    border-radius: 12px;
+    background-color: #FAEBD7;
+    color: #333;
+}

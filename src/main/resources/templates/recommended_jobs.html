@@ -66,9 +66,13 @@
                                 <tr th:each="job : ${jobs}">
                                     <td><div class="card bg-light-secondary">
                                             <div class="card-content">
+                                                <div class="card-header bg-info" style="padding-top:1px;"></div>
                                                 <div class="card-body">
                                                     <h4 class="card-title"><span th:text="${job.title}"></span></h4>
-                                                    <p class="card-text"><span th:text="${job.getCategory().getCategoryName()}"></span></p>
+                                                    <p class="card-text"><span th:text="${job.getCategory().getCategoryName()}"></span>
+                                                    <hr/>
+                                                    <span th:text="${#strings.abbreviate(job.requiredSkill, 40)}"></span>
+                                                    </p>
                                                     <small class="text-muted">Price: <span th:text="${job.paymentAmount}"></span>  &nbsp; &nbsp;Deadline: <span th:text="${#temporals.format(job.deadline, 'yyyy-MM-dd')}"></span></small>
                                                 </div>
                                             </div>
