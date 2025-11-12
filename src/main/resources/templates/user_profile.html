@@ -55,6 +55,28 @@
                                                 <div class="row">
                                                     <div class="col-12">
                                                         <div class="form-group">
+                                                            <label for="title">Title</label>
+                                                            <input type="text" th:field="*{title}" id="title" class="form-control" name="title" placeholder="FullStack Developer" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <div class="form-group">
+                                                            <label for="title">Professional Summary</label>
+                                                            <input type="text" th:field="*{professionalSummary}" id="professionalSummary" class="form-control" name="professionalSummary">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <div class="form-group">
+                                                            <label for="availability">Availability</label>
+                                                            <select class="form-control" id="availability" th:name="availability" th:field="*{availability}">
+                                                                <option value="Full Time">Full Time</option>
+                                                                <option value="Part Time">Part Time</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-12">
+                                                        <div class="form-group">
                                                             <label for="country">Country</label>
                                                             <select class="form-control" name="country" id="country" th:field="*{country}">
                                                                 <option th:value="Bangladesh">Bangladesh</option>
