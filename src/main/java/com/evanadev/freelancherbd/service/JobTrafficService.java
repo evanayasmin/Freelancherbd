@@ -30,4 +30,8 @@ public class JobTrafficService {
     public Optional<JobTraffic> findByUserIdJobId(Long userId, Long jobId, TrafficType trafficType){
         return jobTrafficRepository.findByUserIdJobId(userId, jobId, trafficType);
     }
+
+    public List<JobTraffic> findJobTrafficByUserIdJobId(Long userId, Long jobId){
+        return jobTrafficRepository.findJobTrafficByUserIdJobId(userId, jobId);
+    }
 }

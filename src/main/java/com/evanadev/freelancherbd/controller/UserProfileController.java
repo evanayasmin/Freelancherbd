@@ -101,6 +101,9 @@ public class UserProfileController {
             profile.setCountry(userProfile.getCountry());
             profile.setGender(userProfile.getGender());
             profile.setSkills(userProfile.getSkills());
+            profile.setTitle(userProfile.getTitle());
+            profile.setAvailability(userProfile.getAvailability());
+            profile.setProfessionalSummary(userProfile.getProfessionalSummary());
             if(cvFile !=null){
                 profile.setCv(cvFilePath);
             }

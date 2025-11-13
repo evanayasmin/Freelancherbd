@@ -15,6 +15,12 @@
                        <div class="row mt-2">
                            <h6 class="text-right">Personal Details</h6>
                            <div class="col-md-6"><label class="labels"><strong>User Name:</strong></label>&nbsp;<span th:text="${userDetail.username}"></span></div>
+                           <div class="col-md-6"><label class="labels"><strong>Title:</strong></label>&nbsp;<span th:text="${userDetail.title}"></span></div>
+                           <div class="col-md-6"><label class="labels"><strong>Professional Summary:</strong></label>&nbsp;<span th:text="${userDetail.professionalSummary}"></span></div>
+                           <div class="col-md-6"><label class="labels"><strong>Availability:</strong></label>&nbsp;<span th:text="${userDetail.availability}"></span></div>
+                           <div class="col-md-6"><label class="labels"><strong>Ratings:</strong></label>&nbsp;<span th:text="${userDetail.ratings}"></span></div>
+                           <div class="col-md-6"><label class="labels"><strong>Review:</strong></label>&nbsp;<span th:text="${userDetail.review}"></span></div>
+                           <div class="col-md-6"><label class="labels"><strong>Completed Jobs:</strong></label>&nbsp;<span th:text="${userDetail.completedJobs}"></span></div>
                            <div class="col-md-6"><label class="labels"><strong>Phone:</strong></label>&nbsp;<span th:text="${userDetail.phone}"></span></div>
                            <div class="col-md-6"><label class="labels"><strong>Gender:</strong></label>&nbsp;<span th:text="${userDetail.userProfile !=null && userDetail.userProfile.gender !=null ? userDetail.userProfile.gender : 'N/A'}"></span></div>
                            <div class="col-md-6"><label class="labels"><strong>NID:</strong></label>&nbsp;<span th:text="${userDetail.nid}"></span></div>

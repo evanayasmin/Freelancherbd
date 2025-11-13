@@ -6,6 +6,7 @@ import com.evanadev.freelancherbd.repository.JobRepository;
 import com.evanadev.freelancherbd.service.CategoryService;
 import com.evanadev.freelancherbd.service.JobReportService;
 import com.evanadev.freelancherbd.service.JobService;
+import com.evanadev.freelancherbd.service.JobTrafficService;
 import com.evanadev.freelancherbd.util.AESUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +32,8 @@ public class JobController {
     private AESUtil aesUtil;
     @Autowired
     private JobReportService jobReportService;
+    @Autowired
+    private JobTrafficService jobTrafficService;
 
     public JobController(JobRepository jobRepository, JobService jobService, CategoryService categoryService, AESUtil aesUtil, JobReportService jobReportService) {
         this.jobRepository = jobRepository;
@@ -173,7 +176,6 @@ public class JobController {
         model.addAttribute("statuses", UserStatus.values());
         model.addAttribute("aesUtil", aesUtil);
         model.addAttribute("currentPath", "/admin/jobs/canceled_job");
-
         return "admin_canceled_jobs";
     }
 
@@ -494,12 +496,30 @@ public class JobController {
     }
 
     @GetMapping("/jobs/job_detail/{encId}")
-    public String getJobDetail(@PathVariable("encId") String encId, Model model) {
+    public String getJobDetail(@PathVariable("encId") String encId, @ModelAttribute("loggedUser") CustomUserDetail loggedUser, Model model) {
         try {
             Long did = aesUtil.decryptId(encId);
             Job job = jobService.findById(did);
             if (job == null) {
                 return "redirect:jobs_not_found";
+            }
+            List<JobTraffic> jobTraffics = jobTrafficService.findJobTrafficByUserIdJobId(loggedUser.getId(), did);
+            log.info("Jobtraffics: {}", jobTraffics.toString());
+            if(jobTraffics.isEmpty()){
+                model.addAttribute("jobTraffics",null);
+            }
+            else{
+                for (JobTraffic traffic : jobTraffics) {
+                    log.info("traffic: {}", traffic.getTrafficType());
+                    if (traffic.getTrafficType() == TrafficType.SAVED) {
+                        model.addAttribute("saveStatus", "Saved");
+                    } else if (traffic.getTrafficType() == TrafficType.REPORT) {
+                        model.addAttribute("reportStatus", "Reported");
+                    }else if (traffic.getTrafficType() == TrafficType.APPLIED) {
+                        model.addAttribute("applyStatus", "Applied");
+                    }
+                }
+
             }
             model.addAttribute("jobDetail", job);
             return "categoryJob_detail";

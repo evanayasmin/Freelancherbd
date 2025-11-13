@@ -113,7 +113,7 @@ public class JobService {
 
         // split user skills (e.g., "Java, Spring, AWS")
         List<String> userSkills = Arrays.stream(
-                        user.getUserProfile().getSkills().split(","))
+                user.getUserProfile().getSkills().split(","))
                 .map(String::trim)
                 .map(String::toLowerCase)
                 .toList();

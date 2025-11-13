@@ -35,7 +35,7 @@ public class NotificationService {
                 notification.getRecipient().getId(),
                 notification.getCreatedAt()
         );
-        System.out.println("Principal: " + notification.getRecipient().getUsername());
+        //System.out.println("Principal: " + notification.getRecipient().getUsername());
        // System.out.println("Admin Principal: " + SecurityContextHolder.getContext().getAuthentication().getName());
 
         messagingTemplate.convertAndSendToUser(
@@ -46,5 +46,9 @@ public class NotificationService {
 
 
 
+    }
+
+    public void markAllAsRead(Long userId) {
+        notificationRepository.markAllAsReadByReceiptId(userId);
     }
 }

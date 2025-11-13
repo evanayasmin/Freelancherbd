@@ -18,6 +18,13 @@ public class UserProfile {
     private String country;
     private String city;
     private String gender;
+    private String title;
+    @Column(length = 2000)
+    private String professionalSummary;
+    private String review;
+    private String ratings;
+    private String completed_jobs;
+    private String availability;
 
     @Column(length = 500)
     private String skills; // Comma-separated or JSON
@@ -79,6 +86,54 @@ public class UserProfile {
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getProfessionalSummary() {
+        return professionalSummary;
+    }
+
+    public void setProfessionalSummary(String professionalSummary) {
+        this.professionalSummary = professionalSummary;
+    }
+
+    public String getReview() {
+        return review;
+    }
+
+    public void setReview(String review) {
+        this.review = review;
+    }
+
+    public String getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(String ratings) {
+        this.ratings = ratings;
+    }
+
+    public String getCompleted_jobs() {
+        return completed_jobs;
+    }
+
+    public void setCompleted_jobs(String completed_jobs) {
+        this.completed_jobs = completed_jobs;
+    }
+
+    public String getAvailability() {
+        return availability;
+    }
+
+    public void setAvailability(String availability) {
+        this.availability = availability;
     }
 
     public String getProfilePicture() {
@@ -185,4 +240,33 @@ public class UserProfile {
         this.companyEmail = companyEmail;
     }
 
+    @Override
+    public String toString() {
+        return "UserProfile{" +
+                "id=" + id +
+                ", user=" + user +
+                ", country='" + country + '\'' +
+                ", city='" + city + '\'' +
+                ", gender='" + gender + '\'' +
+                ", title='" + title + '\'' +
+                ", professionalSummary='" + professionalSummary + '\'' +
+                ", review='" + review + '\'' +
+                ", ratings='" + ratings + '\'' +
+                ", completed_jobs='" + completed_jobs + '\'' +
+                ", availability='" + availability + '\'' +
+                ", skills='" + skills + '\'' +
+                ", cv='" + cv + '\'' +
+                ", profilePicture='" + profilePicture + '\'' +
+                ", cvFile=" + cvFile +
+                ", profilePictureFile=" + profilePictureFile +
+                ", linkedinUrl='" + linkedinUrl + '\'' +
+                ", githubUrl='" + githubUrl + '\'' +
+                ", companyName='" + companyName + '\'' +
+                ", companyAddress='" + companyAddress + '\'' +
+                ", companyBusiness='" + companyBusiness + '\'' +
+                ", companyPhone='" + companyPhone + '\'' +
+                ", companyUrl='" + companyUrl + '\'' +
+                ", companyEmail='" + companyEmail + '\'' +
+                '}';
+    }
 }
