@@ -1,9 +1,6 @@
 package com.evanadev.freelancherbd.controller;
 
-import com.evanadev.freelancherbd.model.CustomUserDetail;
-import com.evanadev.freelancherbd.model.Job;
-import com.evanadev.freelancherbd.model.JobStatus;
-import com.evanadev.freelancherbd.model.User;
+import com.evanadev.freelancherbd.model.*;
 import com.evanadev.freelancherbd.service.FreelancerService;
 import com.evanadev.freelancherbd.service.JobService;
 import com.evanadev.freelancherbd.service.UserService;
@@ -15,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
@@ -24,10 +22,10 @@ import java.util.Map;
 public class FreelancerController {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
-    JobService jobService;
-    AESUtil aesUtil;
+    private JobService jobService;
+    private AESUtil aesUtil;
 
     private static final Logger log = LoggerFactory.getLogger(FreelancerController.class);
     @Autowired
@@ -36,6 +34,7 @@ public class FreelancerController {
     public FreelancerController(UserService userService, JobService jobService, AESUtil aesUtil ) {
         this.userService = userService;
         this.jobService = jobService;
+        this.aesUtil = aesUtil;
     }
 
 
@@ -68,6 +67,23 @@ public class FreelancerController {
         model.addAttribute("freelancers", recommendedFreelancers);
         model.addAttribute("aesUtil", aesUtil);
         return "recommended_freelancers";
+    }
+
+    @GetMapping("/freelancer/profile_detail/{encId}")
+    public String getJobDetail(@PathVariable("encId") String encId, Model model) {
+        try {
+            Long did = aesUtil.decryptId(encId);
+            User user = userService.findByUserId(did);
+
+            log.info("profileDetails: {}", user.toString());
+
+            model.addAttribute("profile", user);
+            return "freelancer_detail";
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "redirect:error";
+        }
     }
 
 }
