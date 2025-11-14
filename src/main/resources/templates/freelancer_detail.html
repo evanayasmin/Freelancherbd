@@ -40,7 +40,7 @@
                 </div>
                 <section id="basic-vertical-layouts">
                     <div class="row match-height">
-                        <div class="col-md-6 col-12">
+                        <div class="col-md-7 col-12">
                             <div class="card">
                                 <div class="card-header">
                                     <h4 class="card-title">Freelancer Profile Details</h4>
@@ -49,59 +49,57 @@
                                     <div class="card-body">
                                         <div class="col-12">
                                             <div class="form-group">
-                                                <label>Full Name</label>
+                                                <label><strong>Full Name: </strong>&nbsp;</label>
                                                 <span th:text="${profile.fullname}"></span>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-12">
                                                 <div class="form-group">
-                                                    <label>Title</label>
+                                                    <label><strong>Title: </strong>&nbsp;</label>
                                                     <span th:text="${profile.getUserProfile().title}"></span>
                                                 </div>
                                             </div>
                                             <div class="col-12">
                                                 <div class="form-group">
-                                                    <label>Professional Summary</label>
+                                                    <label><strong>Professional Summary: </strong> &nbsp;</label>
                                                     <span th:text="${profile.getUserProfile.professionalSummary}"></span>
                                                 </div>
                                             </div>
                                         <div class="col-12">
                                             <div class="form-group">
-                                                <label>Availability: </label>
+                                                <label><strong>Availability:</strong> &nbsp;</label>
                                                 <span th:text="${profile.getUserProfile.availability}"></span>
                                             </div>
                                         </div>
 
                                         <div class="col-12">
                                             <div class="form-group">
-                                                <label>Country:</label>
+                                                <label><strong>Country:</strong>&nbsp;</label>
                                                 <span th:text="${profile.getUserProfile.country}"></span>
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="form-group">
-                                                <label>City</label>
+                                                <label><strong>City: </strong>&nbsp;</label>
                                                 <span th:text="${profile.getUserProfile.city}"></span>
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="form-group">
-                                                <label>Gender</label>
+                                                <label><strong>Gender: </strong>&nbsp;</label>
                                                 <span th:text="${profile.getUserProfile.gender}"></span>
 
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="form-group">
-                                                <label>Skills</label>
+                                                <label><strong>Skills: </strong>&nbsp;</label>
                                                 <span th:utext="${profile.getUserProfile.skills}"></span>
                                             </div>
                                         </div>
-                                <div class="col-12"><label> CV</label>
-                                <div th:if="${profile.getUserProfile.cv != null}">
-                                    <a th:href="@{'/' + ${profile.getUserProfile.cv}}" target="_blank">Download Current CV</a>
-                                </div>
+                                <div class="col-12"><label> <strong>CV: </strong>&nbsp;</label>
+                                <div class="form-group" th:if="${profile.getUserProfile.cv != null}"><a th:href="@{'/' + ${profile.getUserProfile.cv}}" target="_blank">Download CV</a></div>
                                 </div>
                             <div class="col-12">
                                 <label >Profile Picture</label>
@@ -111,18 +109,37 @@
                                          style="width:150px; height:140px; margin-bottom:10px; border-radius:8px;" />
                                 </div>
                             </div>
-                        <div class="col-12">
-                            <label>Github URL</label>
-                            <span th:text="${profile.getUserProfile.githubUrl}"></span>
-                        </div>
-                        <div class="col-12">
-                                <div class="form-group">
-                                    <label>LinkedIn URL</label>
-                                    <span th:text="${profile.getUserProfile.linkedinUrl}"></span>
-                                </div>
+                            <div class="col-12">
+                                <label><strong>Github URL</strong> &nbsp;</label>
+                                <a th:href="${profile.getUserProfile.githubUrl}" target="_blank"><span th:text="${profile.getUserProfile.githubUrl}"></span></a>
+                            </div>
+                            <div class="col-12">
+                                    <div class="form-group">
+                                        <label><strong>LinkedIn URL:</strong>&nbsp;</label>
+                                        <a th:href="${profile.getUserProfile.linkedinUrl}" target="_blank"><span th:text="${profile.getUserProfile.linkedinUrl}"></span></a>
+                                    </div>
                             </div>
                         </div>
+
                     </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5 col-12">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body"><p>Review:</p> <span th:utext="${profile.getUserProfile.review}"></span></div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body"><p>Completed Projects: </p><span th:utext="${profile.getUserProfile.completed_jobs}"></span></div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body"><p>Availability: </p>FullTime</div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body"><p>Live Chat</div>
+                        </div>
                     </div>
                 </div>
             </div>
