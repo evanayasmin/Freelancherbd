@@ -1,6 +1,7 @@
 package com.evanadev.freelancherbd.controller;
 
 import com.evanadev.freelancherbd.model.*;
+import com.evanadev.freelancherbd.service.CategoryService;
 import com.evanadev.freelancherbd.service.FreelancerService;
 import com.evanadev.freelancherbd.service.JobService;
 import com.evanadev.freelancherbd.service.UserService;
@@ -19,10 +20,12 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
+@RequestMapping("employer/freelancer")
 public class FreelancerController {
 
     @Autowired
     private UserService userService;
+    private CategoryService categoryService;
 
     private JobService jobService;
     private AESUtil aesUtil;
@@ -31,9 +34,10 @@ public class FreelancerController {
     @Autowired
     private FreelancerService freelancerService;
 
-    public FreelancerController(UserService userService, JobService jobService, AESUtil aesUtil ) {
+    public FreelancerController(UserService userService, JobService jobService, CategoryService categoryService, AESUtil aesUtil ) {
         this.userService = userService;
         this.jobService = jobService;
+        this.categoryService = categoryService;
         this.aesUtil = aesUtil;
     }
 
@@ -41,7 +45,10 @@ public class FreelancerController {
     @GetMapping("/skilled_freelancer")
     public String GetSkilledFreelancer(Model model){
 
-        return "skilled_freelancer";
+        List<Category> categories = categoryService.getAllCategories();
+        model.addAttribute("categories", categories);
+        model.addAttribute("jobTypes", JobType.values());
+        return "find_freelancer";
     }
 
     @GetMapping("/toprated_freelancer")
@@ -50,7 +57,7 @@ public class FreelancerController {
         return "top_rated_freelancer";
     }
 
-    @GetMapping("/employer/recommended_freelancer")
+    @GetMapping("/recommended_freelancer")
     public String GetRecommendedFreelancer(@ModelAttribute("loggedUser") CustomUserDetail loggedUser, Model model){
 
         log.info("Loggedin user=",loggedUser.getUser().getUsername());
@@ -69,7 +76,7 @@ public class FreelancerController {
         return "recommended_freelancers";
     }
 
-    @GetMapping("/freelancer/profile_detail/{encId}")
+    @GetMapping("/profile_detail/{encId}")
     public String getJobDetail(@PathVariable("encId") String encId, Model model) {
         try {
             Long did = aesUtil.decryptId(encId);

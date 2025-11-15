@@ -74,7 +74,7 @@
                                            th:text="${#strings.abbreviate(freelancer.userProfile.getProfessionalSummary(), 80)}">
                                         </p>
                                         <p>
-                                            <a th:href="@{('/freelancer/profile_detail/' + ${@aesUtil.encryptId(freelancer.id)})}"
+                                            <a th:href="@{('/employer/freelancer/profile_detail/' + ${@aesUtil.encryptId(freelancer.id)})}"
                                                class="btn btn-sm text-white"
                                                style="background-color: #0b5ed7; color: #333;">View Profile</a>
                                         </p>
