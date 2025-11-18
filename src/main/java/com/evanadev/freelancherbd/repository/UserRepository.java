@@ -53,4 +53,29 @@ public interface UserRepository extends JpaRepository<User,Long> {
     WHERE r.name = 'ROLE_ADMIN'
     """)
     Optional<User> findAdminUser();
+
+    @Query("""
+    SELECT DISTINCT u
+    FROM User u
+    LEFT JOIN u.userProfile p
+    WHERE 
+    (
+        (:skillTitle IS NOT NULL AND LOWER(p.skills) LIKE LOWER(CONCAT('%', :skillTitle, '%')))
+        OR
+        (:title IS NOT NULL AND LOWER(p.title) LIKE LOWER(CONCAT('%', :title, '%')))
+        OR
+        (:jobType IS NOT NULL AND LOWER(p.availability) LIKE LOWER(CONCAT('%', :jobType, '%')))
+    )
+    AND (
+        :skillTitle IS NOT NULL 
+        OR :title IS NOT NULL
+        OR :jobType IS NOT NULL
+       )
+""")
+    List<User> searchFreelancers(
+            @Param("skillTitle") String skillTitle,
+            @Param("title") String title,
+            @Param("jobType") String jobType,
+            @Param("requiredLevel") String requiredLevel
+    );
 }

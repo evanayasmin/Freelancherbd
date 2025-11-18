@@ -115,6 +115,39 @@ $(document).on('click', '#saveJobBtn', function(e) {
     });
 });
 
+
+//==Search Freelancer by Employee
+// Job Saved for an employee
+$(document).on('click', '#searchFreelancerBtn', function(e) {
+    e.preventDefault();
+
+    const skill_title = $('#skill_title').val();
+    const title = $('#title').val();
+    const jobType = $('#jobType').val();
+    const required_level = $('#required_level').val();
+
+    $.ajax({
+        url: '/employer/freelancer/searchFreelancer',
+        type: 'POST',
+        data: {
+            skill_title: skill_title,
+            title: title,
+            jobType: jobType,
+            required_level: required_level },
+            success: function(response) {
+                $("#table1 tbody").html(response);
+
+                if ($.fn.DataTable.isDataTable('#table1')) {
+                    $('#table1').DataTable().clear().destroy();
+                }
+                $('#table1').DataTable();
+        },
+        error: function(xhr) {
+            alert('Error saving job: ' + xhr.responseText);
+        }
+    });
+});
+
 //User Status Updating:
 $(document).on("submit", "#statusUpdateForm", function(e) {
     e.preventDefault();

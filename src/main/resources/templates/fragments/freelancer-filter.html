@@ -1,0 +1,15 @@
+<tr th:fragment="rows" th:each="f : ${freelancers}">
+        <td th:text="${f.fullname}"></td>
+        <td th:text="${f.email}"></td>
+        <td th:text="${f.getUserProfile().skills}"></td>
+        <td th:text="${f.getUserProfile().title}"></td>
+        <td th:text="${f.getUserProfile().ratings}"></td>
+    </tr>
+
+    <!-- If no results -->
+    <tr th:if="${#lists.isEmpty(freelancers)}">
+        <td colspan="5" class="text-center text-danger">
+            No results found
+        </td>
+    </tr>
+

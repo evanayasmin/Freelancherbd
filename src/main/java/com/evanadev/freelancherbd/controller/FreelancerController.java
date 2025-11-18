@@ -11,10 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -91,6 +88,22 @@ public class FreelancerController {
             e.printStackTrace();
             return "redirect:error";
         }
+    }
+
+    @PostMapping("/searchFreelancer")
+    public String searchFreelancers(
+            @RequestParam("skill_title") String skill_title,
+            @RequestParam("title") String title,
+            @RequestParam("jobType") String jobType,
+            @RequestParam("required_level") String required_level, Model model) {
+
+        List<User> freelancers = freelancerService.searchFreelancers(
+                skill_title, title, jobType, required_level);
+
+        model.addAttribute("freelancers", freelancers);
+
+        // Return ONLY the table rows fragment
+        return "fragments/freelancer-filter :: rows";
     }
 
 }
