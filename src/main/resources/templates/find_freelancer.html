@@ -2,6 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head><div th:replace="~{fragments/header :: header}"></div>
     <link rel="stylesheet" th:href="@{/assets/vendors/simple-datatables/style.css}">
+
 </head>
 <body>
 <div id="app">
@@ -115,10 +116,11 @@
                                         <thead>
                                         <tr>
                                             <th>Name</th>
-                                            <th>Email</th>
-                                            <th>Skill</th>
+                                            <th>Title</th>
+                                            <th>Skills</th>
                                             <th>Experience</th>
-                                            <th>Rate</th>
+                                            <th>Availability</th>
+                                            <th>Action</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -136,21 +138,30 @@
                 <div class="footer clearfix mb-0 text-muted">
                     <div th:replace="~{fragments/footer :: footer}"></div>
                     <script th:src="@{/assets/vendors/simple-datatables/simple-datatables.js}"></script>
-<!--                    <script>-->
-<!--                        // Simple Datatable-->
+                    <link rel="stylesheet" th:href="@{/assets/vendors/simple-datatables/style.css}">
 
-<!--                       let table;-->
-<!--                        $(document).ready(function() {-->
-<!--                            table = $('#table1').DataTable();-->
-<!--                        });-->
+                    <script>
+                        // Simple Datatable
+                        let table1 = document.querySelector('#table1');
+                        let dataTable = new simpleDatatables.DataTable(table1);
 
+                        function reloadTable(rowHtml) {
+                            dataTable.destroy(); // remove old datatable
 
-<!--                    </script>-->
+                            // replace tbody only
+                            table1.querySelector('tbody').innerHTML = rowHtml;
+
+                            // reinitialize
+                            dataTable = new simpleDatatables.DataTable(table1);
+                        }
+                    </script>
 
                 </div>
             </footer>
         </div>
     </div>
+    <div id="toastContainer" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
+
 </div>
 </body>
 </html>

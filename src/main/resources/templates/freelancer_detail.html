@@ -66,12 +66,18 @@
                                                     <span th:text="${profile.getUserProfile.professionalSummary}"></span>
                                                 </div>
                                             </div>
-                                        <div class="col-12">
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label><strong>Experience: </strong>&nbsp;</label>
+                                                    <span th:text="${profile.getUserProfile().experience}"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
                                             <div class="form-group">
                                                 <label><strong>Availability:</strong> &nbsp;</label>
                                                 <span th:text="${profile.getUserProfile.availability}"></span>
                                             </div>
-                                        </div>
+                                            </div>
 
                                         <div class="col-12">
                                             <div class="form-group">
@@ -124,6 +130,13 @@
                     </div>
                     </div>
                 </div>
+                <div class="row col-md-12" th:align="center" sec:authorize="hasAnyRole('EMPLOYER')">
+                    <div class="col-4"><a class="btn btn-outline-success"><i class="bi bi-chat"></i>  Talk Now </a>&nbsp;</div>
+                    <div class="col-4"><a href="#" th:data-id="${@aesUtil.encryptId(profile.id)}" id="saveUserBtn"
+                       class="btn btn-outline-info"><i class="bi bi-save"></i> Save </a>&nbsp;</div>
+                    <div class="col-4"><a th:href="@{'/employer/freelancer/' + ${@aesUtil.encryptId(profile.id)} + '/report'}" class="btn btn-outline-danger">
+                        <i class="bi bi-flag"></i> Report </a></div>
+                </div>
             </div>
             <div class="col-md-5 col-12">
                 <div class="row">
@@ -153,6 +166,7 @@
             </footer>
         </div>
     </div>
+    <div id="toastContainer" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
 </div>
 </body>
 </html>

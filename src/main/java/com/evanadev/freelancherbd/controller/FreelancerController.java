@@ -1,6 +1,7 @@
 package com.evanadev.freelancherbd.controller;
 
 import com.evanadev.freelancherbd.model.*;
+import com.evanadev.freelancherbd.repository.UserTrackRepository;
 import com.evanadev.freelancherbd.service.CategoryService;
 import com.evanadev.freelancherbd.service.FreelancerService;
 import com.evanadev.freelancherbd.service.JobService;
@@ -9,32 +10,38 @@ import com.evanadev.freelancherbd.util.AESUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("employer/freelancer")
 public class FreelancerController {
 
-    @Autowired
-    private UserService userService;
-    private CategoryService categoryService;
+    private final UserService userService;
+    private final CategoryService categoryService;
 
-    private JobService jobService;
-    private AESUtil aesUtil;
+    private final JobService jobService;
+    private final AESUtil aesUtil;
 
     private static final Logger log = LoggerFactory.getLogger(FreelancerController.class);
-    @Autowired
-    private FreelancerService freelancerService;
+    private final FreelancerService freelancerService;
+    private final UserTrackRepository userTrackRepository;
 
-    public FreelancerController(UserService userService, JobService jobService, CategoryService categoryService, AESUtil aesUtil ) {
+    @Autowired
+    public FreelancerController(UserService userService, JobService jobService, CategoryService categoryService, UserTrackRepository userTrackRepository,
+                                AESUtil aesUtil, FreelancerService freelancerService) {
         this.userService = userService;
         this.jobService = jobService;
         this.categoryService = categoryService;
+        this.userTrackRepository = userTrackRepository;
+        this.freelancerService = freelancerService;
         this.aesUtil = aesUtil;
     }
 
@@ -104,6 +111,37 @@ public class FreelancerController {
 
         // Return ONLY the table rows fragment
         return "fragments/freelancer-filter :: rows";
+    }
+
+    /*
+     * @author: evana
+     * @Desc: Freelancer Saved of a LoggedIn User as Employee
+     * @Date: 30-10-25
+     * */
+    @PostMapping("/user_save")
+    @ResponseBody
+    public ResponseEntity<Map<String, String>> SaveJob(@RequestParam("userId") String encId, @ModelAttribute("loggedUser") CustomUserDetail loggedUserDetail, Model model) {
+        Map<String, String> response = new HashMap<>();
+        Long did = aesUtil.decryptId(encId);
+
+        User user = loggedUserDetail.getUser();
+        User trackUser = userService.findByUserId(did);
+        Optional<UserTrac> existing = userTrackRepository.findByUserIdLoggedId(user.getId(), trackUser.getId(), TrafficType.SAVED);
+
+        if(existing.isPresent()){
+            UserTrac userTrac = existing.get();
+            userTrac.setTrafficType(TrafficType.SAVED);
+            userTrackRepository.save(userTrac);
+        }else{
+            UserTrac userTrac = new UserTrac();
+            userTrac.setLoggedinUser(user);
+            userTrac.setTrafficType(TrafficType.SAVED);
+            userTrac.setUser(trackUser);
+            userTrackRepository.save(userTrac);
+        }
+
+        response.put("status", "success");
+        return ResponseEntity.ok(response);
     }
 
 }

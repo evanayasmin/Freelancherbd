@@ -115,16 +115,42 @@ $(document).on('click', '#saveJobBtn', function(e) {
     });
 });
 
+// Freelancer Saved for an employer
+$(document).on('click', '#saveUserBtn', function(e) {
+    e.preventDefault();
+    const freelancerId = $(this).data('id');
+    //alert(freelancerId);
+    $.ajax({
+        url: '/employer/freelancer/user_save',
+        type: 'POST',
+        data: { userId: freelancerId },
+        success: function(response) {
+            if (response.status === "success") {
+                showToast("Employee is Saved Successfully!", "success");
+            }else{
+                showToast("Failed to Save the Employee!", "error");
+            }
+        },
+        error: function(xhr) {
+            alert('Error saving job: ' + xhr.responseText);
+        }
+    });
+});
+
 
 //==Search Freelancer by Employee
-// Job Saved for an employee
+
 $(document).on('click', '#searchFreelancerBtn', function(e) {
     e.preventDefault();
-
     const skill_title = $('#skill_title').val();
     const title = $('#title').val();
     const jobType = $('#jobType').val();
     const required_level = $('#required_level').val();
+
+    console.log("skill_title=", skill_title);
+    console.log("title=", title);
+    console.log("jobType=", jobType);
+    console.log("required_level=", required_level);
 
     $.ajax({
         url: '/employer/freelancer/searchFreelancer',
@@ -135,13 +161,10 @@ $(document).on('click', '#searchFreelancerBtn', function(e) {
             jobType: jobType,
             required_level: required_level },
             success: function(response) {
-                $("#table1 tbody").html(response);
 
-                if ($.fn.DataTable.isDataTable('#table1')) {
-                    $('#table1').DataTable().clear().destroy();
-                }
-                $('#table1').DataTable();
-        },
+                reloadTable(response);
+
+            },
         error: function(xhr) {
             alert('Error saving job: ' + xhr.responseText);
         }
