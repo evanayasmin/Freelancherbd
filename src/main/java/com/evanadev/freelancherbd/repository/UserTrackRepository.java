@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -26,6 +27,18 @@ public interface UserTrackRepository extends JpaRepository<UserTrac, Long>{
     Optional<UserTrac> findByUserIdLoggedId(
             @Param("userId") Long userId,
             @Param("trackId") Long trackId,
+            @Param("trafficType") TrafficType trafficType
+    );
+
+
+    @Query("""
+    SELECT DISTINCT t
+    FROM UserTrac t
+    WHERE t.loggedinUser.id = :userId 
+    AND t.trafficType = :trafficType
+""")
+    List<UserTrac> findByLoggedId(
+            @Param("userId") Long userId,
             @Param("trafficType") TrafficType trafficType
     );
 }

@@ -123,23 +123,23 @@
             </ul>
         </li>
 
-        <li class="sidebar-item has-sub" sec:authorize="hasRole('EMPLOYER')">
-            <a href="#" class='sidebar-link'>
-                <i class="bi bi-kanban text-danger"></i>
-                <span>Projects</span>
-            </a>
-            <ul class="submenu" th:classappend="${currentPath != null and currentPath.startsWith('/employer/projects')} ? ' active'">
-                <li class="submenu-item">
-                    <a th:href="@{/employer/projects/onging_projects}">Ongoing Projects</a>
-                </li>
-                <li class="submenu-item ">
-                    <a th:href="@{/employer/projects/completed_projects}">Completed Projects</a>
-                </li>
-                <li class="submenu-item active">
-                    <a th:href="@{/employer/projects/disputes}">Disputes</a>
-                </li>
-            </ul>
-        </li>
+<!--        <li class="sidebar-item has-sub" sec:authorize="hasRole('EMPLOYER')">-->
+<!--            <a href="#" class='sidebar-link'>-->
+<!--                <i class="bi bi-kanban text-danger"></i>-->
+<!--                <span>Projects</span>-->
+<!--            </a>-->
+<!--            <ul class="submenu" th:classappend="${currentPath != null and currentPath.startsWith('/employer/projects')} ? ' active'">-->
+<!--                <li class="submenu-item">-->
+<!--                    <a th:href="@{/employer/projects/onging_projects}">Ongoing Projects</a>-->
+<!--                </li>-->
+<!--                <li class="submenu-item ">-->
+<!--                    <a th:href="@{/employer/projects/completed_projects}">Completed Projects</a>-->
+<!--                </li>-->
+<!--                <li class="submenu-item active">-->
+<!--                    <a th:href="@{/employer/projects/disputes}">Disputes</a>-->
+<!--                </li>-->
+<!--            </ul>-->
+<!--        </li>-->
 
         <li class="sidebar-item has-sub" sec:authorize="hasRole('EMPLOYER')">
             <a href="#" class='sidebar-link'>
@@ -159,23 +159,23 @@
             </ul>
         </li>
 
-        <li class="sidebar-item has-sub" sec:authorize="hasRole('EMPLOYER')">
-            <a href="#" class='sidebar-link'>
-                <i class="bi bi-building text-info"></i>
-                <span>Company Profile</span>
-            </a>
-            <ul class="submenu" th:classappend="${currentPath != null and currentPath.startsWith('/employer/company')} ? ' active'">
-                <li class="submenu-item">
-                    <a th:href="@{/employer/company/company_profile}">View Profile</a>
-                </li>
-                <li class="submenu-item ">
-                    <a th:href="@{/employer/company/edit_comprofile}">Edit Profile </a>
-                </li>
-                <li class="submenu-item active">
-                    <a th:href="@{/employer/company/reviews_ratings}">Reviews and Ratings</a>
-                </li>
-            </ul>
-        </li>
+<!--        <li class="sidebar-item has-sub" sec:authorize="hasRole('EMPLOYER')">-->
+<!--            <a href="#" class='sidebar-link'>-->
+<!--                <i class="bi bi-building text-info"></i>-->
+<!--                <span>Company Profile</span>-->
+<!--            </a>-->
+<!--            <ul class="submenu" th:classappend="${currentPath != null and currentPath.startsWith('/employer/company')} ? ' active'">-->
+<!--                <li class="submenu-item">-->
+<!--                    <a th:href="@{/employer/company/company_profile}">View Profile</a>-->
+<!--                </li>-->
+<!--                <li class="submenu-item ">-->
+<!--                    <a th:href="@{/employer/company/edit_comprofile}">Edit Profile </a>-->
+<!--                </li>-->
+<!--                <li class="submenu-item active">-->
+<!--                    <a th:href="@{/employer/company/reviews_ratings}">Reviews and Ratings</a>-->
+<!--                </li>-->
+<!--            </ul>-->
+<!--        </li>-->
 
 
         <li class="sidebar-item has-sub" sec:authorize="hasRole('EMPLOYER')">

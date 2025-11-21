@@ -2,10 +2,7 @@ package com.evanadev.freelancherbd.controller;
 
 import com.evanadev.freelancherbd.model.*;
 import com.evanadev.freelancherbd.repository.UserTrackRepository;
-import com.evanadev.freelancherbd.service.CategoryService;
-import com.evanadev.freelancherbd.service.FreelancerService;
-import com.evanadev.freelancherbd.service.JobService;
-import com.evanadev.freelancherbd.service.UserService;
+import com.evanadev.freelancherbd.service.*;
 import com.evanadev.freelancherbd.util.AESUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,16 +30,18 @@ public class FreelancerController {
     private static final Logger log = LoggerFactory.getLogger(FreelancerController.class);
     private final FreelancerService freelancerService;
     private final UserTrackRepository userTrackRepository;
+    private final UserTrackService userTrackService;
 
     @Autowired
     public FreelancerController(UserService userService, JobService jobService, CategoryService categoryService, UserTrackRepository userTrackRepository,
-                                AESUtil aesUtil, FreelancerService freelancerService) {
+                                AESUtil aesUtil, FreelancerService freelancerService, UserTrackService userTrackService) {
         this.userService = userService;
         this.jobService = jobService;
         this.categoryService = categoryService;
         this.userTrackRepository = userTrackRepository;
         this.freelancerService = freelancerService;
         this.aesUtil = aesUtil;
+        this.userTrackService = userTrackService;
     }
 
 
@@ -143,5 +142,21 @@ public class FreelancerController {
         response.put("status", "success");
         return ResponseEntity.ok(response);
     }
+
+    /*
+     * @author: evana
+     * @Desc: Saved freelancer of LoggedIn User as Employee
+     * @Date: 21-11-25
+     * */
+    @GetMapping("/saved_freelancer")
+    public String savedJobList(@ModelAttribute("loggedUser") CustomUserDetail loggedUser, Model model) {
+        log.info("Loggedin user=",loggedUser.getUser().getUsername());
+        Long userId = loggedUser.getId();
+        List<UserTrac> freelancers = userTrackService.findSavedFreelancer(TrafficType.SAVED, userId);
+        model.addAttribute("freelancers", freelancers);
+        model.addAttribute("aesUtil", aesUtil);
+        return "saved_freelancers";
+    }
+
 
 }
