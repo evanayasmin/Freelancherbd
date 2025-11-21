@@ -2,6 +2,7 @@ package com.evanadev.freelancherbd.service;
 
 import com.evanadev.freelancherbd.model.Job;
 import com.evanadev.freelancherbd.model.JobStatus;
+import com.evanadev.freelancherbd.model.TrafficType;
 import com.evanadev.freelancherbd.model.User;
 import com.evanadev.freelancherbd.repository.JobRepository;
 import com.evanadev.freelancherbd.repository.UserRepository;
@@ -66,4 +67,12 @@ public class FreelancerService {
         return recommendedMap;
 
     }
+
+    public List<User> searchFreelancers(String skill_title, String title, String jobType, String required_level){
+
+       return userRepository.searchFreelancers(skill_title, title, jobType, required_level);
+    }
+
+
+
 }

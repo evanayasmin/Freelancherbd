@@ -115,6 +115,62 @@ $(document).on('click', '#saveJobBtn', function(e) {
     });
 });
 
+// Freelancer Saved for an employer
+$(document).on('click', '#saveUserBtn', function(e) {
+    e.preventDefault();
+    const freelancerId = $(this).data('id');
+    //alert(freelancerId);
+    $.ajax({
+        url: '/employer/freelancer/user_save',
+        type: 'POST',
+        data: { userId: freelancerId },
+        success: function(response) {
+            if (response.status === "success") {
+                showToast("Employee is Saved Successfully!", "success");
+            }else{
+                showToast("Failed to Save the Employee!", "error");
+            }
+        },
+        error: function(xhr) {
+            alert('Error saving job: ' + xhr.responseText);
+        }
+    });
+});
+
+
+//==Search Freelancer by Employee
+
+$(document).on('click', '#searchFreelancerBtn', function(e) {
+    e.preventDefault();
+    const skill_title = $('#skill_title').val();
+    const title = $('#title').val();
+    const jobType = $('#jobType').val();
+    const required_level = $('#required_level').val();
+
+    console.log("skill_title=", skill_title);
+    console.log("title=", title);
+    console.log("jobType=", jobType);
+    console.log("required_level=", required_level);
+
+    $.ajax({
+        url: '/employer/freelancer/searchFreelancer',
+        type: 'POST',
+        data: {
+            skill_title: skill_title,
+            title: title,
+            jobType: jobType,
+            required_level: required_level },
+            success: function(response) {
+
+                reloadTable(response);
+
+            },
+        error: function(xhr) {
+            alert('Error saving job: ' + xhr.responseText);
+        }
+    });
+});
+
 //User Status Updating:
 $(document).on("submit", "#statusUpdateForm", function(e) {
     e.preventDefault();

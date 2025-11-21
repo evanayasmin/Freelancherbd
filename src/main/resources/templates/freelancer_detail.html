@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="~{fragments/header :: header}"></div>
+</head>
+<body>
+<div id="app">
+    <div id="sidebar" class="active">
+        <div class="sidebar-wrapper active">
+            <div class="sidebar-header">
+                <div class="d-flex justify-content-between">
+                    <div class="logo">
+                        <a href="index.html"><img src="assets/images/logo/logo.png" alt="Logo" srcset=""></a>
+                    </div>
+                    <div class="toggler">
+                        <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div th:replace="~{fragments/navigation :: navigation}"></div>
+            <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
+        </div>
+    </div>
+    <div id="main" class='layout-navbar'>
+        <div th:replace="~{fragments/profile_header :: profile-header}"></div>
+        <div id="main-content">
+            <div class="page-heading">
+                <div class="page-title">
+                    <div class="row">
+                        <div class="col-12 col-md-6 order-md-1 order-last"></div>
+                        <div class="col-12 col-md-6 order-md-2 order-first">
+                            <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a th:href="@{/home}">Dashboard</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page"><a th:href="@{/employer/freelancer/recommended_freelancer}">Recommended Freelancers </a> / Freelancer Profile</li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+                <section id="basic-vertical-layouts">
+                    <div class="row match-height">
+                        <div class="col-md-7 col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Freelancer Profile Details</h4>
+                                </div>
+                                <div class="card-content">
+                                    <div class="card-body">
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label><strong>Full Name: </strong>&nbsp;</label>
+                                                <span th:text="${profile.fullname}"></span>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label><strong>Title: </strong>&nbsp;</label>
+                                                    <span th:text="${profile.getUserProfile().title}"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label><strong>Professional Summary: </strong> &nbsp;</label>
+                                                    <span th:text="${profile.getUserProfile.professionalSummary}"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label><strong>Experience: </strong>&nbsp;</label>
+                                                    <span th:text="${profile.getUserProfile().experience}"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                            <div class="form-group">
+                                                <label><strong>Availability:</strong> &nbsp;</label>
+                                                <span th:text="${profile.getUserProfile.availability}"></span>
+                                            </div>
+                                            </div>
+
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label><strong>Country:</strong>&nbsp;</label>
+                                                <span th:text="${profile.getUserProfile.country}"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label><strong>City: </strong>&nbsp;</label>
+                                                <span th:text="${profile.getUserProfile.city}"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label><strong>Gender: </strong>&nbsp;</label>
+                                                <span th:text="${profile.getUserProfile.gender}"></span>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label><strong>Skills: </strong>&nbsp;</label>
+                                                <span th:utext="${profile.getUserProfile.skills}"></span>
+                                            </div>
+                                        </div>
+                                <div class="col-12"><label> <strong>CV: </strong>&nbsp;</label>
+                                <div class="form-group" th:if="${profile.getUserProfile.cv != null}"><a th:href="@{'/' + ${profile.getUserProfile.cv}}" target="_blank">Download CV</a></div>
+                                </div>
+                            <div class="col-12">
+                                <label>Profile Picture</label>
+                                <div th:if="${profile.userProfile.profilePicture != null}">
+                                    <img th:if="${profile.userProfile.profilePicture != null}"
+                                         th:src="@{'/' + ${profile.userProfile.profilePicture}}" alt="Profile Picture"
+                                         style="width:150px; height:140px; margin-bottom:10px; border-radius:8px;" />
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <label><strong>Github URL</strong> &nbsp;</label>
+                                <a th:href="${profile.getUserProfile.githubUrl}" target="_blank"><span th:text="${profile.getUserProfile.githubUrl}"></span></a>
+                            </div>
+                            <div class="col-12">
+                                    <div class="form-group">
+                                        <label><strong>LinkedIn URL:</strong>&nbsp;</label>
+                                        <a th:href="${profile.getUserProfile.linkedinUrl}" target="_blank"><span th:text="${profile.getUserProfile.linkedinUrl}"></span></a>
+                                    </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-5 col-12">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body"><p>Review:</p> <span th:utext="${profile.getUserProfile.review}"></span></div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body"><p>Completed Projects: </p><span th:utext="${profile.getUserProfile.completed_jobs}"></span></div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body"><p>Availability: </p>FullTime</div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                            <p><a th:href="@{'/employer/freelancer/' + ${@aesUtil.encryptId(profile.id)} + '/report'}" class="btn btn-outline-success m-1">
+                                <i class="bi bi-chat"></i> Chat </a> &nbsp; <a href="#" th:data-id="${@aesUtil.encryptId(profile.id)}" id="saveUserBtn"
+                                class="btn btn-outline-info m-1"><i class="bi bi-save "></i> Save </a>&nbsp;&nbsp; <a th:href="@{'/employer/freelancer/' + ${@aesUtil.encryptId(profile.id)} + '/report'}" class="btn btn-outline-danger m-1">
+                                <i class="bi bi-flag"></i> Report </a> &nbsp; <a href="#" th:data-id="${@aesUtil.encryptId(profile.id)}" id="emailUserBtn"
+                                class="btn btn-outline-primary m-1"><i class="bi bi-envelope"></i> Email </a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        </section>
+            </div>
+            <footer>
+                <div class="footer clearfix mb-0 text-muted">
+                    <div th:replace="~{fragments/footer :: footer}"></div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <div id="toastContainer" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<tr th:fragment="rows" th:each="f : ${freelancers}">
+    <td th:text="${f.fullname}"></td>
+        <td th:text="${f.getUserProfile().title}"></td>
+        <td th:text="${f.getUserProfile().skills}"></td>
+        <td th:text="${f.getUserProfile().experience}"></td>
+        <td th:text="${f.getUserProfile().availability}"></td>
+        <td><a th:href="@{('/employer/freelancer/profile_detail/' + ${@aesUtil.encryptId(f.id)})}"
+               class="btn btn-sm text-white" target="_blank"
+               style="background-color: #0b5ed7; color: #333;">View Profile</a>
+        </td>
+    </tr>
+    <!-- If no results -->
+    <tr th:if="${#lists.isEmpty(freelancers)}">
+        <td colspan="5" class="text-center text-danger">
+            No results found
+        </td>
+    </tr>
+
+

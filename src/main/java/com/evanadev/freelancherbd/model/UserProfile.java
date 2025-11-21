@@ -25,6 +25,7 @@ public class UserProfile {
     private String ratings;
     private String completed_jobs;
     private String availability;
+    private String experience;
 
     @Column(length = 500)
     private String skills; // Comma-separated or JSON
@@ -150,6 +151,14 @@ public class UserProfile {
 
     public void setSkills(String skills) {
         this.skills = skills;
+    }
+
+    public String getExperience() {
+        return experience;
+    }
+
+    public void setExperience(String experience) {
+        this.experience = experience;
     }
 
     public String getCv() {

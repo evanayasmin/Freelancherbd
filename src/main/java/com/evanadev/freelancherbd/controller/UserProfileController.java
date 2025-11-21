@@ -103,6 +103,7 @@ public class UserProfileController {
             profile.setSkills(userProfile.getSkills());
             profile.setTitle(userProfile.getTitle());
             profile.setAvailability(userProfile.getAvailability());
+            profile.setExperience(userProfile.getExperience());
             profile.setProfessionalSummary(userProfile.getProfessionalSummary());
             if(cvFile !=null){
                 profile.setCv(cvFilePath);
