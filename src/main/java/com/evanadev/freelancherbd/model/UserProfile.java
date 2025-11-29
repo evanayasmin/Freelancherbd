@@ -23,7 +23,7 @@ public class UserProfile {
     private String professionalSummary;
     private String review;
     private String ratings;
-    private String completed_jobs;
+    private String completedJobs;
     private String availability;
     private String experience;
 
@@ -121,12 +121,12 @@ public class UserProfile {
         this.ratings = ratings;
     }
 
-    public String getCompleted_jobs() {
-        return completed_jobs;
+    public String getCompletedJobs() {
+        return completedJobs;
     }
 
-    public void setCompleted_jobs(String completed_jobs) {
-        this.completed_jobs = completed_jobs;
+    public void setCompletedJobs(String completedJobs) {
+        this.completedJobs = completedJobs;
     }
 
     public String getAvailability() {
@@ -261,7 +261,7 @@ public class UserProfile {
                 ", professionalSummary='" + professionalSummary + '\'' +
                 ", review='" + review + '\'' +
                 ", ratings='" + ratings + '\'' +
-                ", completed_jobs='" + completed_jobs + '\'' +
+                ", completed_jobs='" + completedJobs + '\'' +
                 ", availability='" + availability + '\'' +
                 ", skills='" + skills + '\'' +
                 ", cv='" + cv + '\'' +
