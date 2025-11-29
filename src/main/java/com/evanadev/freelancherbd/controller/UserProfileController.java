@@ -61,6 +61,9 @@ public class UserProfileController {
         CustomUserDetail userDetails = (CustomUserDetail) authentication.getPrincipal();
         Long userId = userDetails.getId();
 
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
         // Check if user profile exists
         Optional<UserProfile> existingProfile = userProfileRepository.findByUserId(userId);
 
@@ -78,15 +81,17 @@ public class UserProfileController {
         }
 
         if (cvFile != null && !cvFile.isEmpty()) {
-            if (existingProfile.get().getCv() != null) {
+
+            if (existingProfile.isPresent() && existingProfile.get().getCv() != null) {
                 Path oldPath = Paths.get("uploads/profile/", existingProfile.get().getCv());
                 Files.deleteIfExists(oldPath);
             }
+
             cvFilePath = fileStorageService.saveFile(cvFile, "cv");
         }
 
         if (profilePicture != null && !profilePicture.isEmpty()) {
-            if (existingProfile.get().getProfilePicture()!= null) {
+            if (existingProfile.isPresent() && existingProfile.get().getProfilePicture()!= null) {
                 Path oldPath = Paths.get("uploads/profile/", existingProfile.get().getProfilePicture());
                 Files.deleteIfExists(oldPath);
             }
@@ -105,6 +110,7 @@ public class UserProfileController {
             profile.setAvailability(userProfile.getAvailability());
             profile.setExperience(userProfile.getExperience());
             profile.setProfessionalSummary(userProfile.getProfessionalSummary());
+            profile.setUser(userProfile.getUser());
             if(cvFile !=null){
                 profile.setCv(cvFilePath);
             }
@@ -116,6 +122,9 @@ public class UserProfileController {
             profile = userProfileRepository.save(profile);
             message = "User Profile Updated Successfully";
         } else { // Create new record
+            userProfile.setUser(user);
+            userProfile.setProfilePicture(profilePicturePath);
+            userProfile.setCv(cvFilePath);
             profile = userProfileRepository.save(userProfile);
             message = "User Profile Created Successfully";
         }
