@@ -25,6 +25,7 @@ public SecurityFilterChain configure(HttpSecurity http) throws Exception {
             .requestMatchers("/css/**", "/js/**", "/images/**", "/assets/**", "/webjars/**").permitAll()
             .requestMatchers("/register", "/login").permitAll()
             .requestMatchers("/notification/**").permitAll()
+            .requestMatchers("/ws-chat/**").permitAll()
             .requestMatchers("/jobs/category/", "/jobs/job_detail/").permitAll()
             .requestMatchers("/admin/category/**").hasRole("ADMIN") //Only admin can access
             .requestMatchers("/admin/users/**").hasRole("ADMIN")      //Only admin can access
