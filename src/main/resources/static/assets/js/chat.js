@@ -1,41 +1,57 @@
-    let stompClient = null;
-    let currentReceiver = null;
+let chatClient  = null;
+let currentReceiver = null;
+console.log("CHAT JS LOADED");
 
-    document.addEventListener('DOMContentLoaded', function() {
-    const chatButtons = document.querySelectorAll('.chatBtn');
-    chatButtons.forEach(btn => {
-    btn.addEventListener('click', function(e) {
-    e.preventDefault();
-    const receiverId = btn.getAttribute('data-id');
-    openChatPopup(receiverId);
-});
-});
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.chatBtn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            openChatPopup(btn.getAttribute('data-id'));
+        });
+    });
 
     connectWebSocket();
 });
 
-    function connectWebSocket() {
-    const socket = new SockJS('/ws-chat');
-    stompClient = Stomp.over(socket);
-    stompClient.debug = null;
+function connectWebSocket() {
+    console.log("CHAT WEBSOCKET CONNECTING...");
+    const socket = new SockJS('/ws');
+    chatClient  = Stomp.over(socket);
+    chatClient .debug = null;
 
-    stompClient.connect({}, function(frame) {
-    console.log('Connected: ' + frame);
+    chatClient .connect({}, function(frame) {
+        console.log('Connected: ' + frame);
 
-    stompClient.subscribe('/user/queue/messages', function(messageOutput) {
-    const msg = JSON.parse(messageOutput.body);
-    if (msg.sender === currentReceiver || msg.receiver === currentReceiver) {
-    displayMessage(msg);
+        chatClient .subscribe('/user/queue/notifications', function(messageOutput) {
+            console.log("MESSAGE ARRIVED:", messageOutput.body);  // DEBUG
+            const msg = JSON.parse(messageOutput.body);
+
+            // If no popup is open → open with sender’s ID
+            if (!document.getElementById('chatPopup')) {
+                openChatPopup(msg.sender);
+            }
+
+            // If popup is open but chatting with someone else → switch chat
+            if (currentReceiver !== msg.sender) {
+                openChatPopup(msg.sender);
+            }
+
+            // Show the message
+            displayMessage(msg);
+        });
+    });
 }
-});
-});
-}
 
-    function openChatPopup(receiverId) {
+function openChatPopup(receiverId) {
+    if (currentReceiver === receiverId && document.getElementById('chatPopup')) {
+        return; // Already open with this user
+    }
+
     currentReceiver = receiverId;
 
-    // Avoid creating duplicate popup
-    if(document.getElementById('chatPopup')) return;
+    // Remove old popup if switching to a new user
+    const existingPopup = document.getElementById('chatPopup');
+    if (existingPopup) existingPopup.remove();
 
     const container = document.getElementById('chatPopupContainer');
 
@@ -44,7 +60,7 @@
     popup.classList.add('chat-popup');
 
     popup.innerHTML = `
-        <div class="chat-header">Chat</div>
+        <div class="chat-header">Chat with ${receiverId}</div>
         <div class="chat-messages" id="chatMessages"></div>
         <div class="chat-input">
             <input type="text" id="chatInput" placeholder="Type a message...">
@@ -54,38 +70,40 @@
 
     container.appendChild(popup);
 
-    const sendBtn = document.getElementById('chatSendBtn');
-    sendBtn.addEventListener('click', sendMessage);
-    const input = document.getElementById('chatInput');
-    input.addEventListener('keypress', function(e) {
-    if(e.key === 'Enter') sendMessage();
-});
+    // Send button and Enter key
+    document.getElementById('chatSendBtn').addEventListener('click', sendMessage);
+    document.getElementById('chatInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') sendMessage();
+    });
+
+    // ⬅ Load chat history from DB (optional)
+    // loadChatHistory(receiverId);
 }
 
-    function sendMessage() {
+function sendMessage() {
     const input = document.getElementById('chatInput');
     const content = input.value.trim();
     if (!content || !currentReceiver) return;
 
     const message = {
-    sender: '', // backend uses session principal
-    receiver: currentReceiver,
-    content: content,
-    timestamp: new Date().toISOString()
-};
+        receiver: currentReceiver,
+        content: content,
+        timestamp: new Date().toISOString()
+    };
 
-    stompClient.send('/app/chat.send', {}, JSON.stringify(message));
-    displayMessage(message);
+    chatClient .send('/app/chat.send', {}, JSON.stringify(message));
+    displayMessage({ ...message, sender: "me" });
+
     input.value = '';
 }
 
-    function displayMessage(message) {
+function displayMessage(message) {
     const messagesDiv = document.getElementById('chatMessages');
-    if(!messagesDiv) return;
+    if (!messagesDiv) return;
 
     const msgDiv = document.createElement('div');
+    msgDiv.classList.add(message.sender === 'me' ? 'sent' : 'received');
     msgDiv.textContent = `${message.sender}: ${message.content}`;
     messagesDiv.appendChild(msgDiv);
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
 }
-

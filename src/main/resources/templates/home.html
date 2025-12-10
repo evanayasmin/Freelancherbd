@@ -67,17 +67,17 @@
             <footer>
                 <div class="footer clearfix mb-0 text-muted">
                     <div th:replace="~{fragments/footer :: footer}"></div>
-                    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
-                    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+<!--                    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>-->
+<!--                    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>-->
                     <script>
                         var socket = new SockJS('/ws');
-                        var stompClient = Stomp.over(socket);
+                        var notificationClient  = Stomp.over(socket);
 
-                        stompClient.connect({}, function(frame) {
+                        notificationClient .connect({}, function(frame) {
                             console.log("Connected: " + frame);
 
                             // Subscribe to user-specific notifications
-                            stompClient.subscribe('/user/queue/notifications', function(notification) {
+                            notificationClient .subscribe('/user/queue/notifications', function(notification) {
                                 const data = JSON.parse(notification.body);
                                 console.log("Notification received:", data);
                                 showNotification(data.title, data.message);
@@ -86,7 +86,7 @@
 
                         function showNotification(title, message) {
                             showToast(`${title}\n${message}`, "success");
-                            alert(`🔔 ${title}\n${message}`);
+                            //alert(`🔔 ${title}\n${message}`);
 
                         }
 
