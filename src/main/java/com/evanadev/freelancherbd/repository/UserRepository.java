@@ -57,13 +57,14 @@ public interface UserRepository extends JpaRepository<User,Long> {
     @Query("""
     SELECT DISTINCT u
     FROM User u
-    LEFT JOIN u.userProfile p
+    LEFT JOIN u.userProfile p 
+    JOIN u.roles r
     WHERE 
     (
         (:skillTitle IS NOT NULL AND LOWER(p.skills) LIKE LOWER(CONCAT('%', :skillTitle, '%')))
-        OR
+        AND
         (:title IS NOT NULL AND LOWER(p.title) LIKE LOWER(CONCAT('%', :title, '%')))
-        OR
+        AND
         (:jobType IS NOT NULL AND LOWER(p.availability) LIKE LOWER(CONCAT('%', :jobType, '%')))
     )
     AND (
@@ -71,6 +72,7 @@ public interface UserRepository extends JpaRepository<User,Long> {
         OR :title IS NOT NULL
         OR :jobType IS NOT NULL
        )
+    AND (r.name = 'ROLE_FREELANCER')
 """)
     List<User> searchFreelancers(
             @Param("skillTitle") String skillTitle,

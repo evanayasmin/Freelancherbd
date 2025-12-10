@@ -1,4 +1,5 @@
 <footer th:fragment="footer">
+    <div id="chatPopupContainer"></div>
     <div class="float-start">
         <p>Copyright 2025 &copy; FreelancingBD</p>
     </div>
@@ -13,5 +14,9 @@
     <script th:src="@{/assets/vendors/toastify/toastify.js}"></script>
 <!--    <script th:src="@{/assets/js/extensions/toastify.js}"></script>-->
     <script th:src="@{/assets/js/main.js}" defer></script>
+    <script th:src="@{/assets/js/chat.js}" defer></script>
+
+    <script th:src="@{/webjars/sockjs-client/1.5.1/sockjs.min.js}"></script>
+    <script th:src="@{/webjars/stomp-websocket/2.3.3/stomp.min.js}"></script>
   </footer>
 

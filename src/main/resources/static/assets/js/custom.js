@@ -143,6 +143,10 @@ $(document).on('click', '#saveUserBtn', function(e) {
 $(document).on('click', '#searchFreelancerBtn', function(e) {
     e.preventDefault();
     const skill_title = $('#skill_title').val();
+    if(skill_title == ''){
+        $('#skill_title').focus();
+        return false;
+    }
     const title = $('#title').val();
     const jobType = $('#jobType').val();
     const required_level = $('#required_level').val();

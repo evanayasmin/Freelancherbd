@@ -73,6 +73,4 @@ public class FreelancerService {
        return userRepository.searchFreelancers(skill_title, title, jobType, required_level);
     }
 
-
-
 }
