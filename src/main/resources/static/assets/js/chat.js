@@ -77,7 +77,7 @@ function openChatPopup(receiverId) {
     });
 
     // ⬅ Load chat history from DB (optional)
-    // loadChatHistory(receiverId);
+    loadChatHistory(receiverId);
 }
 
 function sendMessage() {
@@ -86,13 +86,12 @@ function sendMessage() {
     if (!content || !currentReceiver) return;
 
     const message = {
-        receiver: currentReceiver,
-        content: content,
-        timestamp: new Date().toISOString()
+        receiverId: currentReceiver,
+        content: content
     };
 
-    chatClient .send('/app/chat.send', {}, JSON.stringify(message));
-    displayMessage({ ...message, sender: "me" });
+    chatClient.send('/app/chat.send', {}, JSON.stringify(message));
+    displayMessage({ sender: 'me', content });
 
     input.value = '';
 }
@@ -107,3 +106,32 @@ function displayMessage(message) {
     messagesDiv.appendChild(msgDiv);
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
 }
+
+function loadChatHistory(receiverId) {
+
+    const messagesDiv = document.getElementById('chatMessages');
+    if (!messagesDiv) return;
+
+    messagesDiv.innerHTML = '';
+
+    $.get('/chat/history/' + receiverId, function (messages) {
+
+        messages.forEach(function (msg) {
+
+            const isMe = msg.senderId === loggedUserId;
+            const msgDiv = document.createElement('div');
+
+            msgDiv.classList.add(isMe ? 'sent' : 'received');
+            msgDiv.innerHTML = `
+                <b>${msg.senderUsername}</b><br/>
+                ${msg.content}
+            `;
+
+            messagesDiv.appendChild(msgDiv);
+        });
+
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    });
+}
+
+

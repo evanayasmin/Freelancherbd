@@ -1,6 +1,8 @@
 package com.evanadev.freelancherbd.dto;
 
 public class ChatMessage {
+    private Long senderId;
+    private Long receiverId;
     private String sender;
     private String receiver;
     private String content;
@@ -8,11 +10,28 @@ public class ChatMessage {
 
     public ChatMessage() {}
 
-    public ChatMessage(String sender, String receiver, String content, String timestamp) {
+    public ChatMessage(Long senderId, Long receiverId, String sender, String receiver, String content, String timestamp) {
         this.sender = sender;
         this.receiver = receiver;
         this.content = content;
         this.timestamp = timestamp;
+        this.senderId = senderId;
+        this.receiverId = receiverId;
+    }
+
+    public Long getSenderId() {
+        return senderId;
+    }
+    public void setSenderId(Long senderId) {
+        this.senderId = senderId;
+    }
+
+    public Long getReceiverId() {
+        return receiverId;
+    }
+
+    public void setReceiverId(Long receiverId) {
+        this.receiverId = receiverId;
     }
 
     public String getSender() {
