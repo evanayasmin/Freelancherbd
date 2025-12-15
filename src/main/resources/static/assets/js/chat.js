@@ -1,12 +1,19 @@
 let chatClient  = null;
 let currentReceiver = null;
+
+let currentReceiverKey = null;
+let currentReceiverUsername = null;
+
 console.log("CHAT JS LOADED");
 
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.chatBtn').forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.preventDefault();
-            openChatPopup(btn.getAttribute('data-id'));
+            openChatPopup(
+                btn.getAttribute('data-key'),
+                btn.getAttribute('data-username')
+            );
         });
     });
 
@@ -42,16 +49,24 @@ function connectWebSocket() {
     });
 }
 
-function openChatPopup(receiverId) {
-    if (currentReceiver === receiverId && document.getElementById('chatPopup')) {
-        return; // Already open with this user
+function openChatPopup(receiverKey, receiverUsername) {
+
+    // Prevent reopening the same chat
+    if (
+        currentReceiverKey === receiverKey &&
+        document.getElementById('chatPopup')
+    ) {
+        return;
     }
 
-    currentReceiver = receiverId;
+    currentReceiverKey = receiverKey;
+    currentReceiverUsername = receiverUsername;
 
-    // Remove old popup if switching to a new user
+    // Remove old popup if switching users
     const existingPopup = document.getElementById('chatPopup');
-    if (existingPopup) existingPopup.remove();
+    if (existingPopup) {
+        existingPopup.remove();
+    }
 
     const container = document.getElementById('chatPopupContainer');
 
@@ -60,7 +75,9 @@ function openChatPopup(receiverId) {
     popup.classList.add('chat-popup');
 
     popup.innerHTML = `
-        <div class="chat-header">Chat with ${receiverId}</div>
+        <div class="chat-header">
+            Chat with <b>${receiverUsername}</b>
+        </div>
         <div class="chat-messages" id="chatMessages"></div>
         <div class="chat-input">
             <input type="text" id="chatInput" placeholder="Type a message...">
@@ -72,28 +89,27 @@ function openChatPopup(receiverId) {
 
     // Send button and Enter key
     document.getElementById('chatSendBtn').addEventListener('click', sendMessage);
-    document.getElementById('chatInput').addEventListener('keypress', function(e) {
+    document.getElementById('chatInput').addEventListener('keypress', function (e) {
         if (e.key === 'Enter') sendMessage();
     });
 
-    // ⬅ Load chat history from DB (optional)
-    loadChatHistory(receiverId);
+    // Load chat history using encrypted key
+    loadChatHistory(receiverKey);
 }
 
 function sendMessage() {
-    const input = document.getElementById('chatInput');
-    const content = input.value.trim();
-    if (!content || !currentReceiver) return;
+    const content = document.getElementById('chatInput').value.trim();
+    if (!content) return;
 
-    const message = {
-        receiverId: currentReceiver,
+    chatClient.send('/app/chat.send', {}, JSON.stringify({
+        receiverKey: currentReceiverKey,
         content: content
-    };
+    }));
 
-    chatClient.send('/app/chat.send', {}, JSON.stringify(message));
-    displayMessage({ sender: 'me', content });
-
-    input.value = '';
+    displayMessage({
+        sender: 'me',
+        content: content
+    });
 }
 
 function displayMessage(message) {
@@ -107,31 +123,18 @@ function displayMessage(message) {
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
 }
 
-function loadChatHistory(receiverId) {
+function loadChatHistory(receiverKey) {
 
-    const messagesDiv = document.getElementById('chatMessages');
-    if (!messagesDiv) return;
+    $('#chatMessages').empty();
 
-    messagesDiv.innerHTML = '';
+    $.get('/chat/history/' + receiverKey, function (messages) {
 
-    $.get('/chat/history/' + receiverId, function (messages) {
-
-        messages.forEach(function (msg) {
-
-            const isMe = msg.senderId === loggedUserId;
-            const msgDiv = document.createElement('div');
-
-            msgDiv.classList.add(isMe ? 'sent' : 'received');
-            msgDiv.innerHTML = `
-                <b>${msg.senderUsername}</b><br/>
-                ${msg.content}
-            `;
-
-            messagesDiv.appendChild(msgDiv);
+        messages.forEach(msg => {
+            displayMessage(msg);
         });
-
-        messagesDiv.scrollTop = messagesDiv.scrollHeight;
     });
 }
+
+
 
 

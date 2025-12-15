@@ -146,7 +146,7 @@
                         </div>
                         <div class="card">
                             <div class="card-body">
-                            <p> <a href="#" th:data-id="${@aesUtil.encryptId(profile.id)}" class="btn btn-outline-success m-1 chatBtn">
+                            <p> <a href="#" th:data-key="${@aesUtil.encryptId(profile.id)}" th:data-username="${profile.username}" class="btn btn-outline-success m-1 chatBtn">
                             <i class="bi bi-chat"></i> Chat
                             </a> &nbsp; <a href="#" th:data-id="${@aesUtil.encryptId(profile.id)}" id="saveUserBtn"
                                 class="btn btn-outline-info m-1"><i class="bi bi-save "></i> Save </a>&nbsp;&nbsp; <a th:href="@{'/employer/freelancer/' + ${@aesUtil.encryptId(profile.id)} + '/report'}" class="btn btn-outline-danger m-1">
