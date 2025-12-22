@@ -59,6 +59,10 @@ public class UserService {
         return userRepository.findUserDetails(id);
     }
 
+    public User findByUsername(String userName){
+        return userRepository.findByUsername(userName);
+    }
+
     public User findByUserId(Long Id){
         return userRepository.findById(Id).orElseThrow(() -> new RuntimeException("User not found"));
     }
@@ -69,6 +73,7 @@ public class UserService {
     public Optional<User> findAdminUser(){
         return userRepository.findAdminUser();
     }
+
     public void UpdateUserStatus(Long id,String status){
         User existing = userRepository.findById(id).get();
         existing.setStatus(UserStatus.valueOf(status));

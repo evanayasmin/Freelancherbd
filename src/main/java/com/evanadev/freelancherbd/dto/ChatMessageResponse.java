@@ -6,6 +6,15 @@ public class ChatMessageResponse {
     private String content;
     private String timestamp;
 
+    public ChatMessageResponse(String sender, String content) {
+        this.sender = sender;
+        this.content = content;
+    }
+
+    public ChatMessageResponse() {
+
+    }
+
     public String getSender() {
         return sender;
     }

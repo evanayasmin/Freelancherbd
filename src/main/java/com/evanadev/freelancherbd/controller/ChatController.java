@@ -4,12 +4,16 @@ import com.evanadev.freelancherbd.dto.ChatMessageRequest;
 import com.evanadev.freelancherbd.dto.ChatMessageResponse;
 import com.evanadev.freelancherbd.model.ChatMessageEntity;
 import com.evanadev.freelancherbd.model.CustomUserDetail;
+import com.evanadev.freelancherbd.model.User;
 import com.evanadev.freelancherbd.repository.ChatMessageRepository;
+import com.evanadev.freelancherbd.repository.UserRepository;
+import com.evanadev.freelancherbd.service.UserService;
 import com.evanadev.freelancherbd.util.AESUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,14 +27,16 @@ public class ChatController {
 
     private final SimpMessagingTemplate messagingTemplate;
     private final ChatMessageRepository chatMessageRepository;
+    private final UserService userService;
     private final AESUtil aesUtil;
 
     @Autowired
     public ChatController(SimpMessagingTemplate messagingTemplate,
-                          ChatMessageRepository chatMessageRepository,
+                          ChatMessageRepository chatMessageRepository, UserService userService,
                           AESUtil aesUtil) {
         this.messagingTemplate = messagingTemplate;
         this.chatMessageRepository = chatMessageRepository;
+        this.userService = userService;
         this.aesUtil = aesUtil;
     }
 
@@ -39,15 +45,21 @@ public class ChatController {
 
         // Sender from session (SECURE)
         String senderUsername = principal.getName();
+        String receiverUsername = request.getReceiverUsername();
+        User sender = userService.findByUsername(senderUsername);
 
         //  Receiver from encrypted key
-        Long receiverId = aesUtil.decryptId(request.getReceiverKey());
+        User receiver = userService.findByUsername(receiverUsername);
+
+        //System.out.println("Sender principal: " + senderUsername);
+        //System.out.println("Receiver username: " + receiver.getUsername());
 
         // Save entity
         ChatMessageEntity entity = new ChatMessageEntity();
         entity.setSenderUsername(senderUsername);
-        entity.setSenderId(null); // optional if you resolve later
-        entity.setReceiverId(receiverId);
+        entity.setSenderId(sender.getId()); // optional if you resolve later
+        entity.setReceiverId(receiver.getId());
+        entity.setReceiverUsername(receiverUsername);
         entity.setContent(request.getContent());
 
         chatMessageRepository.save(entity);
@@ -57,7 +69,7 @@ public class ChatController {
 
         // Send to receiver
         messagingTemplate.convertAndSendToUser(
-                getUsernameById(receiverId),
+                receiverUsername,
                 "/queue/notifications",
                 response
         );
@@ -70,22 +82,19 @@ public class ChatController {
         );
     }
 
-    @GetMapping("/chat/history/{receiverKey}")
+    @GetMapping("/chat/history/{username}")
     @ResponseBody
-    public List<ChatMessageResponse> loadChatHistory(
-            @PathVariable String receiverKey,
-            @AuthenticationPrincipal CustomUserDetail loggedUser) {
+    public List<ChatMessageResponse> loadChatHistory(@PathVariable String username, Principal principal) {
 
-        Long receiverId = aesUtil.decryptId(receiverKey);
+        String me = principal.getName();
 
-        List<ChatMessageEntity> messages =
-                chatMessageRepository.findChatHistory(
-                        loggedUser.getId(),
-                        receiverId
-                );
-
-        return messages.stream()
-                .map(this::toResponse)
+        return chatMessageRepository
+                .findConversation(me, username)
+                .stream()
+                .map(m -> new ChatMessageResponse(
+                        m.getSenderUsername(),
+                        m.getContent()
+                ))
                 .toList();
     }
 
@@ -100,10 +109,13 @@ public class ChatController {
         return dto;
     }
 
-    // Resolve username safely (example)
+    // Resolve username safely
     private String getUsernameById(Long userId) {
         // fetch from UserRepository
-        return "receiverUsername";
+        User user = userService.findUserDetailById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return user.getUsername();
     }
 }
 

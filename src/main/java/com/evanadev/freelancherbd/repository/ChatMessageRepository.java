@@ -11,16 +11,24 @@ import java.util.List;
 @Repository
 public interface ChatMessageRepository extends JpaRepository<ChatMessageEntity, Long> {
 
+//    @Query("""
+//        SELECT c FROM ChatMessageEntity c
+//        WHERE (c.senderId = :user1 AND c.receiverId = :user2)
+//           OR (c.senderId = :user2 AND c.receiverId = :user1)
+//        ORDER BY c.createdAt ASC
+//    """)
+//    List<ChatMessageEntity> findConversation(
+//            @Param("user1") Long user1,
+//            @Param("user2") Long user2
+//    );
+
     @Query("""
-        SELECT c FROM ChatMessageEntity c
-        WHERE (c.senderId = :user1 AND c.receiverId = :user2)
-           OR (c.senderId = :user2 AND c.receiverId = :user1)
-        ORDER BY c.createdAt ASC
-    """)
-    List<ChatMessageEntity> findConversation(
-            @Param("user1") Long user1,
-            @Param("user2") Long user2
-    );
+        SELECT m FROM ChatMessageEntity m
+        WHERE (m.senderUsername = :me AND m.receiverUsername = :other)
+           OR (m.senderUsername = :other AND m.receiverUsername = :me)
+        ORDER BY m.createdAt
+        """)
+    List<ChatMessageEntity> findConversation(String me, String other);
 
     @Query("""
        SELECT m FROM ChatMessageEntity m
