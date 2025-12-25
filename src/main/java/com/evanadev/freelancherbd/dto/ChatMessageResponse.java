@@ -1,14 +1,17 @@
 package com.evanadev.freelancherbd.dto;
 
+import java.time.LocalDateTime;
+
 public class ChatMessageResponse {
 
     private String sender;        // username
     private String content;
-    private String timestamp;
+    private LocalDateTime createdAt;
 
-    public ChatMessageResponse(String sender, String content) {
+    public ChatMessageResponse(String sender, String content, LocalDateTime createdAt) {
         this.sender = sender;
         this.content = content;
+        this.createdAt = createdAt;
     }
 
     public ChatMessageResponse() {
@@ -31,11 +34,11 @@ public class ChatMessageResponse {
         this.content = content;
     }
 
-    public String getTimestamp() {
-        return timestamp;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }

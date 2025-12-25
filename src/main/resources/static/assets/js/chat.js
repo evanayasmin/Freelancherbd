@@ -1,5 +1,3 @@
-const CURRENT_USERNAME = /*[[${#authentication.name}]]*/ '';
-
 let chatClient = null;
 let currentReceiverUsername = null;
 
@@ -30,20 +28,8 @@ function connectWebSocket() {
         chatClient.subscribe('/user/queue/notifications', function (message) {
             const msg = JSON.parse(message.body);
 
-            /*if (!document.getElementById('chatPopup')
+            if (!document.getElementById('chatPopup')
                 || currentReceiverUsername !== msg.sender) {
-                openChatPopup(msg.sender);
-            }*/
-
-            // Open popup only if it does NOT exist
-            if (!document.getElementById('chatPopup')) {
-                openChatPopup(msg.sender);
-            }
-
-            // If popup exists but chatting with someone else
-            if (document.getElementById('chatPopup')
-                && currentReceiverUsername !== msg.sender
-                && msg.sender !== 'me') {
                 openChatPopup(msg.sender);
             }
 
@@ -102,10 +88,10 @@ function sendMessage() {
         content: content
     }));
 
-    /*displayMessage({
+    displayMessage({
         sender: 'me',
         content: content
-    });*/
+    });
 
     input.value = '';
 }
@@ -127,6 +113,53 @@ function loadChatHistory(username) {
     $('#chatMessages').empty();
 
     $.get('/chat/history/' + username, function (messages) {
-        messages.forEach(displayMessage);
+
+        const groupedMessages = groupByDate(messages);
+
+        Object.keys(groupedMessages).forEach(date => {
+
+            // Date separator
+            $('#chatMessages').append(`
+                <div class="chat-date-separator">
+                    <span>${formatDateLabel(date)}</span>
+                </div>
+            `);
+
+            // Messages of that date
+            groupedMessages[date].forEach(displayMessage);
+        });
     });
+}
+function groupByDate(messages) {
+    return messages.reduce((group, msg) => {
+        const dateTime = msg.createdDate || msg.created_at || msg.createdAt;
+        if (!dateTime) {
+            console.warn("Message missing created date:", msg);
+            return group;
+        }
+
+        const date = dateTime.split('T')[0];
+
+        if (!group[date]) {
+            group[date] = [];
+        }
+
+        group[date].push(msg);
+        return group;
+
+    }, {});
+}
+
+function formatDateLabel(dateString) {
+    const today = new Date();
+    const msgDate = new Date(dateString);
+
+    const diffDays = Math.floor(
+        (today.setHours(0,0,0,0) - msgDate.setHours(0,0,0,0)) / (1000 * 60 * 60 * 24)
+    );
+
+    if (diffDays === 0) return "Today";
+    if (diffDays === 1) return "Yesterday";
+
+    return msgDate.toLocaleDateString();
 }

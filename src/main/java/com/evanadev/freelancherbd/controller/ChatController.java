@@ -93,7 +93,8 @@ public class ChatController {
                 .stream()
                 .map(m -> new ChatMessageResponse(
                         m.getSenderUsername(),
-                        m.getContent()
+                        m.getContent(),
+                        m.getCreatedAt()
                 ))
                 .toList();
     }
@@ -104,8 +105,8 @@ public class ChatController {
         ChatMessageResponse dto = new ChatMessageResponse();
         dto.setSender(entity.getSenderUsername());
         dto.setContent(entity.getContent());
-        dto.setTimestamp(entity.getCreatedAt().toString());
-
+        //dto.setTimestamp(entity.getCreatedAt().toString());
+        dto.setCreatedAt(entity.getCreatedAt());
         return dto;
     }
 
