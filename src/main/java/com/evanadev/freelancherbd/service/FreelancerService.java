@@ -70,7 +70,7 @@ public class FreelancerService {
 
     public List<User> searchFreelancers(String skill_title, String title, String jobType, String required_level){
 
-       return userRepository.searchFreelancers(skill_title, title, jobType, required_level);
+       return userRepository.searchFreelancers(skill_title, title, jobType);
     }
 
 }

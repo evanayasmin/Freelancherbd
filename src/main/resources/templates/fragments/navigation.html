@@ -339,6 +339,22 @@
                 </li>
             </ul>
         </li>
+
+        <li class="sidebar-item has-sub"
+            sec:authorize="hasAnyRole('FREELANCER','EMPLOYER')"
+            th:classappend="${currentPath != null and currentPath.startsWith('/chat')} ? ' active'">
+
+            <a href="#" class="sidebar-link">
+                <i class="bi bi-chat-dots-fill"></i>
+                <span>Chat</span>
+            </a>
+            <ul class="submenu">
+                <li class="submenu-item"
+                    th:classappend="${currentPath != null and currentPath == '/chat'} ? ' active'">
+                    <a th:href="@{/chat}">Chat with Users</a>
+                </li>
+            </ul>
+        </li>
     </ul>
 </div>
 <!-- temporary — use to inspect values -->

@@ -1,21 +1,27 @@
 package com.evanadev.freelancherbd.configuration;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.Message;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+import org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor;
 
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig  implements WebSocketMessageBrokerConfigurer {
+
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         // The endpoint clients connect to
         registry.addEndpoint("/ws")
                 .setAllowedOriginPatterns("*")
-                .withSockJS();
+                .withSockJS()
+                .setInterceptors(new HttpSessionHandshakeInterceptor());
 
 //        // New chat endpoint
 //        registry.addEndpoint("/ws-chat")

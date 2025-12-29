@@ -106,7 +106,7 @@
                                       </tr>
 
                                       <tr>
-                                          <td colspan="2">
+                                      <td colspan="2">
                                       <div th:align="center" sec:authorize="hasAnyRole('FREELANCER')">
                                           <a th:if="${applyStatus == null or applyStatus != 'Applied'}" th:href="@{'/freelancer/jobs/application/' + ${@aesUtil.encryptId(jobDetail.id)}}"
                                              target="_parent" class="btn btn-outline-success"><i class="bi bi-arrow-up-right"></i>  Apply Now </a>&nbsp;

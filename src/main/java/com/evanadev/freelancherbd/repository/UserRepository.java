@@ -77,7 +77,7 @@ public interface UserRepository extends JpaRepository<User,Long> {
     List<User> searchFreelancers(
             @Param("skillTitle") String skillTitle,
             @Param("title") String title,
-            @Param("jobType") String jobType,
-            @Param("requiredLevel") String requiredLevel
+            @Param("jobType") String jobType
+
     );
 }

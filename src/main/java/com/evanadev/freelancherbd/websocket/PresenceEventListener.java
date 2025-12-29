@@ -8,6 +8,7 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
 @Component
 public class PresenceEventListener {
+
     @EventListener
     public void handleWebSocketConnect(SessionConnectedEvent event) {
         System.out.println("A user connected: " + event.getUser());

@@ -2,6 +2,7 @@ package com.evanadev.freelancherbd.controller;
 
 import com.evanadev.freelancherbd.dto.ChatMessageRequest;
 import com.evanadev.freelancherbd.dto.ChatMessageResponse;
+import com.evanadev.freelancherbd.model.Category;
 import com.evanadev.freelancherbd.model.ChatMessageEntity;
 import com.evanadev.freelancherbd.model.CustomUserDetail;
 import com.evanadev.freelancherbd.model.User;
@@ -9,12 +10,14 @@ import com.evanadev.freelancherbd.repository.ChatMessageRepository;
 import com.evanadev.freelancherbd.repository.UserRepository;
 import com.evanadev.freelancherbd.service.UserService;
 import com.evanadev.freelancherbd.util.AESUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -39,6 +42,13 @@ public class ChatController {
         this.userService = userService;
         this.aesUtil = aesUtil;
     }
+
+    @GetMapping("/chat")
+    public String chat_open(HttpServletRequest request, Model model){
+        model.addAttribute("currentPath", request.getRequestURI());
+        return "chat_page";
+    }
+
 
     @MessageMapping("/chat.send")
     public void sendPrivateMessage(ChatMessageRequest request, Principal principal) {

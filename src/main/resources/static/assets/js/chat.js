@@ -5,6 +5,7 @@ console.log("CHAT JS LOADED");
 
 document.addEventListener('DOMContentLoaded', function () {
 
+    // Popup chat buttons (job page, profile page, etc.)
     document.querySelectorAll('.chatBtn').forEach(btn => {
         btn.addEventListener('click', function (e) {
             e.preventDefault();
@@ -17,6 +18,9 @@ document.addEventListener('DOMContentLoaded', function () {
     connectWebSocket();
 });
 
+/* =========================
+   WEBSOCKET CONNECTION
+========================= */
 function connectWebSocket() {
 
     const socket = new SockJS('/ws');
@@ -25,6 +29,7 @@ function connectWebSocket() {
 
     chatClient.connect({}, function () {
 
+        // 🔔 Personal messages
         chatClient.subscribe('/user/queue/notifications', function (message) {
             const msg = JSON.parse(message.body);
 
@@ -35,9 +40,50 @@ function connectWebSocket() {
 
             displayMessage(msg);
         });
+
+        // ONLINE USERS (NEW)
+        chatClient.subscribe('/user/queue/online-users', function (message) {
+            const users = JSON.parse(message.body);
+            renderOnlineUsers(users);
+        });
     });
 }
 
+/* =========================
+   ONLINE USERS (LEFT SIDEBAR)
+========================= */
+function renderOnlineUsers(users) {
+
+    const list = document.getElementById('onlineUsersList');
+    if (!list) return;
+
+    list.innerHTML = "";
+
+    users.forEach(username => {
+
+        // Do not show self
+        if (username === currentReceiverUsername) return;
+
+        const li = document.createElement("li");
+        li.className = "list-group-item chatUser";
+        li.dataset.username = username;
+
+        li.innerHTML = `
+            <span class="online-dot"></span>
+            ${username}
+        `;
+
+        li.addEventListener('click', function () {
+            openChatInPage(username);
+        });
+
+        list.appendChild(li);
+    });
+}
+
+/* =========================
+   POPUP CHAT
+========================= */
 function openChatPopup(receiverUsername) {
 
     if (currentReceiverUsername === receiverUsername &&
@@ -51,6 +97,7 @@ function openChatPopup(receiverUsername) {
     if (oldPopup) oldPopup.remove();
 
     const container = document.getElementById('chatPopupContainer');
+    if (!container) return;
 
     const popup = document.createElement('div');
     popup.id = 'chatPopup';
@@ -77,11 +124,14 @@ function openChatPopup(receiverUsername) {
     loadChatHistory(receiverUsername);
 }
 
+/* =========================
+   SEND MESSAGE
+========================= */
 function sendMessage() {
 
     const input = document.getElementById('chatInput');
     const content = input.value.trim();
-    if (!content) return;
+    if (!content || !currentReceiverUsername) return;
 
     chatClient.send('/app/chat.send', {}, JSON.stringify({
         receiverUsername: currentReceiverUsername,
@@ -96,6 +146,9 @@ function sendMessage() {
     input.value = '';
 }
 
+/* =========================
+   DISPLAY MESSAGE
+========================= */
 function displayMessage(message) {
 
     const messagesDiv = document.getElementById('chatMessages');
@@ -108,6 +161,9 @@ function displayMessage(message) {
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
 }
 
+/* =========================
+   LOAD CHAT HISTORY
+========================= */
 function loadChatHistory(username) {
 
     $('#chatMessages').empty();
@@ -118,48 +174,68 @@ function loadChatHistory(username) {
 
         Object.keys(groupedMessages).forEach(date => {
 
-            // Date separator
             $('#chatMessages').append(`
                 <div class="chat-date-separator">
                     <span>${formatDateLabel(date)}</span>
                 </div>
             `);
 
-            // Messages of that date
             groupedMessages[date].forEach(displayMessage);
         });
     });
 }
+
+/* =========================
+   HELPERS
+========================= */
 function groupByDate(messages) {
     return messages.reduce((group, msg) => {
+
         const dateTime = msg.createdDate || msg.created_at || msg.createdAt;
-        if (!dateTime) {
-            console.warn("Message missing created date:", msg);
-            return group;
-        }
+        if (!dateTime) return group;
 
         const date = dateTime.split('T')[0];
-
-        if (!group[date]) {
-            group[date] = [];
-        }
-
+        if (!group[date]) group[date] = [];
         group[date].push(msg);
-        return group;
 
+        return group;
     }, {});
 }
 
 function formatDateLabel(dateString) {
+
     const today = new Date();
     const msgDate = new Date(dateString);
 
     const diffDays = Math.floor(
-        (today.setHours(0,0,0,0) - msgDate.setHours(0,0,0,0)) / (1000 * 60 * 60 * 24)
+        (today.setHours(0,0,0,0) - msgDate.setHours(0,0,0,0))
+        / (1000 * 60 * 60 * 24)
     );
 
     if (diffDays === 0) return "Today";
     if (diffDays === 1) return "Yesterday";
 
     return msgDate.toLocaleDateString();
+}
+
+/* =========================
+   IN-PAGE CHAT (LEFT SIDEBAR)
+========================= */
+function openChatInPage(receiverUsername) {
+
+    currentReceiverUsername = receiverUsername;
+
+    document.getElementById('chatWith').textContent = receiverUsername;
+
+    $('#chatMessages').empty();
+
+    document.getElementById('chatInput').disabled = false;
+    document.getElementById('chatSendBtn').disabled = false;
+
+    document.getElementById('chatSendBtn').onclick = sendMessage;
+    document.getElementById('chatInput').onkeypress = e => {
+        if (e.key === 'Enter') sendMessage();
+    };
+
+    loadChatHistory(receiverUsername);
 }
