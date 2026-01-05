@@ -3,7 +3,7 @@
 <head>
     <div th:replace="~{fragments/header :: header}"></div>
 </head>
-<body>
+<body th:data-username="${#authentication.name}">
 <div id="app">
     <div id="sidebar" class="active">
         <div class="sidebar-wrapper active">

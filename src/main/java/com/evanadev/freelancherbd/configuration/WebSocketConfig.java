@@ -14,7 +14,6 @@ import org.springframework.web.socket.server.support.HttpSessionHandshakeInterce
 @EnableWebSocketMessageBroker
 public class WebSocketConfig  implements WebSocketMessageBrokerConfigurer {
 
-
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         // The endpoint clients connect to
@@ -23,10 +22,6 @@ public class WebSocketConfig  implements WebSocketMessageBrokerConfigurer {
                 .withSockJS()
                 .setInterceptors(new HttpSessionHandshakeInterceptor());
 
-//        // New chat endpoint
-//        registry.addEndpoint("/ws-chat")
-//                .setAllowedOriginPatterns("*")
-//                .withSockJS();
     }
 
     @Override

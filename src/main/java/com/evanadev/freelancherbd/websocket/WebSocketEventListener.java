@@ -3,6 +3,7 @@ package com.evanadev.freelancherbd.websocket;
 import com.evanadev.freelancherbd.service.OnlineUserService;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionConnectedEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
@@ -24,37 +25,32 @@ public class WebSocketEventListener {
 
     @EventListener
     public void handleWebSocketConnect(SessionConnectedEvent event) {
-        Principal user = event.getUser();
-        if (user != null) {
-            onlineUserService.userConnected(user.getName());
-            broadcastOnlineUsers();
-        }
+        StompHeaderAccessor accessor = StompHeaderAccessor.wrap(event.getMessage());
+        Principal user = accessor.getUser();
+
+        if (user == null) return;
+
+        onlineUserService.userConnected(user.getName());
+        broadcastOnlineUsers();
     }
     @EventListener
     public void handleWebSocketDisconnect(SessionDisconnectEvent event) {
-        Principal user = event.getUser();
-        if (user != null) {
-            onlineUserService.userDisconnected(user.getName());
-            broadcastOnlineUsers();
-        }
+        StompHeaderAccessor accessor = StompHeaderAccessor.wrap(event.getMessage());
+        Principal user = accessor.getUser();
+
+        if (user == null) return;
+
+        onlineUserService.userDisconnected(user.getName());
+        broadcastOnlineUsers();
     }
 
 
     private void broadcastOnlineUsers() {
 
-        Set<String> users = onlineUserService.getOnlineUsers();
-
-        users.forEach(user -> {
-            Set<String> others = users.stream()
-                    .filter(u -> !u.equals(user))
-                    .collect(Collectors.toSet());
-
-            messagingTemplate.convertAndSendToUser(
-                    user,
-                    "/queue/online-users",
-                    others
-            );
-        });
+        messagingTemplate.convertAndSend(
+                "/topic/online-users",
+                onlineUserService.getOnlineUsers()
+        );
     }
 
 }

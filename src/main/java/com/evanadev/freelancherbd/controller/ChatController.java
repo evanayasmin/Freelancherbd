@@ -13,6 +13,7 @@ import com.evanadev.freelancherbd.util.AESUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -31,16 +32,14 @@ public class ChatController {
     private final SimpMessagingTemplate messagingTemplate;
     private final ChatMessageRepository chatMessageRepository;
     private final UserService userService;
-    private final AESUtil aesUtil;
+
 
     @Autowired
     public ChatController(SimpMessagingTemplate messagingTemplate,
-                          ChatMessageRepository chatMessageRepository, UserService userService,
-                          AESUtil aesUtil) {
+                          ChatMessageRepository chatMessageRepository, UserService userService) {
         this.messagingTemplate = messagingTemplate;
         this.chatMessageRepository = chatMessageRepository;
         this.userService = userService;
-        this.aesUtil = aesUtil;
     }
 
     @GetMapping("/chat")
@@ -50,47 +49,98 @@ public class ChatController {
     }
 
 
+//    @MessageMapping("/chat.send")
+//    public void sendPrivateMessage(ChatMessageRequest request, Principal principal) {
+//
+//        String senderUsername = principal.getName();
+//        String receiverUsername = request.getReceiver(); // FIXED
+//
+//        if (receiverUsername == null) return;
+//
+//        User sender = userService.findByUsername(senderUsername);
+//        User receiver = userService.findByUsername(receiverUsername);
+//
+//        if (receiver == null) return;
+//
+//        ChatMessageEntity entity = new ChatMessageEntity();
+//        entity.setSenderUsername(senderUsername);
+//        entity.setSenderId(sender.getId());
+//        entity.setReceiverId(receiver.getId());
+//        entity.setReceiverUsername(receiverUsername);
+//        entity.setContent(request.getContent());
+//
+//        chatMessageRepository.save(entity);
+//
+//        ChatMessageResponse response = toResponse(entity);
+//
+//        messagingTemplate.convertAndSendToUser(
+//                receiverUsername,
+//                "/queue/messages",
+//                response
+//        );
+//
+//        messagingTemplate.convertAndSendToUser(
+//                senderUsername,
+//                "/queue/messages",
+//                response
+//        );
+//
+//        System.out.println("FROM " + senderUsername + " TO " + receiverUsername);
+//    }
+
     @MessageMapping("/chat.send")
-    public void sendPrivateMessage(ChatMessageRequest request, Principal principal) {
+    public void sendPrivateMessage(@Payload ChatMessageRequest request,
+                                   Principal principal) {
 
-        // Sender from session (SECURE)
+        // 1 Safety check
+        if (principal == null) return;
+
         String senderUsername = principal.getName();
-        String receiverUsername = request.getReceiverUsername();
-        User sender = userService.findByUsername(senderUsername);
+        String receiverUsername = request.getReceiver();
 
-        //  Receiver from encrypted key
+        if (receiverUsername == null || receiverUsername.isBlank()) return;
+
+        // 2 Load users safely
+        User sender = userService.findByUsername(senderUsername);
         User receiver = userService.findByUsername(receiverUsername);
 
-        //System.out.println("Sender principal: " + senderUsername);
-        //System.out.println("Receiver username: " + receiver.getUsername());
+        if (sender == null || receiver == null) return;
 
-        // Save entity
+        // 3 Persist message
         ChatMessageEntity entity = new ChatMessageEntity();
+        entity.setSenderId(sender.getId());
         entity.setSenderUsername(senderUsername);
-        entity.setSenderId(sender.getId()); // optional if you resolve later
         entity.setReceiverId(receiver.getId());
         entity.setReceiverUsername(receiverUsername);
         entity.setContent(request.getContent());
 
         chatMessageRepository.save(entity);
 
-        // Build response DTO
-        ChatMessageResponse response = toResponse(entity);
+        // 4 Prepare response
+        ChatMessageResponse response = new ChatMessageResponse(
+                senderUsername,
+                receiverUsername,
+                entity.getContent(),
+                entity.getCreatedAt()   // optional if you have it
+        );
 
-        // Send to receiver
+        // 5 Send to RECEIVER (MAIN delivery)
         messagingTemplate.convertAndSendToUser(
                 receiverUsername,
-                "/queue/notifications",
+                "/queue/messages",
                 response
         );
 
-        // Echo to sender
+        // 6 Send to SENDER (echo back)
         messagingTemplate.convertAndSendToUser(
                 senderUsername,
-                "/queue/notifications",
+                "/queue/messages",
                 response
         );
+
+        System.out.println("CHAT SENT: " + senderUsername + " → " + receiverUsername);
     }
+
 
     @GetMapping("/chat/history/{username}")
     @ResponseBody
@@ -103,6 +153,7 @@ public class ChatController {
                 .stream()
                 .map(m -> new ChatMessageResponse(
                         m.getSenderUsername(),
+                        m.getReceiverUsername(),
                         m.getContent(),
                         m.getCreatedAt()
                 ))

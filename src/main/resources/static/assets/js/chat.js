@@ -1,17 +1,45 @@
+/*document.addEventListener('DOMContentLoaded', () => {
+
+    console.log("CHAT TEST START");
+
+    const socket = new SockJS('/ws');
+    const stomp = Stomp.over(socket);
+    stomp.debug = console.log;
+
+    stomp.connect({}, frame => {
+        console.log("CONNECTED OK", frame);
+
+        stomp.subscribe('/user/queue/messages', msg => {
+            console.log("MESSAGE RECEIVED", msg.body);
+        });
+    });
+
+});*/
+
+
 let chatClient = null;
 let currentReceiverUsername = null;
-
+let loggedInUsername = document.body.dataset.username; // IMPORTANT
+console.log("LOGGED IN USER:", loggedInUsername);
 console.log("CHAT JS LOADED");
+
+
+document.addEventListener('click', function (e) {
+    if (e.target && (e.target.id === 'popupChatSendBtn' ||
+        e.target.id === 'chatSendBtn')) {
+        sendMessage();
+    }
+});
+
 
 document.addEventListener('DOMContentLoaded', function () {
 
-    // Popup chat buttons (job page, profile page, etc.)
+    console.log("CHAT TEST START");
+
     document.querySelectorAll('.chatBtn').forEach(btn => {
         btn.addEventListener('click', function (e) {
             e.preventDefault();
-            openChatPopup(
-                btn.getAttribute('data-username')
-            );
+            openChatPopup(btn.dataset.username);
         });
     });
 
@@ -19,18 +47,26 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 /* =========================
-   WEBSOCKET CONNECTION
+   WEBSOCKET CONNECTION (FIXED)
 ========================= */
 function connectWebSocket() {
 
     const socket = new SockJS('/ws');
     chatClient = Stomp.over(socket);
-    chatClient.debug = null;
 
-    chatClient.connect({}, function () {
+    // DEBUG ENABLED (same as your working test)
+    chatClient.debug = console.log;
 
-        // 🔔 Personal messages
-        chatClient.subscribe('/user/queue/notifications', function (message) {
+    chatClient.connect({}, function (frame) {
+
+        console.log("CONNECTED OK", frame);
+
+        /* =========================
+           PRIVATE CHAT SUBSCRIPTION
+        ========================= */
+        chatClient.subscribe('/user/queue/messages', function (message) {
+            console.log("MESSAGE RECEIVED", message.body);
+
             const msg = JSON.parse(message.body);
 
             if (!document.getElementById('chatPopup')
@@ -41,16 +77,20 @@ function connectWebSocket() {
             displayMessage(msg);
         });
 
-        // ONLINE USERS (NEW)
-        chatClient.subscribe('/user/queue/online-users', function (message) {
-            const users = JSON.parse(message.body);
-            renderOnlineUsers(users);
+        /* =========================
+           ONLINE USERS (BROADCAST)
+        ========================= */
+        chatClient.subscribe('/topic/online-users', function (message) {
+            renderOnlineUsers(JSON.parse(message.body));
         });
+
+    }, function (error) {
+        console.error("STOMP CONNECTION ERROR", error);
     });
 }
 
 /* =========================
-   ONLINE USERS (LEFT SIDEBAR)
+   ONLINE USERS
 ========================= */
 function renderOnlineUsers(users) {
 
@@ -61,21 +101,13 @@ function renderOnlineUsers(users) {
 
     users.forEach(username => {
 
-        // Do not show self
-        if (username === currentReceiverUsername) return;
+        if (username === loggedInUsername) return;
 
         const li = document.createElement("li");
         li.className = "list-group-item chatUser";
-        li.dataset.username = username;
+        li.innerHTML = `<span class="online-dot"></span>${username}`;
 
-        li.innerHTML = `
-            <span class="online-dot"></span>
-            ${username}
-        `;
-
-        li.addEventListener('click', function () {
-            openChatInPage(username);
-        });
+        li.onclick = () => openChatInPage(username);
 
         list.appendChild(li);
     });
@@ -87,14 +119,11 @@ function renderOnlineUsers(users) {
 function openChatPopup(receiverUsername) {
 
     if (currentReceiverUsername === receiverUsername &&
-        document.getElementById('chatPopup')) {
-        return;
-    }
+        document.getElementById('chatPopup')) return;
 
     currentReceiverUsername = receiverUsername;
 
-    const oldPopup = document.getElementById('chatPopup');
-    if (oldPopup) oldPopup.remove();
+    document.getElementById('chatPopup')?.remove();
 
     const container = document.getElementById('chatPopupContainer');
     if (!container) return;
@@ -104,22 +133,16 @@ function openChatPopup(receiverUsername) {
     popup.className = 'chat-popup';
 
     popup.innerHTML = `
-        <div class="chat-header">
-            Chat with <b>${receiverUsername}</b>
-        </div>
-        <div class="chat-messages" id="chatMessages"></div>
+        <div class="chat-header">Chat with <b>${receiverUsername}</b></div>
+        <div class="chat-messages" id="popupChatMessages"></div>
         <div class="chat-input">
-            <input type="text" id="chatInput" placeholder="Type a message...">
-            <button id="chatSendBtn">Send</button>
+            <input type="text" id="popupChatInput" placeholder="Type a message...">
+            <button id="popupChatSendBtn">Send</button>
         </div>
     `;
 
     container.appendChild(popup);
 
-    document.getElementById('chatSendBtn').onclick = sendMessage;
-    document.getElementById('chatInput').onkeypress = e => {
-        if (e.key === 'Enter') sendMessage();
-    };
 
     loadChatHistory(receiverUsername);
 }
@@ -128,18 +151,36 @@ function openChatPopup(receiverUsername) {
    SEND MESSAGE
 ========================= */
 function sendMessage() {
+   // alert("Hi");
+    console.log("SEND BUTTON CLICKED");
+    if (!chatClient || !chatClient.connected) {
+        console.error("STOMP NOT CONNECTED");
+        return;
+    }
 
-    const input = document.getElementById('chatInput');
+    const input =
+        document.getElementById('popupChatInput') ||
+        document.getElementById('chatInput');
+
+    if (!input) {
+        console.error("chatInput NOT FOUND");
+        return;
+    }
+
     const content = input.value.trim();
-    if (!content || !currentReceiverUsername) return;
+    if (!content || !currentReceiverUsername) {
+        console.error("Missing content or receiver");
+        return;
+    }
 
     chatClient.send('/app/chat.send', {}, JSON.stringify({
-        receiverUsername: currentReceiverUsername,
+        receiver: currentReceiverUsername,
         content: content
     }));
+    console.log("MESSAGE SENT TO SERVER");
 
     displayMessage({
-        sender: 'me',
+        sender: loggedInUsername,
         content: content
     });
 
@@ -149,16 +190,38 @@ function sendMessage() {
 /* =========================
    DISPLAY MESSAGE
 ========================= */
-function displayMessage(message) {
+/*function displayMessage(message) {
 
-    const messagesDiv = document.getElementById('chatMessages');
+    const messagesDiv =
+        document.getElementById('popupChatMessages') ||
+        document.getElementById('chatMessages');
+
     if (!messagesDiv) return;
 
     const div = document.createElement('div');
-    div.className = message.sender === 'me' ? 'sent' : 'received';
-    div.textContent = `${message.sender}: ${message.content}`;
+    const sender = message.sender || message.senderUsername;
+
+    div.className = sender === loggedInUsername ? 'sent' : 'received';
+    div.textContent = `${sender}: ${message.content}`;
+
     messagesDiv.appendChild(div);
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
+}
+*/
+function displayMessage(message) {
+    ['popupChatMessages', 'chatMessages'].forEach(id => {
+        const box = document.getElementById(id);
+        if (!box) return;
+
+        const div = document.createElement('div');
+        const sender = message.sender || message.senderUsername;
+
+        div.className = sender === loggedInUsername ? 'sent' : 'received';
+        div.textContent = `${sender}: ${message.content}`;
+
+        box.appendChild(div);
+        box.scrollTop = box.scrollHeight;
+    });
 }
 
 /* =========================
@@ -169,62 +232,16 @@ function loadChatHistory(username) {
     $('#chatMessages').empty();
 
     $.get('/chat/history/' + username, function (messages) {
-
-        const groupedMessages = groupByDate(messages);
-
-        Object.keys(groupedMessages).forEach(date => {
-
-            $('#chatMessages').append(`
-                <div class="chat-date-separator">
-                    <span>${formatDateLabel(date)}</span>
-                </div>
-            `);
-
-            groupedMessages[date].forEach(displayMessage);
-        });
+        messages.forEach(displayMessage);
     });
 }
 
 /* =========================
-   HELPERS
-========================= */
-function groupByDate(messages) {
-    return messages.reduce((group, msg) => {
-
-        const dateTime = msg.createdDate || msg.created_at || msg.createdAt;
-        if (!dateTime) return group;
-
-        const date = dateTime.split('T')[0];
-        if (!group[date]) group[date] = [];
-        group[date].push(msg);
-
-        return group;
-    }, {});
-}
-
-function formatDateLabel(dateString) {
-
-    const today = new Date();
-    const msgDate = new Date(dateString);
-
-    const diffDays = Math.floor(
-        (today.setHours(0,0,0,0) - msgDate.setHours(0,0,0,0))
-        / (1000 * 60 * 60 * 24)
-    );
-
-    if (diffDays === 0) return "Today";
-    if (diffDays === 1) return "Yesterday";
-
-    return msgDate.toLocaleDateString();
-}
-
-/* =========================
-   IN-PAGE CHAT (LEFT SIDEBAR)
+   IN-PAGE CHAT
 ========================= */
 function openChatInPage(receiverUsername) {
-
+   // alert("OPEN PAGE CHAT");
     currentReceiverUsername = receiverUsername;
-
     document.getElementById('chatWith').textContent = receiverUsername;
 
     $('#chatMessages').empty();
@@ -232,10 +249,6 @@ function openChatInPage(receiverUsername) {
     document.getElementById('chatInput').disabled = false;
     document.getElementById('chatSendBtn').disabled = false;
 
-    document.getElementById('chatSendBtn').onclick = sendMessage;
-    document.getElementById('chatInput').onkeypress = e => {
-        if (e.key === 'Enter') sendMessage();
-    };
-
     loadChatHistory(receiverUsername);
 }
+

@@ -1,15 +1,15 @@
 package com.evanadev.freelancherbd.dto;
 
 public class ChatMessageRequest {
-    private String receiverUsername;   // encrypted user id
+    private String receiver;   // encrypted user id
     private String content;
 
-    public String getReceiverUsername() {
-        return receiverUsername;
+    public String getReceiver() {
+        return receiver;
     }
 
-    public void setReceiverUsername(String receiverUsername) {
-        this.receiverUsername = receiverUsername;
+    public void setReceiver(String receiver) {
+        this.receiver = receiver;
     }
 
     public String getContent() {
