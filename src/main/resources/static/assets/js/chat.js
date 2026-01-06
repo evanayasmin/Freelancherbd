@@ -19,7 +19,11 @@
 
 let chatClient = null;
 let currentReceiverUsername = null;
-let loggedInUsername = document.body.dataset.username; // IMPORTANT
+let chatMode = null; // "page" | "popup"
+let messageSubscription = null;
+
+let loggedInUsername = document.body.dataset.username;
+
 console.log("LOGGED IN USER:", loggedInUsername);
 console.log("CHAT JS LOADED");
 
@@ -53,41 +57,33 @@ function connectWebSocket() {
 
     const socket = new SockJS('/ws');
     chatClient = Stomp.over(socket);
-
-    // DEBUG ENABLED (same as your working test)
     chatClient.debug = console.log;
 
     chatClient.connect({}, function (frame) {
 
         console.log("CONNECTED OK", frame);
 
-        /* =========================
-           PRIVATE CHAT SUBSCRIPTION
-        ========================= */
-        chatClient.subscribe('/user/queue/messages', function (message) {
-            console.log("MESSAGE RECEIVED", message.body);
+        //  SUBSCRIBE ONCE
+        if (!messageSubscription) {
+            messageSubscription = chatClient.subscribe(
+                '/user/queue/messages',
+                onMessageReceived
+            );
+        }
 
-            const msg = JSON.parse(message.body);
-
-            if (!document.getElementById('chatPopup')
-                || currentReceiverUsername !== msg.sender) {
-                openChatPopup(msg.sender);
-            }
-
-            displayMessage(msg);
+        // Online users (broadcast)
+        chatClient.subscribe('/topic/online-users', msg => {
+            renderOnlineUsers(JSON.parse(msg.body));
         });
 
-        /* =========================
-           ONLINE USERS (BROADCAST)
-        ========================= */
-        chatClient.subscribe('/topic/online-users', function (message) {
-            renderOnlineUsers(JSON.parse(message.body));
+        // Initial sync
+        chatClient.subscribe('/user/queue/online-users', msg => {
+            renderOnlineUsers(JSON.parse(msg.body));
         });
 
-    }, function (error) {
-        console.error("STOMP CONNECTION ERROR", error);
-    });
+    }, error => console.error(error));
 }
+
 
 /* =========================
    ONLINE USERS
@@ -113,15 +109,31 @@ function renderOnlineUsers(users) {
     });
 }
 
+function onMessageReceived(message) {
+
+    const msg = JSON.parse(message.body);
+    const sender = msg.sender || msg.senderUsername;
+
+    // Show message ONLY in active chat
+    if (chatMode === "popup" && sender === currentReceiverUsername) {
+        appendMessage('popupChatMessages', msg);
+    }
+
+    if (chatMode === "page" && sender === currentReceiverUsername) {
+        appendMessage('chatMessages', msg);
+    }
+
+    //  DO NOT auto-open popup here
+}
+
+
 /* =========================
    POPUP CHAT
 ========================= */
-function openChatPopup(receiverUsername) {
+function openChatPopup(username) {
 
-    if (currentReceiverUsername === receiverUsername &&
-        document.getElementById('chatPopup')) return;
-
-    currentReceiverUsername = receiverUsername;
+    chatMode = "popup";
+    currentReceiverUsername = username;
 
     document.getElementById('chatPopup')?.remove();
 
@@ -133,81 +145,67 @@ function openChatPopup(receiverUsername) {
     popup.className = 'chat-popup';
 
     popup.innerHTML = `
-        <div class="chat-header">Chat with <b>${receiverUsername}</b></div>
-        <div class="chat-messages" id="popupChatMessages"></div>
-        <div class="chat-input">
-            <input type="text" id="popupChatInput" placeholder="Type a message...">
-            <button id="popupChatSendBtn">Send</button>
+        <div class="chat-header">
+            <span>Chat with <b>${username}</b></span>
+            <div class="chat-actions">
+                <button class="chat-minimize">−</button>
+                <button class="chat-close">×</button>
+            </div>
+        </div>
+        <div class="chat-body">
+            <div class="chat-messages" id="popupChatMessages"></div>
+            <div class="chat-input">
+                <input id="popupChatInput" placeholder="Type a message...">
+                <button id="popupChatSendBtn">Send</button>
+            </div>
         </div>
     `;
 
     container.appendChild(popup);
 
+    popup.querySelector('.chat-close').onclick = () => popup.remove();
+    popup.querySelector('.chat-minimize').onclick = () => popup.classList.toggle('minimized');
 
-    loadChatHistory(receiverUsername);
+    loadChatHistory(username, 'popupChatMessages');
 }
+
 
 /* =========================
    SEND MESSAGE
 ========================= */
-function sendMessage() {
-   // alert("Hi");
-    console.log("SEND BUTTON CLICKED");
-    if (!chatClient || !chatClient.connected) {
-        console.error("STOMP NOT CONNECTED");
-        return;
-    }
+function sendMessage(source) {
 
-    const input =
-        document.getElementById('popupChatInput') ||
-        document.getElementById('chatInput');
+    if (!chatClient?.connected) return;
 
-    if (!input) {
-        console.error("chatInput NOT FOUND");
-        return;
-    }
+    const inputId = source === 'popup'
+        ? 'popupChatInput'
+        : 'chatInput';
+
+    const input = document.getElementById(inputId);
+    if (!input) return;
 
     const content = input.value.trim();
-    if (!content || !currentReceiverUsername) {
-        console.error("Missing content or receiver");
-        return;
-    }
+    if (!content) return;
 
     chatClient.send('/app/chat.send', {}, JSON.stringify({
         receiver: currentReceiverUsername,
         content: content
     }));
-    console.log("MESSAGE SENT TO SERVER");
 
-    displayMessage({
-        sender: loggedInUsername,
-        content: content
-    });
+    appendMessage(
+        source === 'popup' ? 'popupChatMessages' : 'chatMessages',
+        { sender: loggedInUsername, content }
+    );
 
     input.value = '';
+
+    document.addEventListener('click', e => {
+        if (e.target.id === 'popupChatSendBtn') sendMessage('popup');
+        if (e.target.id === 'chatSendBtn') sendMessage('page');
+    });
 }
 
-/* =========================
-   DISPLAY MESSAGE
-========================= */
-/*function displayMessage(message) {
 
-    const messagesDiv =
-        document.getElementById('popupChatMessages') ||
-        document.getElementById('chatMessages');
-
-    if (!messagesDiv) return;
-
-    const div = document.createElement('div');
-    const sender = message.sender || message.senderUsername;
-
-    div.className = sender === loggedInUsername ? 'sent' : 'received';
-    div.textContent = `${sender}: ${message.content}`;
-
-    messagesDiv.appendChild(div);
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
-}
-*/
 function displayMessage(message) {
     ['popupChatMessages', 'chatMessages'].forEach(id => {
         const box = document.getElementById(id);
@@ -224,31 +222,51 @@ function displayMessage(message) {
     });
 }
 
+function appendMessage(containerId, message) {
+
+    const box = document.getElementById(containerId);
+    if (!box) return;
+
+    const div = document.createElement('div');
+    const sender = message.sender || message.senderUsername;
+
+    div.className = sender === loggedInUsername ? 'sent' : 'received';
+    div.textContent = `${sender}: ${message.content}`;
+
+    box.appendChild(div);
+    box.scrollTop = box.scrollHeight;
+}
+
 /* =========================
    LOAD CHAT HISTORY
 ========================= */
-function loadChatHistory(username) {
+function loadChatHistory(username, targetId) {
 
-    $('#chatMessages').empty();
+    const box = document.getElementById(targetId);
+    if (!box) return;
 
-    $.get('/chat/history/' + username, function (messages) {
-        messages.forEach(displayMessage);
+    box.innerHTML = '';
+
+    $.get('/chat/history/' + username, messages => {
+        messages.forEach(m => appendMessage(targetId, m));
     });
 }
+
 
 /* =========================
    IN-PAGE CHAT
 ========================= */
-function openChatInPage(receiverUsername) {
-   // alert("OPEN PAGE CHAT");
-    currentReceiverUsername = receiverUsername;
-    document.getElementById('chatWith').textContent = receiverUsername;
 
-    $('#chatMessages').empty();
+function openChatInPage(username) {
 
+    chatMode = "page";
+    currentReceiverUsername = username;
+
+    document.getElementById('chatWith').textContent = username;
     document.getElementById('chatInput').disabled = false;
     document.getElementById('chatSendBtn').disabled = false;
 
-    loadChatHistory(receiverUsername);
+    loadChatHistory(username, 'chatMessages');
 }
+
 
