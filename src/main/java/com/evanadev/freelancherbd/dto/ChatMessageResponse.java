@@ -1,18 +1,23 @@
 package com.evanadev.freelancherbd.dto;
 
-public class ChatMessage {
+import java.time.LocalDateTime;
+
+public class ChatMessageResponse {
+
     private String sender;
-    private String receiver;
+    private String receiver; // username
     private String content;
-    private String timestamp;
+    private LocalDateTime createdAt;
 
-    public ChatMessage() {}
-
-    public ChatMessage(String sender, String receiver, String content, String timestamp) {
+    public ChatMessageResponse(String sender, String receiver , String content, LocalDateTime createdAt) {
         this.sender = sender;
         this.receiver = receiver;
         this.content = content;
-        this.timestamp = timestamp;
+        this.createdAt = createdAt;
+    }
+
+    public ChatMessageResponse() {
+
     }
 
     public String getSender() {
@@ -39,11 +44,11 @@ public class ChatMessage {
         this.content = content;
     }
 
-    public String getTimestamp() {
-        return timestamp;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }

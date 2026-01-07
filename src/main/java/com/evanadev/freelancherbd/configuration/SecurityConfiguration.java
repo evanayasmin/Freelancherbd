@@ -20,23 +20,35 @@ public class SecurityConfiguration {
     }
 @Bean
 public SecurityFilterChain configure(HttpSecurity http) throws Exception {
-    http.csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(request -> request
-            .requestMatchers("/css/**", "/js/**", "/images/**", "/assets/**", "/webjars/**").permitAll()
-            .requestMatchers("/register", "/login").permitAll()
-            .requestMatchers("/notification/**").permitAll()
-            .requestMatchers("/ws-chat/**").permitAll()
-            .requestMatchers("/jobs/category/", "/jobs/job_detail/").permitAll()
-            .requestMatchers("/admin/category/**").hasRole("ADMIN") //Only admin can access
-            .requestMatchers("/admin/users/**").hasRole("ADMIN")      //Only admin can access
-            .requestMatchers("/employer/jobs/**").hasRole("EMPLOYER")     //Only Employer can access
-            .requestMatchers("/freelancer/jobs/**").hasRole("FREELANCER")  //Only Freelancer can access
-            .requestMatchers("/ws/**","/user/**").permitAll()
-            .anyRequest().authenticated())
-            .formLogin(form -> form.
-                    loginPage("/login").
-                    loginProcessingUrl("/login").
-                    defaultSuccessUrl("/home", true)
+
+    http
+            .csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(auth -> auth
+
+                    // Static resources
+                    .requestMatchers("/css/**", "/js/**", "/images/**", "/assets/**", "/webjars/**").permitAll()
+
+                    // Auth pages
+                    .requestMatchers("/login", "/register").permitAll()
+
+                    // WebSocket handshake ONLY
+                    .requestMatchers("/ws/**").permitAll().requestMatchers("/app/**", "/topic/**",     // Broadcast topics
+                            "/user/**").permitAll()
+
+                    // Public pages
+                    .requestMatchers("/jobs/category/**", "/jobs/job_detail/**").permitAll()
+
+                    // Role-based
+                    .requestMatchers("/admin/**").hasRole("ADMIN")
+                    .requestMatchers("/employer/**").hasRole("EMPLOYER")
+                    .requestMatchers("/freelancer/**").hasRole("FREELANCER")
+
+                    .anyRequest().authenticated()
+            )
+            .formLogin(form -> form
+                    .loginPage("/login")
+                    .loginProcessingUrl("/login")
+                    .defaultSuccessUrl("/home", true)
                     .permitAll()
             )
             .logout(logout -> logout
@@ -44,8 +56,10 @@ public SecurityFilterChain configure(HttpSecurity http) throws Exception {
                     .permitAll()
             )
             .userDetailsService(customUserDetails);
-            return http.build();
+
+    return http.build();
 }
+
 
 @Bean
 public PasswordEncoder passwordEncoder()    {
