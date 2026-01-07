@@ -152,21 +152,32 @@ function openChatPopup(username) {
                 <button class="chat-close">×</button>
             </div>
         </div>
-        <div class="chat-body">
-            <div class="chat-messages" id="popupChatMessages"></div>
-            <div class="chat-input">
-                <input id="popupChatInput" placeholder="Type a message...">
-                <button id="popupChatSendBtn">Send</button>
-            </div>
+
+        <!-- SCROLLABLE MESSAGE AREA -->
+        <div class="chat-messages" id="popupChatMessages"></div>
+
+        <!-- FIXED FOOTER -->
+        <div class="chat-input">
+            <input id="popupChatInput" placeholder="Type a message..." />
+            <button id="popupChatSendBtn">Send</button>
         </div>
     `;
 
     container.appendChild(popup);
+    popup.querySelector('#popupChatSendBtn')
+        .addEventListener('click', () => sendMessage('popup'));
+    scrollPopupToBottom();
 
     popup.querySelector('.chat-close').onclick = () => popup.remove();
-    popup.querySelector('.chat-minimize').onclick = () => popup.classList.toggle('minimized');
+    popup.querySelector('.chat-minimize').onclick = () =>
+    popup.classList.toggle('minimized');
 
     loadChatHistory(username, 'popupChatMessages');
+}
+
+function scrollPopupToBottom() {
+    const body = document.getElementById("popupChatMessages");
+    body.scrollTop = body.scrollHeight;
 }
 
 
@@ -182,7 +193,10 @@ function sendMessage(source) {
         : 'chatInput';
 
     const input = document.getElementById(inputId);
-    if (!input) return;
+    if (!input) {
+        console.error("Input not found:", inputId);
+        return;
+    }
 
     const content = input.value.trim();
     if (!content) return;
@@ -198,12 +212,8 @@ function sendMessage(source) {
     );
 
     input.value = '';
-
-    document.addEventListener('click', e => {
-        if (e.target.id === 'popupChatSendBtn') sendMessage('popup');
-        if (e.target.id === 'chatSendBtn') sendMessage('page');
-    });
 }
+
 
 
 function displayMessage(message) {
@@ -227,11 +237,44 @@ function appendMessage(containerId, message) {
     const box = document.getElementById(containerId);
     if (!box) return;
 
-    const div = document.createElement('div');
-    const sender = message.sender || message.senderUsername;
+    /* --------- MATCH BACKEND DTO --------- */
 
-    div.className = sender === loggedInUsername ? 'sent' : 'received';
-    div.textContent = `${sender}: ${message.content}`;
+    const sender =
+        message.sender ||
+        message.senderUsername ||
+        'Unknown';
+
+    const msgDate = message.createdAt
+        ? new Date(message.createdAt)
+        : new Date();
+
+    const dateKey = msgDate.toDateString();
+
+    /* --------- DATE DIVIDER --------- */
+
+    let divider = box.querySelector(
+        `.date-divider[data-date="${dateKey}"]`
+    );
+
+    if (!divider) {
+        divider = document.createElement('div');
+        divider.className = 'date-divider';
+        divider.dataset.date = dateKey;
+        divider.textContent = formatDateLabel(msgDate);
+        box.appendChild(divider);
+    }
+
+    /* --------- MESSAGE BUBBLE --------- */
+
+    const div = document.createElement('div');
+    div.className =
+        sender === loggedInUsername ? 'sent' : 'received';
+
+    div.innerHTML = `
+        <div class="msg-sender">${sender}</div>
+        <div class="msg-content">${message.content}</div>
+        <div class="msg-time">${formatMessageTime(msgDate)}</div>
+    `;
 
     box.appendChild(div);
     box.scrollTop = box.scrollHeight;
@@ -250,6 +293,7 @@ function loadChatHistory(username, targetId) {
     $.get('/chat/history/' + username, messages => {
         messages.forEach(m => appendMessage(targetId, m));
     });
+
 }
 
 
@@ -259,6 +303,7 @@ function loadChatHistory(username, targetId) {
 
 function openChatInPage(username) {
 
+
     chatMode = "page";
     currentReceiverUsername = username;
 
@@ -266,7 +311,51 @@ function openChatInPage(username) {
     document.getElementById('chatInput').disabled = false;
     document.getElementById('chatSendBtn').disabled = false;
 
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('chatSendBtn')
+            ?.addEventListener('click', () => sendMessage('page'));
+    });
+
     loadChatHistory(username, 'chatMessages');
 }
+
+document.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+        if (document.activeElement.id === 'popupChatInput')
+            sendMessage('popup');
+
+        if (document.activeElement.id === 'chatInput')
+            sendMessage('page');
+    }
+});
+
+/* =============
+Message Grouping BY Date
+ =================== */
+function formatDateLabel(date) {
+    const today = new Date();
+    const yesterday = new Date();
+    yesterday.setDate(today.getDate() - 1);
+
+    if (date.toDateString() === today.toDateString())
+        return "Today";
+
+    if (date.toDateString() === yesterday.toDateString())
+        return "Yesterday";
+
+    return date.toLocaleDateString(undefined, {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+    });
+}
+
+function formatMessageTime(date) {
+    return date.toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+}
+
 
 
