@@ -50,58 +50,123 @@
                     <div class="card">
                         <div class="card-header">Job List : <span th:text="${category.categoryName}"></span></div>
                         <div class="card-body" id="freelancerCardBody">
-                            <table class="table table-striped" id="table1">
+                            <table class="table job-table" id="table1">
                                 <thead>
                                 <tr>
-                                    <th>Job Summary</th>
+                                    <th>Job</th>
                                     <th>Vacancy</th>
-                                    <th>Job Type</th>
                                     <th>Status</th>
-                                    <th>Created At</th>
+                                    <th>Created</th>
                                     <th>Action</th>
                                 </tr>
                                 </thead>
+
                                 <tbody>
                                 <tr th:each="job : ${jobs}">
-                                    <td>
-                                    <div class="card bg-light-secondary">
-                                        <div class="card-content">
-                                            <div class="card-body">
-                                                <h4 class="card-title"><span th:text="${job.title}"></span></h4>
-                                                <p class="card-text"><span th:text="${job.getCategory().getCategoryName()}"></span>
-                                                <hr/>
-                                                <span th:text="${#strings.abbreviate(job.requiredSkill, 40)}"></span>
-                                                </p>
-                                                <small class="text-muted">Price: <span th:text="${job.paymentAmount}"></span>  &nbsp; &nbsp;Deadline: <span th:text="${#temporals.format(job.deadline, 'yyyy-MM-dd')}"></span></small>
+                                    <!-- JOB SUMMARY -->
+                                    <td data-label="Job">
+                                        <div class="job-summary">
+                                            <h6 class="job-title" th:text="${job.title}"></h6>
+
+                                            <div class="job-meta">
+                                                <span th:text="${job.getCategory().getCategoryName()}"></span>
+                                                <span class="dot">•</span>
+                                                <span th:text="${job.jobType}"></span>
+                                            </div>
+
+                                            <p class="job-skills"
+                                               th:text="${#strings.abbreviate(job.requiredSkill, 90)}">
+                                            </p>
+
+                                            <div class="job-footer">
+                                                <span>💰 <strong th:text="${job.paymentAmount}"></strong></span>
+                                                <span>⏰ <span th:text="${#temporals.format(job.deadline,'yyyy-MM-dd')}"></span></span>
                                             </div>
                                         </div>
-                                    </div>
                                     </td>
-                                    <td th:text="${job.vacancy != null ? job.vacancy : ''}" th:align="center"></td>
-                                    <td th:text="${job.jobType}"></td>
-                                    <td>
-                                        <span th:if="${job.jobStatus.name() =='POSTED' }"
-                                              class="badge bg-primary">Open</span>
-                                        <span th:if="${job.jobStatus.name() =='PENDING' }"
-                                              class="badge bg-warning">Pending</span>
-                                        <span th:if="${job.jobStatus.name() =='IN_PROGRESS' }"
-                                              class="badge bg-light-primary">IN PROGRESS</span>
-                                        <span th:if="${job.jobStatus.name() =='COMPLETED' }"
-                                              class="badge bg-success">COMPLETED</span>
-                                        <span th:if="${job.jobStatus.name() =='CANCELLED' }"
-                                              class="badge bg-danger">CANCELLED</span>
+
+                                    <!-- VACANCY -->
+                                    <td data-label="Vacancy" th:text="${job.vacancy != null ? job.vacancy : '-'}"></td>
+
+                                    <!-- STATUS -->
+                                    <td data-label="Status">
+                                        <span th:if="${job.jobStatus.name() =='POSTED'}" class="badge bg-primary">Open</span>
+                                        <span th:if="${job.jobStatus.name() =='PENDING'}" class="badge bg-warning">Pending</span>
+                                        <span th:if="${job.jobStatus.name() =='IN_PROGRESS'}" class="badge bg-info">In Progress</span>
+                                        <span th:if="${job.jobStatus.name() =='COMPLETED'}" class="badge bg-success">Completed</span>
+                                        <span th:if="${job.jobStatus.name() =='CANCELLED'}" class="badge bg-danger">Cancelled</span>
                                     </td>
-                                    <td th:text="${#temporals.format(job.createdAt, 'yyyy-MM-dd')}"></td>
-                                    <td>
-                                        <a type="button" th:target="_blank"
-                                           class="btn btn-sm btn-outline-primary edit-btn"
+
+                                    <!-- CREATED -->
+                                    <td data-label="Created"
+                                        th:text="${#temporals.format(job.createdAt,'yyyy-MM-dd')}">
+                                    </td>
+
+                                    <!-- ACTION -->
+                                    <td data-label="Action">
+                                        <a class="btn btn-sm btn-outline-primary w-100"
+                                           th:target="_blank"
                                            th:href="@{('/jobs/job_detail/' + ${@aesUtil.encryptId(job.id)})}">
-                                            <i class="bi bi-book"></i>
+                                            View Job
                                         </a>
                                     </td>
                                 </tr>
                                 </tbody>
                             </table>
+
+                            <!--   <table class="table table-striped" id="table1">-->
+<!--                                <thead>-->
+<!--                                <tr>-->
+<!--                                    <th>Job Summary</th>-->
+<!--                                    <th>Vacancy</th>-->
+<!--                                    <th>Job Type</th>-->
+<!--                                    <th>Status</th>-->
+<!--                                    <th>Created At</th>-->
+<!--                                    <th>Action</th>-->
+<!--                                </tr>-->
+<!--                                </thead>-->
+<!--                                <tbody>-->
+<!--                                <tr th:each="job : ${jobs}">-->
+<!--                                    <td>-->
+<!--                                    <div class="card bg-light-secondary">-->
+<!--                                        <div class="card-content">-->
+<!--                                            <div class="card-body">-->
+<!--                                                <h4 class="card-title"><span th:text="${job.title}"></span></h4>-->
+<!--                                                <p class="card-text"><span th:text="${job.getCategory().getCategoryName()}"></span>-->
+<!--                                                <hr/>-->
+<!--                                                <span th:text="${#strings.abbreviate(job.requiredSkill, 40)}"></span>-->
+<!--                                                </p>-->
+<!--                                                <small class="text-muted">Price: <span th:text="${job.paymentAmount}"></span>  &nbsp; &nbsp;Deadline: <span th:text="${#temporals.format(job.deadline, 'yyyy-MM-dd')}"></span></small>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    </td>-->
+<!--                                    <td th:text="${job.vacancy != null ? job.vacancy : ''}" th:align="center"></td>-->
+<!--                                    <td th:text="${job.jobType}"></td>-->
+<!--                                    <td>-->
+<!--                                        <span th:if="${job.jobStatus.name() =='POSTED' }"-->
+<!--                                              class="badge bg-primary">Open</span>-->
+<!--                                        <span th:if="${job.jobStatus.name() =='PENDING' }"-->
+<!--                                              class="badge bg-warning">Pending</span>-->
+<!--                                        <span th:if="${job.jobStatus.name() =='IN_PROGRESS' }"-->
+<!--                                              class="badge bg-light-primary">IN PROGRESS</span>-->
+<!--                                        <span th:if="${job.jobStatus.name() =='COMPLETED' }"-->
+<!--                                              class="badge bg-success">COMPLETED</span>-->
+<!--                                        <span th:if="${job.jobStatus.name() =='CANCELLED' }"-->
+<!--                                              class="badge bg-danger">CANCELLED</span>-->
+<!--                                    </td>-->
+<!--                                    <td th:text="${#temporals.format(job.createdAt, 'yyyy-MM-dd')}"></td>-->
+<!--                                    <td>-->
+<!--                                        <a type="button" th:target="_blank"-->
+<!--                                           class="btn btn-sm btn-outline-primary edit-btn"-->
+<!--                                           th:href="@{('/jobs/job_detail/' + ${@aesUtil.encryptId(job.id)})}">-->
+<!--                                            <i class="bi bi-book"></i>-->
+<!--                                        </a>-->
+<!--                                    </td>-->
+<!--                                </tr>-->
+<!--                                </tbody>-->
+<!--                            </table>-->
+
                         </div>
                     </div>
                 </section>

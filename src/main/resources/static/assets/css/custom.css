@@ -1,7 +1,19 @@
-.card:hover {
-    transform: translateY(-5px);
-    transition: 0.3s ease;
+/* ===============================
+   GLOBAL CARD HOVER (NO MOVEMENT)
+   =============================== */
+
+.card {
+    transition: box-shadow 0.3s ease;
 }
+
+.card:hover {
+    transform: none;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* ===============================
+   BADGES
+   =============================== */
 
 .badge {
     border-radius: 12px;
@@ -9,17 +21,9 @@
     color: #333;
 }
 
-
-/*.chat-header {*/
-/*    background: #0d6efd;*/
-/*    color: #fff;*/
-/*    padding: 8px 10px;*/
-/*    display: flex;*/
-/*    justify-content: space-between;*/
-/*    align-items: center;*/
-/*    font-size: 14px;*/
-/*}*/
-
+/* ===============================
+   CHAT POPUP CONTAINER
+   =============================== */
 
 .chat-popup {
     position: fixed;
@@ -34,10 +38,13 @@
     box-shadow: 0 8px 30px rgba(0,0,0,0.2);
 
     display: flex;
-    flex-direction: column; /*  MOST IMPORTANT */
+    flex-direction: column;
 }
 
-/* HEADER */
+/* ===============================
+   CHAT HEADER
+   =============================== */
+
 .chat-header {
     padding: 10px;
     background: #0d6efd;
@@ -48,15 +55,31 @@
     align-items: center;
 }
 
-/* SCROLLABLE MESSAGES */
+/* ===============================
+   CHAT BODY
+   =============================== */
+
+.chat-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ===============================
+   CHAT MESSAGES
+   =============================== */
+
 .chat-messages {
-    flex: 1;                 /* fills remaining space */
+    flex: 1;
     padding: 10px;
-    overflow-y: auto;        /* enables scrolling */
+    overflow-y: auto;
     background: #f8f9fa;
 }
 
-/* FOOTER */
+/* ===============================
+   CHAT INPUT
+   =============================== */
+
 .chat-input {
     padding: 8px;
     border-top: 1px solid #ddd;
@@ -70,13 +93,13 @@
     padding: 6px;
 }
 
-/* MINIMIZED STATE */
-.chat-popup.minimized .chat-messages,
-.chat-popup.minimized .chat-input {
-    display: none;
+.chat-input button {
+    margin-left: 6px;
 }
 
-
+/* ===============================
+   CHAT ACTION BUTTONS
+   =============================== */
 
 .chat-actions button {
     background: none;
@@ -91,22 +114,23 @@
     opacity: 0.8;
 }
 
-.chat-body {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
+/* ===============================
+   MINIMIZED STATE
+   =============================== */
 
-.chat-input button {
-    margin-left: 6px;
-}
 .chat-popup.minimized {
     height: auto;
 }
 
-.chat-popup.minimized .chat-body {
+.chat-popup.minimized .chat-body,
+.chat-popup.minimized .chat-messages,
+.chat-popup.minimized .chat-input {
     display: none;
 }
+
+/* ===============================
+   DATE DIVIDER
+   =============================== */
 
 .date-divider {
     text-align: center;
@@ -127,7 +151,11 @@
 }
 
 .date-divider::before { left: 0; }
-.date-divider::after { right: 0; }
+.date-divider::after  { right: 0; }
+
+/* ===============================
+   CHAT MESSAGES (SENT / RECEIVED)
+   =============================== */
 
 .sent {
     align-self: flex-end;
@@ -154,9 +182,166 @@
     opacity: 0.7;
     margin-top: 2px;
 }
+
 .msg-sender {
     font-size: 11px;
     font-weight: bold;
     opacity: 0.7;
     margin-bottom: 2px;
 }
+/* ===============================
+   JOB SUMMARY – BASE (MOBILE FIRST)
+   =============================== */
+
+.job-summary {
+    position: relative;
+    padding: 14px 14px 14px 22px; /* stable left spacing */
+    background: #ffffff;
+}
+
+/* Accent line */
+.job-summary::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 12px;
+    bottom: 12px;
+    width: 4px;
+    background: linear-gradient(180deg, #4f6ef7, #6f8cff);
+    border-radius: 6px;
+}
+
+/* Title */
+.job-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #1f2937;
+}
+
+/* Meta */
+.job-meta {
+    font-size: 12px;
+    color: #6b7280;
+    margin-bottom: 8px;
+}
+
+.job-meta .dot {
+    margin: 0 6px;
+}
+
+/* Skills */
+.job-skills {
+    font-size: 13px;
+    color: #374151;
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+
+/* Footer */
+.job-footer {
+    display: flex;
+    gap: 16px;
+    font-size: 12px;
+    color: #4b5563;
+}
+
+/* ===============================
+   TABLE BASE
+   =============================== */
+
+.job-table {
+    width: 100%;
+}
+
+.job-table tbody tr {
+    border-bottom: 1px solid #e5e7eb;
+}
+
+/* ===============================
+   STATUS BADGES
+   =============================== */
+
+.badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+}
+
+/* ===============================
+   MOBILE STACKED VIEW
+   =============================== */
+
+@media (max-width: 767px) {
+
+    .job-table thead {
+        display: none;
+    }
+
+    .job-table tr {
+        display: block;
+        margin-bottom: 16px;
+        border: 1px solid #e9ecef;
+        border-radius: 10px;
+        padding: 12px;
+        background: #fff;
+        box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+        transition: box-shadow 0.2s ease;
+    }
+
+    .job-table tr:hover {
+        box-shadow: 0 10px 22px rgba(0,0,0,0.08);
+    }
+
+    .job-table td {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        border: none;
+        padding: 8px 0;
+        font-size: 13px;
+    }
+
+    .job-table td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #6b7280;
+        padding-right: 10px;
+        white-space: nowrap;
+    }
+
+    .job-table td[data-label="Job"]::before {
+        display: none;
+    }
+
+    .job-table td[data-label="Action"] {
+        margin-top: 10px;
+    }
+
+    .job-table .btn {
+        width: 100%;
+        border-radius: 20px;
+        padding: 8px 14px;
+    }
+}
+
+/* ===============================
+   DESKTOP VIEW
+   =============================== */
+
+@media (min-width: 768px) {
+
+    .job-table td {
+        vertical-align: middle;
+    }
+
+    .job-table tbody tr:hover {
+        background-color: #f9fafb;
+    }
+
+    .job-table .btn {
+        border-radius: 20px;
+        padding: 6px 14px;
+    }
+}
+
