@@ -1,99 +1,165 @@
-<!-- fragments/category_update_form.html -->
-<div th:fragment="proposalDetail">
-    <div class="row" th:object="${jobApplication}">
-        <div class="col-md-4 border-right">
-            <div class="d-flex flex-column align-items-center text-center">
-                <img class="rounded-square" style="width:150px; height:170px; border-radius:8px;"
-                     th:src="${applicant.getUserProfile().profilePicture != null
-              ? '/'+applicant.getUserProfile().profilePicture : '/images/default.jpg'}" />
-                <div class="col-md-12"><strong>Name: </strong><span class="font-weight-bold" th:text="${applicant.fullname}"></span></div>
-                <div class="col-md-12"><strong>Email: </strong> <span class="text-black-50" th:text="${applicant.email}"></span></div>
-                <div class="col-md-12"><label class="labels"><strong>Phone:</strong></label>&nbsp;<span th:text="${applicant.phone}"></span></div>
-                <div class="col-md-12"><label class="labels"><strong>Gender:</strong></label>&nbsp;<span th:text="${applicant.getUserProfile().gender !=null ? applicant.getUserProfile().gender : 'N/A'}"></span></div>
-<!--                <div class="col-md-12"><label class="labels"><strong>NID:</strong></label>&nbsp;<span th:text="${applicant.nid}"></span></div>-->
-                <div class="col-md-12"><label class="labels"><strong>Country:</strong></label>&nbsp;<span th:text="${applicant.getUserProfile().country !=null ? applicant.getUserProfile().country :'N/A'}"></span></div>
-                <div class="col-md-12"><label class="labels"><strong>City:</strong></label>&nbsp;<span th:text="${applicant.getUserProfile().city !=null ? applicant.getUserProfile().city : 'N/A'}"></span></div>
-                <div class="col-md-12"><label class="labels"><strong>Github Url:</strong></label>&nbsp;<span th:text="${applicant.getUserProfile().githubUrl !=null ? applicant.getUserProfile().githubUrl : 'N/A'}"></span></div>
-                <div class="col-md-12"><label class="labels"><strong>Linkedin Url:</strong></label>&nbsp;<span th:text="${applicant.getUserProfile().linkedinUrl !=null ? applicant.getUserProfile().linkedinUrl : 'N/A'}"></span></div>
-                <div class="col-md-12"><label class="labels"><strong>Resume:</strong> </label>&nbsp;
-                <span th:if="${applicant.getUserProfile().cv != null}">
-                <a th:href="@{'/' + ${applicant.getUserProfile().cv}}" target="_blank">Download CV</a></span></div>
+<div th:fragment="proposalDetail" th:object="${jobApplication}">
+
+    <div class="row g-4">
+
+        <!-- LEFT: Applicant Profile -->
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+
+                    <img class="rounded mb-3"
+                         style="width:140px;height:160px;object-fit:cover;"
+                         th:src="${applicant.userProfile.profilePicture != null
+                         ? '/' + applicant.userProfile.profilePicture
+                         : '/images/default.jpg'}"/>
+
+                    <h5 class="fw-bold mb-1" th:text="${applicant.fullname}"></h5>
+                    <p class="text-muted mb-3" th:text="${applicant.email}"></p>
+
+                    <ul class="list-group list-group-flush text-start small">
+                        <li class="list-group-item">
+                            <strong>📞 Phone:</strong>
+                            <span th:text="${applicant.phone}"></span>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>⚧ Gender:</strong>
+                            <span th:text="${applicant.userProfile.gender ?: 'N/A'}"></span>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>🌍 Country:</strong>
+                            <span th:text="${applicant.userProfile.country ?: 'N/A'}"></span>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>🏙 City:</strong>
+                            <span th:text="${applicant.userProfile.city ?: 'N/A'}"></span>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>🐙 GitHub:</strong>
+                            <span th:text="${applicant.userProfile.githubUrl ?: 'N/A'}"></span>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>💼 LinkedIn:</strong>
+                            <span th:text="${applicant.userProfile.linkedinUrl ?: 'N/A'}"></span>
+                        </li>
+                        <li class="list-group-item text-center">
+                            <a th:if="${applicant.userProfile.cv != null}"
+                               th:href="@{'/' + ${applicant.userProfile.cv}}"
+                               target="_blank"
+                               class="btn btn-sm btn-outline-primary w-100">
+                                <i class="bi bi-download"></i> Download CV
+                            </a>
+                        </li>
+                    </ul>
+
+                </div>
             </div>
         </div>
-        <div class="col-md-8 border-right">
-             <h6 class="text-right">Applicantion Details</h6>
-                        <form id="proposalUpdateForm" class="form-control" th:action="@{/employer/proposals/update}" method="post">
-                            <input type="hidden" th:field="*{id}"/>
-                            <input type="hidden" th:field="*{job.id}"/>
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <label class="card-title">Job Title: </label>
-                                    <span th:text="${jobApplication.getJob().title}"></span>
-                                </div>
+
+        <!-- RIGHT: Proposal Details -->
+        <div class="col-md-8">
+            <div class="card h-100">
+
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="bi bi-file-earmark-text me-2"></i>
+                        Application Details
+                    </h5>
+                </div>
+
+                <div class="card-body">
+
+                    <form id="proposalUpdateForm"
+                          th:action="@{/employer/proposals/update}"
+                          method="post">
+
+                        <input type="hidden" th:field="*{id}"/>
+                        <input type="hidden" th:field="*{job.id}"/>
+
+                        <!-- Job Info -->
+                        <div class="mb-3">
+                            <span class="badge bg-light-primary me-2">
+                                Job: <span th:text="${jobApplication.job.title}"></span>
+                            </span>
+                            <span class="badge bg-light-secondary">
+                                Category: <span th:text="${jobApplication.job.category.categoryName}"></span>
+                            </span>
+                        </div>
+
+                        <!-- Skills -->
+                        <div class="mb-3">
+                            <h6 class="fw-bold">Skills</h6>
+                            <div class="border rounded p-2 bg-light"
+                                 th:utext="${applicant.userProfile.skills}">
                             </div>
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <label class="card-title">Category: </label>
-                                    <span th:text="${jobApplication.getJob().getCategory().categoryName}"></span>
-                                </div>
+                        </div>
+
+                        <!-- Cover Letter -->
+                        <div class="mb-3">
+                            <h6 class="fw-bold">Cover Letter</h6>
+                            <div class="border rounded p-3"
+                                 th:utext="${jobApplication.coverLetter}">
                             </div>
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <label class="card-title">Skills: </label>
-                                    <span th:utext="${applicant.getUserProfile().skills}"></span>
-                                </div>
+                        </div>
+
+                        <!-- Salary & Date -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Expected Salary</label>
+                                <input type="text" class="form-control"
+                                       th:field="*{expectedSalary}" readonly>
                             </div>
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <label class="card-title">Cover Letter: </label>
-                                    <span th:utext="${jobApplication.coverLetter}"></span>
-                                </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Applied On</label>
+                                <input type="text" class="form-control"
+                                       th:value="${#temporals.format(jobApplication.applicationDate,'yyyy-MM-dd')}"
+                                       readonly>
                             </div>
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <label class="card-title">Expected Salary: </label>
-                                    <input type="text" class="form-control"
-                                            th:field="*{expectedSalary}" readonly />
-<!--                                    <input type="text" class="form-control" >-->
-<!--                                    <span th:text="${jobApplication.expectedSalary}"></span>-->
-                                </div>
+                        </div>
+
+                        <!-- Status -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Application Status</label>
+                            <select class="form-select" th:field="*{applicationStatus}" required>
+                                <option th:each="aps : ${applicationStatus}"
+                                        th:value="${aps.name()}"
+                                        th:text="${aps.name()}"></option>
+                            </select>
+                        </div>
+
+                        <!-- Remarks -->
+                        <div class="mb-4">
+                            <h6 class="fw-bold">Remarks</h6>
+                            <div class="border rounded p-2 bg-light"
+                                 th:utext="${jobApplication.remarks}">
                             </div>
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <label class="card-title">Application Date: </label>
-                                    <span th:text="${#temporals.format(jobApplication.applicationDate, 'yyyy-MM-dd')}"></span>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                            <div class="form-group">
-                                <label class="form-label">Application Status</label>
-                                <select class="form-select" th:field="*{applicationStatus}" required>
-                                    <option th:each="aps : ${applicationStatus}"
-                                            th:value="${aps.name()}"
-                                            th:text="${aps.name()}">
-                                    </option>
-                                </select>
-                            </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <label class="card-title">Remarks: </label>
-                                    <span th:utext="${jobApplication.remarks}"></span>
-                                </div>
-                            </div>
-                            <div class="col-12 d-flex justify-content-end">
-                                <button th:if="${jobApplication.applicationStatus.name() != 'PAID'
-            and jobApplication.applicationStatus.name() != 'REPORT'}" type="submit" class="btn btn-primary me-1 mb-1">Update</button>
-                                <button type="reset" class="btn btn-light-secondary me-1 mb-1">Reset</button>
-                            </div>
-                        </form>
-                    </div>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="d-flex justify-content-end gap-2">
+                            <button th:if="${jobApplication.applicationStatus.name() != 'PAID'
+                                    and jobApplication.applicationStatus.name() != 'REPORT'}"
+                                    type="submit"
+                                    class="btn btn-primary">
+                                <i class="bi bi-check-circle"></i> Update
+                            </button>
+
+                            <button type="reset" class="btn btn-outline-secondary">
+                                Reset
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
         </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-light-secondary"
-                data-bs-dismiss="modal">
-            <i class="bx bx-x d-block d-sm-none"></i>
-            <span class="d-none d-sm-block">Close</span>
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="modal-footer mt-4">
+        <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+            Close
         </button>
     </div>
+
 </div>

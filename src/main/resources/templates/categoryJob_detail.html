@@ -39,120 +39,162 @@
                     </div>
                 </div>
                 <section id="basic-vertical-layouts">
-                    <div class="row match-height">
-                        <div class="col-md-12 col-12">
-                            <div class="card">
-                                <div class="card-header">
-                                  <div class="row" th:align="right">
-                                      <div class="col-md-3">&nbsp;</div>
-                                      <div class="col-md-3">&nbsp;</div>
-                                      <div class="col-md-2" th:if="${saveStatus != null}">
-                                          <strong>Saved:</strong> &nbsp;
-                                          <i class="bi bi-save-fill text-info fs-4"></i>
-                                      </div>
-                                      <div class="col-md-2" th:if="${applyStatus != null}">
-                                          <strong>Applied:</strong>&nbsp;
-                                          <i class="bi bi-file-check-fill text-success fs-4"></i>
-                                      </div>
-                                      <div class="col-md-2" th:if="${reportStatus != null}">
-                                          <strong>Reported:</strong> &nbsp;
-                                          <i class="bi bi-flag-fill text-danger fs-4"></i>
-                                      </div>
-                                  </div>
-                                </div>
-                                <div class="card-content">
-                                  <div class="card-body">
-                                  <p class="text-primary"><strong>Post: &nbsp; <span th:text="${jobDetail.title}"></span></strong></p>
-                                  <div class="row match-height alert alert-light-primary border-bottom">
-                                      <div class="col-md-2"><strong>Vacancy:</strong>&nbsp;<span th:text="${jobDetail.vacancy}"></span></div>
-                                      <div class="col-md-4"><strong>Deadline:</strong>&nbsp;<span th:text="${#temporals.format(jobDetail.deadline, 'yyyy-MM-dd')}"></span></div>
-                                      <div class="col-md-3"><strong>Experience:</strong>&nbsp;<span th:text="${jobDetail.experience}"></span></div>
-                                      <div class="col-md-3"><strong>Payment:</strong>&nbsp;<span th:text="${jobDetail.paymentAmount}"></span></div>
-                                  </div><hr/>
-                                  <div class="table-responsive">
-                                  <table class="table table-lg">
-                                      <tbody>
-                                      <tr>
-                                          <td style="background-color: #f2f7ff"><strong>Job Description</strong></td>
-                                          <td><span  th:utext="${jobDetail.description}"></span></td>
-                                      </tr>
-                                      <tr>
-                                          <td style="background-color: #f2f7ff;"><strong>Required Skill</strong></td>
-                                          <td><span th:utext="${jobDetail.requiredSkill}"></span></td>
-                                      </tr>
-                                      <tr>
-                                          <td style="background-color: #f2f7ff;"><strong>Job Location</strong></td>
-                                          <td><span th:text="${jobDetail.jobLocation}"></span></td>
-                                      </tr>
-                                      <tr>
-                                          <td style="background-color: #f2f7ff;"><strong>Age Limit</strong></td>
-                                          <td><span th:text="${jobDetail.ageLimit}"></span></td>
-                                      </tr>
-                                      <tr>
-                                          <td style="background-color: #f2f7ff;"><strong>Required Experience</strong></td>
-                                          <td><span th:text="${jobDetail.experience}"></span></td>
-                                      </tr>
-                                      <tr>
-                                          <td style="background-color: #f2f7ff;"><strong>Payment</strong></td>
-                                          <td><span th:text="${jobDetail.paymentAmount}"></span></td>
-                                      </tr>
-                                      <tr>
-                                          <td style="background-color: #f2f7ff;"><strong>Company Name</strong></td>
-                                          <td><span th:text="${jobDetail.company}"></span></td>
-                                      </tr>
-                                      <tr>
-                                          <td style="background-color: #f2f7ff;"><strong>Special Instruction</strong></td>
-                                          <td><span th:text="${jobDetail.companyInstruction}"></span></td>
-                                      </tr>
+                    <section class="section">
 
-                                      <tr>
-                                      <td colspan="2">
-                                      <div th:align="center" sec:authorize="hasAnyRole('FREELANCER')">
-                                          <a th:if="${applyStatus == null or applyStatus != 'Applied'}" th:href="@{'/freelancer/jobs/application/' + ${@aesUtil.encryptId(jobDetail.id)}}"
-                                             target="_parent" class="btn btn-outline-success"><i class="bi bi-arrow-up-right"></i>  Apply Now </a>&nbsp;
-                                          <a th:if="${saveStatus == null or saveStatus != 'Saved'}" href="#" th:data-id="${@aesUtil.encryptId(jobDetail.id)}" id="saveJobBtn"
-                                             class="btn btn-outline-info"><i class="bi bi-save"></i> Save </a>&nbsp;
-                                          <a th:if="${reportStatus == null or reportStatus != 'Reported'}" th:href="@{'/freelancer/jobs/' + ${@aesUtil.encryptId(jobDetail.id)} + '/report'}" class="btn btn-outline-danger">
-                                              <i class="bi bi-flag"></i> Report Job
-                                          </a>
-                                      </div>
-                                     </td>
-                                      </tr>
-                                      <tr th:if="${applyStatus != '' and applyStatus == 'Applied'}">
-                                          <td colspan="2" class="alert alert-light-primary" th:align="center"><h5>You have already applied for this post.</h5></td>
-                                      </tr>
-                                     </tbody>
-                                  </table>
-                                  </div>
-                                      <div class="col-12 col-md-12 alert alert-light-primary border-bottom">
-                                          <h6 class="alert-heading"><i class="bi bi-building text-primary fs-4 me-2"></i>Company Information</h6>
-                                          <p><span th:text="${jobDetail.getUser().getUserProfile().getCompanyName()}"></span></p>
-                                          <p>&nbsp;</p>
-                                          <h6 class="alert-heading">Company Address</h6>
-                                          <p><span th:text="${jobDetail.getUser().getUserProfile().getCompanyAddress()}"></span></p>
-                                          <p>&nbsp;</p>
-                                          <h6 class="alert-heading">Business</h6>
-                                          <p><span th:text="${jobDetail.getUser().getUserProfile().getCompanyBusiness()}"></span></p>
-                                          <p>&nbsp;</p>
-                                          <h6 class="alert-heading">Contact No.</h6>
-                                          <p>Phone: <span th:text="${jobDetail.getUser().getUserProfile().getCompanyPhone()}"></span>
-                                          Email: <span th:text="${jobDetail.getUser().getUserProfile().getCompanyEmail()}"></span></p>
-                                      </div>
-                                      <div class="col-12 col-md-12 alert alert-light-warning border-bottom">
-                                          <h6 class="alert-heading">
-                                          <i class="bi bi-exclamation-triangle text-danger fs-4 me-2"></i> &nbsp;Report this Job!</h6>
-                                          <p class="card-body" style="font-size: smaller;">সতর্কীকরণ:
-                                          এই চাকরির বিজ্ঞাপনদাতা ব্যক্তি বা প্রতিষ্ঠান যদি কোনো অর্থ দাবি করে বা হয়রানিমূলক আচরণ করে, অনুগ্রহ করে দ্রুত জবটি রিপোর্ট করুন।
-                                          চাকরি পাওয়ার জন্য কোনো ব্যক্তি বা প্রতিষ্ঠানের কাছে অর্থ প্রদান করবেন না।
-                                          অর্থ লেনদেন বা নিয়োগদাতার হয়রানিমূলক আচরণের জন্য FreelancingBD দায়ী থাকবে না।
-                                          <br/><i class="bi bi-phone text-danger"></i> 01912000265, 01730909510
-                                              &nbsp; <i class="bi bi-envelope text-primary"></i> complain@FreelancingBD.com</p>
-                                      </div>
-                                  </div>
+                        <!-- Job Header -->
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start flex-wrap">
+
+                                    <div>
+                                        <h3 class="fw-bold text-primary mb-1" th:text="${jobDetail.title}"></h3>
+                                        <p class="text-muted mb-2">
+                                            <i class="bi bi-building"></i>
+                                            <span th:text="${jobDetail.company}"></span>
+                                        </p>
+
+                                        <span class="badge bg-light-primary me-2">
+                        <i class="bi bi-people"></i>
+                        Vacancy: <span th:text="${jobDetail.vacancy}"></span>
+                    </span>
+
+                                        <span class="badge bg-light-success me-2">
+                        <i class="bi bi-cash"></i>
+                        <span th:text="${jobDetail.paymentAmount}"></span>
+                    </span>
+
+                                        <span class="badge bg-light-warning">
+                        <i class="bi bi-calendar"></i>
+                        Deadline:
+                        <span th:text="${#temporals.format(jobDetail.deadline,'yyyy-MM-dd')}"></span>
+                    </span>
+                                    </div>
+
+                                    <!-- Status Icons -->
+                                    <div class="text-end">
+                    <span th:if="${saveStatus != null}" class="me-2">
+                        <i class="bi bi-save-fill text-info fs-4" title="Saved"></i>
+                    </span>
+                    <span th:if="${applyStatus != null}" class="me-2">
+                        <i class="bi bi-file-check-fill text-success fs-4" title="Applied"></i>
+                    </span>
+                                        <span th:if="${reportStatus != null}">
+                        <i class="bi bi-flag-fill text-danger fs-4" title="Reported"></i>
+                    </span>
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
+
+                        <div class="row">
+
+                            <!-- LEFT: Job Details -->
+                            <div class="col-lg-8">
+
+                                <!-- Job Description -->
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <h5><i class="bi bi-file-text me-2"></i>Job Description</h5>
+                                    </div>
+                                    <div class="card-body" th:utext="${jobDetail.description}"></div>
+                                </div>
+
+                                <!-- Skills -->
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <h5><i class="bi bi-tools me-2"></i>Required Skills</h5>
+                                    </div>
+                                    <div class="card-body" th:utext="${jobDetail.requiredSkill}"></div>
+                                </div>
+
+                                <!-- Additional Info -->
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <h5><i class="bi bi-info-circle me-2"></i>Job Information</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item"><strong>Location:</strong> <span th:text="${jobDetail.jobLocation}"></span></li>
+                                            <li class="list-group-item"><strong>Experience:</strong> <span th:text="${jobDetail.experience}"></span></li>
+                                            <li class="list-group-item"><strong>Age Limit:</strong> <span th:text="${jobDetail.ageLimit}"></span></li>
+                                            <li class="list-group-item"><strong>Special Instruction:</strong> <span th:text="${jobDetail.companyInstruction}"></span></li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- RIGHT: Actions & Company -->
+                            <div class="col-lg-4">
+
+                                <!-- Action Box -->
+                                <div class="card mb-4">
+                                    <div class="card-body text-center" sec:authorize="hasRole('FREELANCER')">
+
+                                        <a th:if="${applyStatus == null}"
+                                           th:href="@{'/freelancer/jobs/application/' + ${@aesUtil.encryptId(jobDetail.id)}}"
+                                           class="btn btn-success w-100 mb-2">
+                                            <i class="bi bi-arrow-up-right"></i> Apply Now
+                                        </a>
+
+                                        <a th:if="${saveStatus == null}"
+                                           href="#"
+                                           th:data-id="${@aesUtil.encryptId(jobDetail.id)}"
+                                           id="saveJobBtn"
+                                           class="btn btn-outline-info w-100 mb-2">
+                                            <i class="bi bi-save"></i> Save Job
+                                        </a>
+
+                                        <a th:if="${reportStatus == null}"
+                                           th:href="@{'/freelancer/jobs/' + ${@aesUtil.encryptId(jobDetail.id)} + '/report'}"
+                                           class="btn btn-outline-danger w-100">
+                                            <i class="bi bi-flag"></i> Report Job
+                                        </a>
+
+                                        <div th:if="${applyStatus == 'Applied'}"
+                                             class="alert alert-success mt-3">
+                                            You have already applied for this job.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Company Info -->
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <h5><i class="bi bi-building me-2"></i>Company Information</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <p><strong>Name:</strong>
+                                            <span th:text="${jobDetail.user.userProfile.companyName}"></span></p>
+                                        <p><strong>Address:</strong>
+                                            <span th:text="${jobDetail.user.userProfile.companyAddress}"></span></p>
+                                        <p><strong>Business:</strong>
+                                            <span th:text="${jobDetail.user.userProfile.companyBusiness}"></span></p>
+                                        <p>
+                                            <strong>Phone:</strong>
+                                            <span th:text="${jobDetail.user.userProfile.companyPhone}"></span><br/>
+                                            <strong>Email:</strong>
+                                            <span th:text="${jobDetail.user.userProfile.companyEmail}"></span>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- Warning -->
+                                <div class="card border-warning">
+                                    <div class="card-body text-warning small">
+                                        <i class="bi bi-exclamation-triangle-fill"></i>
+                                        Never pay money to get a job. Report suspicious activity immediately.
+                                        <hr>
+                                        📞 01912000265, 01730909510<br>
+                                        📧 complain@FreelancingBD.com
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </section>
+
                 </section>
                 <!-- Toast Container (GLOBAL) -->
                 <div id="toastContainer" class="toast-container position-fixed bottom-0 end-0 p-3"></div>

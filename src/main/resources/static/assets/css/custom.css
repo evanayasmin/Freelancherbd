@@ -344,4 +344,18 @@
         padding: 6px 14px;
     }
 }
+.job-card {
+    transition: all 0.25s ease;
+    border-left: 4px solid #435ebe;
+}
+
+.job-card:hover {
+
+    box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+}
+
+.bg-light-primary {
+    background-color: #eef2ff;
+    color: #435ebe;
+}
 

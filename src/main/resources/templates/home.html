@@ -41,27 +41,546 @@
                         </div>
                     </div>
                 </div>
-                <section class="section">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title">Example Content</h4>
+                <section class="section" sec:authorize="hasRole('FREELANCER')">
+                    <div class="row">
+                        <!-- Active Jobs -->
+                        <div class="col-6 col-lg-3 col-md-6">
+                            <div class="card">
+                                <div class="card-body px-3 py-4-5">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="stats-icon purple">
+                                                <i class="bi bi-briefcase-fill"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <h6 class="text-muted font-semibold">Active Jobs</h6>
+                                            <h6 class="font-extrabold mb-0">5</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
+                        <!-- Completed Jobs -->
+                        <div class="col-6 col-lg-3 col-md-6">
+                            <div class="card">
+                                <div class="card-body px-3 py-4-5">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="stats-icon green">
+                                                <i class="bi bi-check-circle-fill"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <h6 class="text-muted font-semibold">Completed Jobs</h6>
+                                            <h6 class="font-extrabold mb-0">28</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="notifications">
-                            <h5>Live Notifications</h5>
-                            <ul id="notificationList">
-                                <li>Waiting for new notifications...</li>
-                            </ul>
+
+                        <!-- Earnings -->
+                        <div class="col-6 col-lg-3 col-md-6">
+                            <div class="card">
+                                <div class="card-body px-3 py-4-5">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="stats-icon blue">
+                                                <i class="bi bi-currency-dollar"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <h6 class="text-muted font-semibold">Total Earnings</h6>
+                                            <h6 class="font-extrabold mb-0">$1,250</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur quas omnis
-                            laudantium tempore
-                            exercitationem, expedita aspernatur sed officia asperiores unde tempora maxime odio
-                            reprehenderit
-                            distinctio incidunt! Vel aspernatur dicta consequatur!
+
+                        <!-- Profile Views -->
+                        <div class="col-6 col-lg-3 col-md-6">
+                            <div class="card">
+                                <div class="card-body px-3 py-4-5">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="stats-icon red">
+                                                <i class="bi bi-eye-fill"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <h6 class="text-muted font-semibold">Profile Views</h6>
+                                            <h6 class="font-extrabold mb-0">1,120</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Recent Jobs & Messages -->
+                    <div class="row">
+
+                        <!-- Recent Jobs -->
+                        <div class="col-12 col-lg-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4>Recent Jobs</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover table-lg">
+                                            <thead>
+                                            <tr>
+                                                <th>Client</th>
+                                                <th>Project</th>
+                                                <th>Status</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td>Acme Corp</td>
+                                                <td>Website Redesign</td>
+                                                <td><span class="badge bg-success">Active</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>TechSoft</td>
+                                                <td>Mobile App API</td>
+                                                <td><span class="badge bg-warning">Pending</span></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recent Messages -->
+                        <div class="col-12 col-lg-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4>Recent Messages</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="recent-message d-flex mb-3">
+                                        <div class="avatar avatar-md">
+                                            <img src="assets/images/faces/1.jpg">
+                                        </div>
+                                        <div class="ms-3">
+                                            <h6 class="mb-0">Client A</h6>
+                                            <small class="text-muted">Please update the task</small>
+                                        </div>
+                                    </div>
+
+                                    <div class="recent-message d-flex">
+                                        <div class="avatar avatar-md">
+                                            <img src="assets/images/faces/2.jpg">
+                                        </div>
+                                        <div class="ms-3">
+                                            <h6 class="mb-0">Client B</h6>
+                                            <small class="text-muted">Deadline confirmed</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+                <section class="section" sec:authorize="hasRole('EMPLOYER')">
+
+                    <!-- Top Statistics -->
+                    <div class="row">
+
+                        <!-- Posted Jobs -->
+                        <div class="col-6 col-lg-3 col-md-6">
+                            <div class="card">
+                                <div class="card-body px-3 py-4-5">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="stats-icon purple">
+                                                <i class="bi bi-megaphone-fill"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <h6 class="text-muted font-semibold">Posted Jobs</h6>
+                                            <h6 class="font-extrabold mb-0">12</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Active Jobs -->
+                        <div class="col-6 col-lg-3 col-md-6">
+                            <div class="card">
+                                <div class="card-body px-3 py-4-5">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="stats-icon blue">
+                                                <i class="bi bi-briefcase-fill"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <h6 class="text-muted font-semibold">Active Jobs</h6>
+                                            <h6 class="font-extrabold mb-0">6</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Applicants -->
+                        <div class="col-6 col-lg-3 col-md-6">
+                            <div class="card">
+                                <div class="card-body px-3 py-4-5">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="stats-icon green">
+                                                <i class="bi bi-people-fill"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <h6 class="text-muted font-semibold">Applicants</h6>
+                                            <h6 class="font-extrabold mb-0">148</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Total Spent -->
+                        <div class="col-6 col-lg-3 col-md-6">
+                            <div class="card">
+                                <div class="card-body px-3 py-4-5">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="stats-icon red">
+                                                <i class="bi bi-cash-stack"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <h6 class="text-muted font-semibold">Total Spent</h6>
+                                            <h6 class="font-extrabold mb-0">$4,750</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Jobs & Applications -->
+                    <div class="row">
+
+                        <!-- Recent Job Posts -->
+                        <div class="col-12 col-lg-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4>Recent Job Posts</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover table-lg">
+                                            <thead>
+                                            <tr>
+                                                <th>Job Title</th>
+                                                <th>Applicants</th>
+                                                <th>Status</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td>Java Backend Developer</td>
+                                                <td>42</td>
+                                                <td><span class="badge bg-success">Open</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>UI/UX Designer</td>
+                                                <td>27</td>
+                                                <td><span class="badge bg-warning">Paused</span></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Latest Applications -->
+                        <div class="col-12 col-lg-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4>Latest Applications</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="recent-message d-flex mb-3">
+                                        <div class="avatar avatar-md">
+                                            <img src="assets/images/faces/3.jpg">
+                                        </div>
+                                        <div class="ms-3">
+                                            <h6 class="mb-0">Sarah Ahmed</h6>
+                                            <small class="text-muted">Applied for Backend Developer</small>
+                                        </div>
+                                    </div>
+
+                                    <div class="recent-message d-flex">
+                                        <div class="avatar avatar-md">
+                                            <img src="assets/images/faces/4.jpg">
+                                        </div>
+                                        <div class="ms-3">
+                                            <h6 class="mb-0">John Smith</h6>
+                                            <small class="text-muted">Applied for UI/UX Designer</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Active Contracts -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4>Active Contracts</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover table-lg">
+                                            <thead>
+                                            <tr>
+                                                <th>Freelancer</th>
+                                                <th>Project</th>
+                                                <th>Progress</th>
+                                                <th>Amount</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td>Alex Johnson</td>
+                                                <td>REST API Development</td>
+                                                <td>
+                                                    <div class="progress progress-sm">
+                                                        <div class="progress-bar bg-success" role="progressbar" style="width: 70%"></div>
+                                                    </div>
+                                                </td>
+                                                <td>$850</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </section>
+                <section class="section" sec:authorize="hasRole('ADMIN')">
+
+                    <!-- System Statistics -->
+                    <div class="row">
+                        <!-- Total Users -->
+                        <div class="col-6 col-lg-3 col-md-6">
+                            <div class="card">
+                                <div class="card-body px-3 py-4-5">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="stats-icon purple">
+                                                <i class="bi bi-people-fill"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <h6 class="text-muted font-semibold">Total Users</h6>
+                                            <h6 class="font-extrabold mb-0">1,245</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Freelancers -->
+                        <div class="col-6 col-lg-3 col-md-6">
+                            <div class="card">
+                                <div class="card-body px-3 py-4-5">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="stats-icon blue">
+                                                <i class="bi bi-person-workspace"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <h6 class="text-muted font-semibold">Freelancers</h6>
+                                            <h6 class="font-extrabold mb-0">820</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Employers -->
+                        <div class="col-6 col-lg-3 col-md-6">
+                            <div class="card">
+                                <div class="card-body px-3 py-4-5">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="stats-icon green">
+                                                <i class="bi bi-building"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <h6 class="text-muted font-semibold">Employers</h6>
+                                            <h6 class="font-extrabold mb-0">425</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Active Jobs -->
+                        <div class="col-6 col-lg-3 col-md-6">
+                            <div class="card">
+                                <div class="card-body px-3 py-4-5">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="stats-icon red">
+                                                <i class="bi bi-briefcase-fill"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <h6 class="text-muted font-semibold">Active Jobs</h6>
+                                            <h6 class="font-extrabold mb-0">312</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Revenue & Reports -->
+                    <div class="row">
+
+                        <!-- Platform Revenue -->
+                        <div class="col-12 col-lg-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4>Platform Revenue</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <h3 class="text-success">$128,450</h3>
+                                        <span class="badge bg-success">+18% this month</span>
+                                    </div>
+                                    <div id="admin-revenue-chart"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Reports & Issues -->
+                        <div class="col-12 col-lg-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4>Reports & Issues</h4>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            Pending Reports
+                                            <span class="badge bg-danger rounded-pill">9</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            Resolved Today
+                                            <span class="badge bg-success rounded-pill">14</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            Blocked Accounts
+                                            <span class="badge bg-warning rounded-pill">3</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="row">
+
+                        <!-- User Activity -->
+                        <div class="col-12 col-lg-7">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4>Recent User Activity</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover table-lg">
+                                            <thead>
+                                            <tr>
+                                                <th>User</th>
+                                                <th>Role</th>
+                                                <th>Action</th>
+                                                <th>Date</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td>Ali Hasan</td>
+                                                <td><span class="badge bg-primary">Freelancer</span></td>
+                                                <td>Profile Updated</td>
+                                                <td>2 mins ago</td>
+                                            </tr>
+                                            <tr>
+                                                <td>TechCorp Ltd</td>
+                                                <td><span class="badge bg-info">Employer</span></td>
+                                                <td>Job Posted</td>
+                                                <td>10 mins ago</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- System Health -->
+                        <div class="col-12 col-lg-5">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4>System Health</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <span>API Status</span>
+                                        <span class="float-end badge bg-success">Operational</span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <span>WebSocket</span>
+                                        <span class="float-end badge bg-success">Connected</span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <span>Database</span>
+                                        <span class="float-end badge bg-success">Healthy</span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <span>Storage</span>
+                                        <span class="float-end badge bg-warning">75% Used</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+
                 <div id="toastContainer" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
             </div>
             <footer>
