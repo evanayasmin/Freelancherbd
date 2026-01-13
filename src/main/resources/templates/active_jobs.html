@@ -70,7 +70,7 @@
                                     <td th:text="${#temporals.format(job.deadline, 'yyyy-MM-dd')}"></td>
                                     <td>
                                         <span th:if="${job.jobStatus.name() =='POSTED' }"
-                                              class="badge bg-primary">Posted</span>
+                                              class="badge bg-primary text-white">Posted</span>
                                         <span th:if="${job.jobStatus.name() =='PENDING' }"
                                               class="badge bg-warning">Pending</span>
                                         <span th:if="${job.jobStatus.name() =='IN_PROGRESS' }"
