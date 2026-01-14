@@ -75,7 +75,7 @@
                                             </div>
 
                                             <p class="job-skills"
-                                               th:text="${#strings.abbreviate(job.requiredSkill, 90)}">
+                                               th:utext="${#strings.abbreviate(job.requiredSkill, 100)}">
                                             </p>
 
                                             <div class="job-footer">

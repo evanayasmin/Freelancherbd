@@ -111,6 +111,12 @@ public class JobController {
         model.addAttribute("jobs", jobs);
         model.addAttribute("statuses", UserStatus.values());
         model.addAttribute("aesUtil", aesUtil);
+
+        model.addAttribute("totalActive", jobs.size());
+        model.addAttribute("postedCount", jobs.stream().filter(j -> j.getJobStatus() == JobStatus.POSTED).count());
+        model.addAttribute("progressCount", jobs.stream().filter(j -> j.getJobStatus() == JobStatus.IN_PROGRESS).count());
+        model.addAttribute("completedCount", jobs.stream().filter(j -> j.getJobStatus() == JobStatus.COMPLETED).count());
+
         model.addAttribute("currentPath", "/employer/jobs/active_job");
 
         return "active_jobs";
