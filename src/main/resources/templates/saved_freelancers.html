@@ -40,7 +40,16 @@
                 </div>
                 <section id="basic-vertical-layouts" class="section">
                     <div class="container mt-4">
-                        <h5 class="mb-4 fw-bold text-secondary"><hr/></h5>
+                        <div class="card mb-4">
+                            <div class="card-body d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+                                <div>
+                                    <h5 class="mb-1 fw-bold text-secondary">Saved Freelancers</h5>
+                                    <div class="text-muted small">
+                                        Browse top freelancers based on skills, rating, and profile quality.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row row-cols-1 row-cols-md-3 g-4">
                             <div class="col" th:each="freelancer : ${freelancers}">
                                 <div class="card h-80 shadow-sm border-0 rounded-4">
