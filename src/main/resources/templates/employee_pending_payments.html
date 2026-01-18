@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <div th:replace="~{fragments/header :: header}"></div>
+
+    <style>
+        /* =========================
+           Pending Payment Page
+        ========================= */
+
+        .avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .stat-box {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 10px 14px;
+            min-width: 100px;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .payment-card {
+            background: #ffffff;
+            border-radius: 14px;
+            box-shadow: 0 8px 28px rgba(0,0,0,0.07);
+            transition: all 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .payment-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 44px rgba(0,0,0,0.12);
+        }
+
+        .payment-card-header {
+            padding: 16px 18px;
+            border-bottom: 1px solid #f1f1f1;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .payment-card-header h5 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .status.pending {
+            font-size: 12px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            background: #fff7ed;
+            color: #d97706;
+            font-weight: 500;
+        }
+
+        .payment-card-body {
+            padding: 16px 18px;
+            flex-grow: 1;
+        }
+
+        .meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .meta i {
+            margin-right: 4px;
+            color: #6b7280;
+        }
+
+        .payment-card-footer {
+            padding: 14px 18px;
+            border-top: 1px solid #f1f1f1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body>
+<div id="app">
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="active">
+        <div class="sidebar-wrapper active">
+            <div class="sidebar-header">
+                <div class="d-flex justify-content-between">
+                    <div class="logo">
+                        <a href="#"><img src="assets/images/logo/logo.png" alt="Logo"></a>
+                    </div>
+                    <div class="toggler">
+                        <a href="#" class="sidebar-hide d-xl-none d-block">
+                            <i class="bi bi-x bi-middle"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div th:replace="~{fragments/navigation :: navigation}"></div>
+
+            <button class="sidebar-toggler btn x">
+                <i data-feather="x"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main -->
+    <div id="main" class="layout-navbar">
+
+        <div th:replace="~{fragments/profile_header :: profile-header}"></div>
+
+        <div id="main-content">
+            <div class="page-heading">
+
+                <!-- Breadcrumb -->
+                <div class="page-title">
+                    <div class="row">
+                        <div class="col-12 col-md-6"></div>
+                        <div class="col-12 col-md-6">
+                            <nav class="breadcrumb-header float-start float-lg-end">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item">
+                                        <a th:href="@{/home}">Dashboard</a>
+                                    </li>
+                                    <li class="breadcrumb-item">
+                                        Payments
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        Pending Payments
+                                    </li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ===================== SECTION ===================== -->
+                <section class="section">
+
+                    <!-- Statistics Header -->
+                    <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
+
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="avatar bg-light-warning">
+                                <i class="bi bi-hourglass-split text-warning"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-1 fw-bold">Pending Payments</h5>
+                                <div class="text-muted small">
+                                    Completed jobs awaiting payment confirmation.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-3 flex-wrap">
+                            <div class="stat-box">
+                                <div class="stat-value" th:text="${pendingCount}">0</div>
+                                <div class="stat-label">Jobs</div>
+                            </div>
+
+                            <div class="stat-box">
+                                <div class="stat-value text-warning">
+                                    ৳ <span th:text="${pendingAmount}">0</span>
+                                </div>
+                                <div class="stat-label">Total Pending</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Cards -->
+                    <div class="card">
+                        <div class="card-header fw-bold">
+                            Pending Payment List
+                        </div>
+
+                        <div class="card-body">
+                            <div class="row g-4">
+
+                                <div class="col-xl-4 col-lg-6 col-md-6"
+                                     th:each="job : ${pendingJobs}">
+                                    <div class="payment-card">
+
+                                        <div class="payment-card-header">
+                                            <div>
+                                                <h5 th:text="${job.title}"></h5>
+                                                <small class="text-muted"
+                                                       th:text="${job.category.categoryName}"></small>
+                                            </div>
+                                            <span class="status pending">Pending</span>
+                                        </div>
+
+                                        <div class="payment-card-body">
+                                            <div class="meta">
+                                                <div>
+                                                    <i class="bi bi-cash-stack"></i>
+                                                    Amount
+                                                </div>
+                                                <strong>
+                                                    ৳ <span th:text="${job.paymentAmount}"></span>
+                                                </strong>
+                                            </div>
+
+                                            <div class="meta">
+                                                <div>
+                                                    <i class="bi bi-calendar-check"></i>
+                                                    Completed On
+                                                </div>
+                                                <span th:text="${#temporals.format(job.completedAt,'dd MMM yyyy')}"></span>
+                                            </div>
+
+                                            <div class="meta">
+                                                <div>
+                                                    <i class="bi bi-clock-history"></i>
+                                                    Waiting
+                                                </div>
+                                                <span th:text="${job.pendingDays} + ' days'"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="payment-card-footer">
+                                            <small class="text-muted">
+                                                Employer: <span th:text="${job.employerName}"></span>
+                                            </small>
+
+                                            <button class="btn btn-sm btn-outline-primary"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#jobViewModal"
+                                                    th:data-url="@{/employee/jobs/job_detail(encId=${@aesUtil.encryptId(job.id)})}">
+                                                <i class="bi bi-eye"></i> Details
+                                            </button>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </section>
+                <!-- ===================== SECTION END ===================== -->
+
+            </div>
+
+            <!-- Job Detail Modal -->
+            <div class="modal fade" id="jobViewModal" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Job Details</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body" id="viewModalContent"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer>
+                <div class="footer clearfix mb-0 text-muted">
+                    <div th:replace="~{fragments/footer :: footer}"></div>
+                </div>
+            </footer>
+
+        </div>
+
+        <div id="toastContainer"
+             class="toast-container position-fixed bottom-0 end-0 p-3"></div>
+    </div>
+</div>
+</body>
+</html>

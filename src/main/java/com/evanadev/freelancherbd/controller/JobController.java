@@ -269,6 +269,28 @@ public class JobController {
 
     /*
      * @author: evana
+     * @Desc: Completed job lists for payment pending of LoggedIn User as Employer
+     * @Date: 18-12-26
+     * */
+
+    @GetMapping("/employer/payments/pending_payments")
+    public String pendingPaymentJobList(@ModelAttribute("loggedUser") CustomUserDetail loggedUser, Model model) {
+        log.info("Loggedin user=",loggedUser.getUser().getUsername());
+        List<Job> pendingJobs = jobService.findByPendingPaymentJobs(loggedUser.getId());
+
+        model.addAttribute("aesUtil", aesUtil);
+
+        model.addAttribute("pendingJobs", pendingJobs);
+        model.addAttribute("pendingCount", pendingJobs.size());
+        model.addAttribute("pendingAmount", pendingJobs.size());
+
+        model.addAttribute("currentPath", "/employer/payments");
+
+        return "employee_pending_payments";
+    }
+
+    /*
+     * @author: evana
      * @Desc: New job lists of LoggedIn User as Employee
      * @Date: 28-10-25
      * */

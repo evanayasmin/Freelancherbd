@@ -133,6 +133,9 @@ public class JobService {
         return jobRepository.findByTrackingJobStatus(jobStatus, userId);
     }
 
+    public List<Job> findByPendingPaymentJobs(Long userId) {
+        return jobRepository.findByJobTrackingCompleted(userId);
+    }
 
 
 }
