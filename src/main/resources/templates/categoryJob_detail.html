@@ -54,33 +54,39 @@
                                         </p>
 
                                         <span class="badge bg-light-primary me-2">
-                        <i class="bi bi-people"></i>
-                        Vacancy: <span th:text="${jobDetail.vacancy}"></span>
-                    </span>
+                                            <i class="bi bi-people"></i>
+                                            Vacancy: <span th:text="${jobDetail.vacancy}"></span>
+                                        </span>
 
                                         <span class="badge bg-light-success me-2">
-                        <i class="bi bi-cash"></i>
-                        <span th:text="${jobDetail.paymentAmount}"></span>
-                    </span>
+                                            <i class="bi bi-cash"></i>
+                                            <span th:text="${jobDetail.paymentAmount}"></span>
+                                        </span>
 
                                         <span class="badge bg-light-warning">
-                        <i class="bi bi-calendar"></i>
-                        Deadline:
-                        <span th:text="${#temporals.format(jobDetail.deadline,'yyyy-MM-dd')}"></span>
-                    </span>
+                                            <i class="bi bi-calendar"></i>
+                                            Deadline:
+                                            <span th:text="${#temporals.format(jobDetail.deadline,'yyyy-MM-dd')}"></span>
+                                        </span>
                                     </div>
 
                                     <!-- Status Icons -->
                                     <div class="text-end">
-                    <span th:if="${saveStatus != null}" class="me-2">
-                        <i class="bi bi-save-fill text-info fs-4" title="Saved"></i>
-                    </span>
-                    <span th:if="${applyStatus != null}" class="me-2">
-                        <i class="bi bi-file-check-fill text-success fs-4" title="Applied"></i>
-                    </span>
+                                        <span th:if="${saveStatus != null}" class="me-2">
+                                            <i class="bi bi-save-fill text-info fs-4" title="Saved"></i>
+                                        </span>
+                                        <span th:if="${applyStatus != null}" class="me-2">
+                                            <i class="bi bi-file-check-fill text-primary fs-4" title="Applied"></i>
+                                        </span>
+                                        <span th:if="${submitStatus != null}" class="me-2">
+                                            <i class="bi bi-file-check text-success fs-4" title="Submitted"></i>
+                                        </span>
                                         <span th:if="${reportStatus != null}">
-                        <i class="bi bi-flag-fill text-danger fs-4" title="Reported"></i>
-                    </span>
+                                        <i class="bi bi-flag-fill text-danger fs-4" title="Reported"></i>
+                                        </span>
+                                        <span th:if="${rejectStatus != null}">
+                                        <i class="bi bi-book-fill text-warning fs-4" title="Rejected"></i>
+                                        </span>
                                     </div>
 
                                 </div>
@@ -146,6 +152,14 @@
                                             <i class="bi bi-save"></i> Save Job
                                         </a>
 
+                                        <a th:if="${submitStatus == null}"
+                                           href="#"
+                                           th:data-id="${@aesUtil.encryptId(jobDetail.id)}"
+                                           id="submitJobBtn" title="Click here to submit your task."
+                                           class="btn btn-outline-primary w-100 mb-2">
+                                            <i class="bi bi-file-check"></i>  Submit Task
+                                        </a>
+
                                         <a th:if="${reportStatus == null}"
                                            th:href="@{'/freelancer/jobs/' + ${@aesUtil.encryptId(jobDetail.id)} + '/report'}"
                                            class="btn btn-outline-danger w-100">
@@ -155,6 +169,11 @@
                                         <div th:if="${applyStatus == 'Applied'}"
                                              class="alert alert-success mt-3">
                                             You have already applied for this job.
+                                        </div>
+
+                                        <div th:if="${rejectStatus == 'Rejected'}"
+                                             class="alert alert-warning mt-3">
+                                            Your submitted task has been rejected. Please check again!
                                         </div>
                                     </div>
                                 </div>
@@ -203,6 +222,7 @@
                 <div class="footer clearfix mb-0 text-muted">
                     <div th:replace="~{fragments/footer :: footer}"></div>
                 </div>
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
             </footer>
         </div>
     </div>

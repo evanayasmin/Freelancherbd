@@ -5,104 +5,7 @@
 
 <head>
     <div th:replace="~{fragments/header :: header}"></div>
-
-    <style>
-        /* =========================
-           Pending Payment Page
-        ========================= */
-
-        .avatar {
-            width: 42px;
-            height: 42px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-        }
-
-        .stat-box {
-            background: #ffffff;
-            border-radius: 12px;
-            padding: 10px 14px;
-            min-width: 100px;
-            text-align: center;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.06);
-        }
-
-        .stat-value {
-            font-size: 18px;
-            font-weight: 700;
-        }
-
-        .stat-label {
-            font-size: 12px;
-            color: #6b7280;
-        }
-
-        .payment-card {
-            background: #ffffff;
-            border-radius: 14px;
-            box-shadow: 0 8px 28px rgba(0,0,0,0.07);
-            transition: all 0.3s ease;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .payment-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 16px 44px rgba(0,0,0,0.12);
-        }
-
-        .payment-card-header {
-            padding: 16px 18px;
-            border-bottom: 1px solid #f1f1f1;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
-
-        .payment-card-header h5 {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .status.pending {
-            font-size: 12px;
-            padding: 6px 12px;
-            border-radius: 20px;
-            background: #fff7ed;
-            color: #d97706;
-            font-weight: 500;
-        }
-
-        .payment-card-body {
-            padding: 16px 18px;
-            flex-grow: 1;
-        }
-
-        .meta {
-            display: flex;
-            justify-content: space-between;
-            font-size: 13px;
-            margin-bottom: 8px;
-        }
-
-        .meta i {
-            margin-right: 4px;
-            color: #6b7280;
-        }
-
-        .payment-card-footer {
-            padding: 14px 18px;
-            border-top: 1px solid #f1f1f1;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/assets/vendors/simple-datatables/style.css}">
 </head>
 
 <body>
@@ -202,65 +105,81 @@
                         </div>
 
                         <div class="card-body">
-                            <div class="row g-4">
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle" id="table1">
+                                    <thead class="table-light">
+                                    <tr>
+                                        <th>Task</th>
+                                        <th>Category</th>
+                                        <th>Applicant</th>
+                                        <th>Payment</th>
+                                        <th>Status</th>
+                                        <th>Submitted At</th>
+                                        <th class="text-center">Action</th>
+                                    </tr>
+                                    </thead>
 
-                                <div class="col-xl-4 col-lg-6 col-md-6"
-                                     th:each="job : ${pendingJobs}">
-                                    <div class="payment-card">
+                                    <tbody>
+                                    <tr th:each="jobp : ${jobPayments}">
 
-                                        <div class="payment-card-header">
-                                            <div>
-                                                <h5 th:text="${job.title}"></h5>
-                                                <small class="text-muted"
-                                                       th:text="${job.category.categoryName}"></small>
-                                            </div>
-                                            <span class="status pending">Pending</span>
-                                        </div>
+                                        <!-- Job -->
+                                        <td>
+                                            <div class="fw-semibold" th:text="${jobp.getJob().getTitle()}"></div>
+                                        </td>
 
-                                        <div class="payment-card-body">
-                                            <div class="meta">
-                                                <div>
-                                                    <i class="bi bi-cash-stack"></i>
-                                                    Amount
+                                        <!-- Category -->
+                                        <td>
+                                        <span class="badge bg-light-secondary"
+                                              th:text="${jobp.job.category.categoryName}">
+                                        </span>
+                                        </td>
+
+                                        <!-- Applicant -->
+                                        <td>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div class="avatar bg-info text-white rounded-circle">
+                                                    <span th:text="${#strings.substring(jobp.user.fullname,0,1)}"></span>
                                                 </div>
-                                                <strong>
-                                                    ৳ <span th:text="${job.paymentAmount}"></span>
-                                                </strong>
+                                                <span class="fw-medium" th:text="${jobp.user.fullname}"></span>
                                             </div>
+                                        </td>
 
-                                            <div class="meta">
-                                                <div>
-                                                    <i class="bi bi-calendar-check"></i>
-                                                    Completed On
-                                                </div>
-                                                <span th:text="${#temporals.format(job.completedAt,'dd MMM yyyy')}"></span>
-                                            </div>
+                                        <!-- Salary -->
+                                        <td class="fw-bold text-success">
+                                            ৳ <span th:text="${jobp.job.getPaymentAmount()}"></span>
+                                        </td>
 
-                                            <div class="meta">
-                                                <div>
-                                                    <i class="bi bi-clock-history"></i>
-                                                    Waiting
-                                                </div>
-                                                <span th:text="${job.pendingDays} + ' days'"></span>
-                                            </div>
-                                        </div>
+                                        <!-- Status -->
+                                        <td>
+                                            <span class="badge bg-primary text-white" th:if="${jobp.getTrafficType().name() == 'SUBMITTED'}">
+                                                Submitted
+                                            </span>
+<!--                                            <span th:if="${jobp.applicationStatus.name() == 'VIEWED'}"-->
+<!--                                                  class="badge bg-info">-->
+<!--                                                VIEWED-->
+<!--                                            </span>-->
+                                        </td>
 
-                                        <div class="payment-card-footer">
-                                            <small class="text-muted">
-                                                Employer: <span th:text="${job.employerName}"></span>
-                                            </small>
+                                        <!-- Date -->
+                                        <td class="text-muted">
+                                            <i class="bi bi-clock me-1"></i>
+                                            <span th:text="${#temporals.format(jobp.getUpdatedAt(),'dd MMM yyyy')}"></span>
+                                        </td>
 
-                                            <button class="btn btn-sm btn-outline-primary"
+                                        <!-- Action -->
+                                        <td class="text-center">
+                                            <button type="button"
+                                                    class="btn btn-sm btn-outline-primary"
                                                     data-bs-toggle="modal"
-                                                    data-bs-target="#jobViewModal"
-                                                    th:data-url="@{/employee/jobs/job_detail(encId=${@aesUtil.encryptId(job.id)})}">
-                                                <i class="bi bi-eye"></i> Details
+                                                    data-bs-target="#proposalViewModal"
+                                                    th:data-url="@{/employer/jobs/proposal_details(encId=${@aesUtil.encryptId(jobp.id)})}">
+                                                <i class="bi bi-eye"></i>
+                                                Payment
                                             </button>
-                                        </div>
-
-                                    </div>
-                                </div>
-
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -287,6 +206,14 @@
             <footer>
                 <div class="footer clearfix mb-0 text-muted">
                     <div th:replace="~{fragments/footer :: footer}"></div>
+                    <script th:src="@{/assets/vendors/simple-datatables/simple-datatables.js}"></script>
+                    <script>
+                        // Simple Datatable
+                        let table1 = document.querySelector('#table1');
+                        let dataTable = new simpleDatatables.DataTable(table1);
+
+                    </script>
+
                 </div>
             </footer>
 

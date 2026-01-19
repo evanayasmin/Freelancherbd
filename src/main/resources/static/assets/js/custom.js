@@ -115,6 +115,65 @@ $(document).on('click', '#saveJobBtn', function(e) {
     });
 });
 
+//=== Freelancer submit his work to employee
+
+/*$(document).on('click', '#submitJobBtn', function(e) {
+    e.preventDefault();
+    const jobId = $(this).data('id');
+    //alert(jobId);
+    $.ajax({
+        url: '/freelancer/jobs/task_submit',
+        type: 'POST',
+        data: { jobId: jobId },
+        success: function(response) {
+            if (response.status === "success") {
+                showToast("Task is submitted Successfully!", "success");
+            }else{
+                showToast("Failed to submit the job!", "error");
+            }
+        },
+        error: function(xhr) {
+            alert('Error saving job: ' + xhr.responseText);
+        }
+    });
+});
+
+ */
+
+$(document).on('click', '#submitJobBtn', function (e) {
+    e.preventDefault();
+
+    const jobId = $(this).data('id');
+
+    Swal.fire({
+        title: 'Confirm Task Submission',
+        text: 'Once submitted, you will not be able to modify this task.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, Submit',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/freelancer/jobs/task_submit',
+                type: 'POST',
+                data: { jobId: jobId },
+                success: function (response) {
+                    if (response.status === "success") {
+                        Swal.fire('Submitted!', 'Your task has been submitted.', 'success');
+                    } else {
+                        Swal.fire('Failed!', 'Task submission failed.', 'error');
+                    }
+                },
+                error: function () {
+                    Swal.fire('Error!', 'Something went wrong.', 'error');
+                }
+            });
+        }
+    });
+});
+
+
 // Freelancer Saved for an employer
 $(document).on('click', '#saveUserBtn', function(e) {
     e.preventDefault();

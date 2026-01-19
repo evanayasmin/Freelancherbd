@@ -114,6 +114,7 @@
                                        th:value="${#temporals.format(jobApplication.applicationDate,'yyyy-MM-dd')}"
                                        readonly>
                             </div>
+
                         </div>
 
                         <!-- Status -->
@@ -125,6 +126,12 @@
                                         th:text="${aps.name()}"></option>
                             </select>
                         </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Approved Salary (Tk)*</label>
+                            <input type="number" class="form-control" th:field="*{approvedSalary}">
+                        </div>
+
 
                         <!-- Remarks -->
                         <div class="mb-4">

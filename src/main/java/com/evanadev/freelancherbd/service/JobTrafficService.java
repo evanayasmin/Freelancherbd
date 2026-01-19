@@ -34,4 +34,8 @@ public class JobTrafficService {
     public List<JobTraffic> findJobTrafficByUserIdJobId(Long userId, Long jobId){
         return jobTrafficRepository.findJobTrafficByUserIdJobId(userId, jobId);
     }
+
+    public List<JobTraffic> findJobTrafficByStatus(Long userId, TrafficType trafficType){
+        return jobTrafficRepository.findJobTrafficByStatus(userId, trafficType);
+    }
 }

@@ -276,15 +276,16 @@ public class JobController {
     @GetMapping("/employer/payments/pending_payments")
     public String pendingPaymentJobList(@ModelAttribute("loggedUser") CustomUserDetail loggedUser, Model model) {
         log.info("Loggedin user=",loggedUser.getUser().getUsername());
-        List<Job> pendingJobs = jobService.findByPendingPaymentJobs(loggedUser.getId());
+
+        List<JobTraffic> jobPayments= jobTrafficService.findJobTrafficByStatus(loggedUser.getId(), TrafficType.SUBMITTED);
 
         model.addAttribute("aesUtil", aesUtil);
 
-        model.addAttribute("pendingJobs", pendingJobs);
-        model.addAttribute("pendingCount", pendingJobs.size());
-        model.addAttribute("pendingAmount", pendingJobs.size());
+        model.addAttribute("jobPayments", jobPayments);
+        model.addAttribute("pendingCount", jobPayments.size());
+        model.addAttribute("pendingAmount", jobPayments.size());
 
-        model.addAttribute("currentPath", "/employer/payments");
+        model.addAttribute("currentPath", "/employer/payments/pending");
 
         return "employee_pending_payments";
     }
@@ -375,7 +376,7 @@ public class JobController {
     public String completedJobList(@ModelAttribute("loggedUser") CustomUserDetail loggedUser, Model model) {
         log.info("Loggedin user=",loggedUser.getUser().getUsername());
         Long userId = loggedUser.getId();
-        List<Job> jobs = jobService.findBySavedJobs(TrafficType.COMPLETED, userId);
+        List<Job> jobs = jobService.findBySavedJobs(TrafficType.SUBMITTED, userId);
         model.addAttribute("jobs", jobs);
         model.addAttribute("aesUtil", aesUtil);
         return "employee_completed_jobs";
@@ -545,12 +546,17 @@ public class JobController {
                         model.addAttribute("reportStatus", "Reported");
                     }else if (traffic.getTrafficType() == TrafficType.APPLIED) {
                         model.addAttribute("applyStatus", "Applied");
+                    }else if (traffic.getTrafficType() == TrafficType.SUBMITTED) {
+                        model.addAttribute("submitStatus", "Submitted");
+                    }
+                    else if (traffic.getTrafficType() == TrafficType.REJECTED) {
+                        model.addAttribute("rejectStatus", "Rejected");
                     }
                 }
 
             }
             model.addAttribute("jobDetail", job);
-            return "categoryJob_detail";
+        return "categoryJob_detail";
 
         } catch (Exception e) {
             e.printStackTrace();

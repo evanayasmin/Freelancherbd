@@ -5,7 +5,8 @@ public enum TrafficType {
     SAVED,
     APPLIED,
     WORKING,
-    COMPLETED,
+    SUBMITTED,
+    REJECTED,
     PAID,
     REPORT
 }

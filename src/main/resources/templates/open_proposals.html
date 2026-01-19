@@ -63,50 +63,6 @@
                     </div>
                 </div>
 
-<!--                <section class="section">-->
-<!--                    <div class="card">-->
-<!--                        <div class="card-header">Open Proposal</div>-->
-<!--                        <div class="card-body" id="freelancerCardBody">-->
-<!--                            <table class="table table-striped" id="table1">-->
-<!--                                <thead>-->
-<!--                                <tr>-->
-<!--                                    <th>Job Title</th>-->
-<!--                                    <th>Category</th>-->
-<!--                                    <th>Applicant Name</th>-->
-<!--                                    <th>Expected Salary</th>-->
-<!--                                    <th>Status</th>-->
-<!--                                    <th>Applied At</th>-->
-<!--                                    <th>Action</th>-->
-<!--                                </tr>-->
-<!--                                </thead>-->
-<!--                                <tbody>-->
-<!--                                <tr th:each="jobp : ${proposals}">-->
-<!--                                    <td th:text="${jobp.getJob().title}"></td>-->
-<!--                                    <td th:text="${jobp.getJob().getCategory().categoryName}"></td>-->
-<!--                                    <td th:text="${jobp.getUser().fullname}"></td>-->
-<!--                                    <td th:text="${jobp.expectedSalary}"></td>-->
-<!--                                    <td>-->
-<!--                                    <span th:if="${jobp.applicationStatus.name() =='RECEIVED' }"-->
-<!--                                          class="badge bg-primary">RECEIVED</span>-->
-<!--                                    <span th:if="${jobp.applicationStatus.name() =='VIEWED' }"-->
-<!--                                          class="badge bg-info">VIEWED</span>-->
-<!--                                    </td>-->
-<!--                                    <td th:text="${#temporals.format(jobp.applicationDate, 'yyyy-MM-dd')}"></td>-->
-<!--                                    <td>-->
-<!--                                        <button type="button"-->
-<!--                                            class="btn btn-sm btn-outline-primary edit-btn"-->
-<!--                                            data-bs-toggle="modal"-->
-<!--                                            data-bs-target="#proposalViewModal"-->
-<!--                                            th:data-url="@{/employer/jobs/proposal_details(encId=${@aesUtil.encryptId(jobp.id)})}">-->
-<!--                                        <i class="bi bi-book"></i>-->
-<!--                                        </button>-->
-<!--                                    </td>-->
-<!--                                </tr>-->
-<!--                                </tbody>-->
-<!--                            </table>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </section>-->
                 <section class="section">
                     <div class="card border-0 shadow-sm">
                         <div class="card-header bg-white border-bottom">
@@ -142,9 +98,9 @@
 
                                         <!-- Category -->
                                         <td>
-                            <span class="badge bg-light-secondary"
-                                  th:text="${jobp.job.category.categoryName}">
-                            </span>
+                                        <span class="badge bg-light-secondary"
+                                              th:text="${jobp.job.category.categoryName}">
+                                        </span>
                                         </td>
 
                                         <!-- Applicant -->
@@ -164,14 +120,14 @@
 
                                         <!-- Status -->
                                         <td>
-                            <span th:if="${jobp.applicationStatus.name() == 'RECEIVED'}"
-                                  class="badge bg-primary">
-                                NEW
-                            </span>
+                                            <span th:if="${jobp.applicationStatus.name() == 'RECEIVED'}"
+                                                  class="badge bg-primary">
+                                                NEW
+                                            </span>
                                             <span th:if="${jobp.applicationStatus.name() == 'VIEWED'}"
                                                   class="badge bg-info">
-                                VIEWED
-                            </span>
+                                                VIEWED
+                                            </span>
                                         </td>
 
                                         <!-- Date -->

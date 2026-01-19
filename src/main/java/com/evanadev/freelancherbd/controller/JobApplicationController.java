@@ -103,7 +103,7 @@ public class JobApplicationController {
      * */
     @PostMapping("/freelancer/jobs/application_saved")
     @ResponseBody
-    public ResponseEntity<Map<String, String>> SaveJob(@RequestParam("jobId") String encId, @ModelAttribute("loggedUser") CustomUserDetail loggedUserDetail, Model model) {
+    public ResponseEntity<Map<String, String>> SaveJob(@RequestParam("jobId") String encId, @ModelAttribute("loggedUser") CustomUserDetail loggedUserDetail) {
         Map<String, String> response = new HashMap<>();
         Long did = aesUtil.decryptId(encId);
         User user = loggedUserDetail.getUser();
@@ -127,6 +127,40 @@ public class JobApplicationController {
         response.put("status", "success");
         return ResponseEntity.ok(response);
     }
+
+    /*
+     * @author: evana
+     * @Desc: Task Submitted of a LoggedIn User as Employee
+     * @Date: 30-10-25
+     * */
+    @PostMapping("/freelancer/jobs/task_submit")
+    @ResponseBody
+    public ResponseEntity<Map<String, String>> SubmitJob(@RequestParam("jobId") String encId, @ModelAttribute("loggedUser") CustomUserDetail loggedUserDetail, Model model) {
+        Map<String, String> response = new HashMap<>();
+        Long did = aesUtil.decryptId(encId);
+        User user = loggedUserDetail.getUser();
+        Job job = jobService.findById(did);
+
+        //JobTraffic Value Set ===
+        Optional<JobTraffic> existing = jobTrafficService.findByUserIdJobId(user.getId(), did,TrafficType.SUBMITTED);
+
+        System.out.println("Existing record found: " + existing.isPresent());
+        if(existing.isPresent()){
+            JobTraffic jobTraffic = existing.get();
+            jobTraffic.setTrafficType(TrafficType.SUBMITTED);
+            jobTrafficService.save(jobTraffic);
+        }else{
+            JobTraffic jobTraffic = new JobTraffic();
+            jobTraffic.setJob(job);
+            jobTraffic.setTrafficType(TrafficType.SUBMITTED);
+            jobTraffic.setUser(loggedUserDetail.getUser());
+            jobTrafficService.save(jobTraffic);
+        }
+
+        response.put("status", "success");
+        return ResponseEntity.ok(response);
+    }
+
 
 
     /*
