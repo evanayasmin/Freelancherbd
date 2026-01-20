@@ -46,6 +46,17 @@ public interface JobRepository extends JpaRepository<Job, Long> {
             "WHERE jt.trafficType = :jobStatus AND jt.user.id = :userId")
     List<Job> findByTrackingJobStatus(@Param("jobStatus") TrafficType jobStatus, @Param("userId") Long userId);
 
+    // Pending Payment completed Jobs
+
+    @Query("""
+    SELECT DISTINCT jb
+    FROM JobTraffic jt
+    JOIN jt.job jb
+    JOIN FETCH jb.category
+    WHERE jt.trafficType = 'COMPLETED'
+    AND jt.job.user.id = :userId
+""")
+    List<Job> findByJobTrackingCompleted(@Param("userId") Long userId);
 
 
 }

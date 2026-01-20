@@ -24,6 +24,9 @@ public class JobApplication {
     @Column(nullable = false)
     private String expectedSalary;
 
+    @Column(nullable = false)
+    private Double approvedSalary;
+
     @Enumerated(EnumType.STRING)
     private ApplicationStatus applicationStatus;
     private String remarks;
@@ -68,6 +71,14 @@ public class JobApplication {
 
     public void setExpectedSalary(String expectedSalary) {
         this.expectedSalary = expectedSalary;
+    }
+
+    public Double getApprovedSalary() {
+        return approvedSalary;
+    }
+
+    public void setApprovedSalary(Double approvedSalary) {
+        this.approvedSalary = approvedSalary;
     }
 
     public ApplicationStatus getApplicationStatus() {

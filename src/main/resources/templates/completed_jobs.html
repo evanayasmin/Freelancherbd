@@ -48,61 +48,97 @@
                 </div>
                 <section class="section">
                     <div class="card">
-                        <div class="card-header">Completed Job List</div>
+                        <div class="card-header d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="bi bi-list-check"></i>
+                                <div class="fw-bold">Completed Job List</div>
+                            </div>
+                        </div>
                         <div class="card-body" id="freelancerCardBody">
-                            <table class="table table-striped" id="table1">
-                                <thead>
-                                <tr>
-                                    <th>Job Summary</th>
-                                    <th>Vacancy</th>
-                                    <th>Job Type</th>
-                                    <th>Status</th>
-                                    <th>Created At</th>
-                                    <th>Action</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr th:each="job : ${jobs}">
-                                    <td><div class="card bg-light-secondary">
-                                        <div class="card-content">
-                                            <div class="card-body">
-                                                <h4 class="card-title"><span th:text="${job.title}"></span></h4>
-                                                <p class="card-text"><span th:text="${job.getCategory().getCategoryName()}"></span>
-                                                <hr/>
-                                                <span th:text="${#strings.abbreviate(job.requiredSkill, 40)}"></span>
-                                                </p>
-                                                <small class="text-muted">Price: <span th:text="${job.paymentAmount}"></span>  &nbsp; &nbsp;Deadline: <span th:text="${#temporals.format(job.deadline, 'yyyy-MM-dd')}"></span></small>
+                            <div class="row g-4">
+                                <div class="col-xl-4 col-lg-6 col-md-6" th:each="job : ${jobs}">
+                                    <div class="card job-card h-100 border-0">
+
+                                        <!-- Card Header -->
+                                        <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-start">
+                                            <div>
+                                                <h6 class="fw-semibold mb-1" th:text="${job.title}"></h6>
+                                                <span class="badge bg-light-secondary"
+                                                      th:text="${job.category.categoryName}">
+                                            </span>
+                                            </div>
+
+                                            <!-- Status -->
+                                            <div><span th:if="${job.jobStatus.name() == 'COMPLETED'}"
+                                                      class="badge bg-success text-white">Completed</span>
                                             </div>
                                         </div>
+
+                                        <!-- Card Body -->
+                                        <div class="card-body">
+
+                                            <div class="d-flex justify-content-between mb-2">
+                                            <span class="text-muted">
+                                                <i class="bi bi-cash-stack me-1"></i>
+                                                Budget:
+                                            </span>
+                                                <span class="fw-bold text-success">
+                                                ৳ <span th:text="${job.paymentAmount}"></span>
+                                            </span>
+                                            </div>
+
+                                            <div class="d-flex justify-content-between mb-2">
+                                            <span class="text-muted">
+                                                <i class="bi bi-calendar-event me-1"></i>
+                                                Deadline:
+                                            </span>
+                                                <span th:text="${#temporals.format(job.deadline,'dd MMM yyyy')}"></span>
+                                            </div>
+
+                                            <div class="d-flex justify-content-between">
+                                        <span class="text-muted">
+                                            <i class="bi bi-clock-history me-1"></i>
+                                            Created:
+                                        </span>
+                                                <span th:text="${#temporals.format(job.createdAt,'dd MMM yyyy')}"></span>
+                                            </div>
+                                            <!--                                    <div class="d-flex align-items-start justify-content-between mt-2">-->
+                                            <!--                                    <span class="text-muted fw-semibold">-->
+                                            <!--                                        <i class="bi bi-tools me-1"></i> Skills:-->
+                                            <!--                                    </span>-->
+
+                                            <!--                                        <div class="d-flex flex-wrap gap-1 justify-content-end">-->
+                                            <!--                                        <span th:each="skill : ${#strings.arraySplit(job.requiredSkill, ',')}"-->
+                                            <!--                                              class="badge rounded-pill bg-light-info text-info">-->
+                                            <!--                                            <i class="bi bi-lightning-charge me-1"></i>-->
+                                            <!--                                            <span th:utext="${skill.trim()}"></span>-->
+                                            <!--                                        </span>-->
+                                            <!--                                        </div>-->
+                                            <!--                                    </div>-->
+
+                                        </div>
+
+                                        <!-- Card Footer -->
+                                        <div class="card-footer bg-white border-top d-flex justify-content-between align-items-center">
+                                            <small class="text-muted">
+                                                Location: <span th:text="${job.jobLocation}"></span>
+                                            </small>
+
+                                            <button type="button"
+                                                    class="btn btn-sm btn-outline-primary"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#jobViewModal"
+                                                    th:data-url="@{/employer/jobs/job_detail(encId=${@aesUtil.encryptId(job.id)})}">
+                                                <i class="bi bi-eye"></i>
+                                                View
+                                            </button>
+                                        </div>
+
                                     </div>
-                                    </td>
-                                    <td th:text="${job.vacancy != null ? job.vacancy : ''}" th:align="center"></td>
-                                    <td th:text="${job.jobType}"></td>
-                                    <td>
-                                        <span th:if="${job.jobStatus.name() =='POSTED' }"
-                                              class="badge bg-primary">Posted</span>
-                                        <span th:if="${job.jobStatus.name() =='PENDING' }"
-                                              class="badge bg-warning">Pending</span>
-                                        <span th:if="${job.jobStatus.name() =='IN_PROGRESS' }"
-                                              class="badge bg-light-primary">IN PROGRESS</span>
-                                        <span th:if="${job.jobStatus.name() =='COMPLETED' }"
-                                              class="badge bg-success">COMPLETED</span>
-                                        <span th:if="${job.jobStatus.name() =='CANCELLED' }"
-                                              class="badge bg-danger">CANCELLED</span>
-                                    </td>
-                                    <td th:text="${#temporals.format(job.createdAt, 'yyyy-MM-dd')}"></td>
-                                    <td>
-                                        <button type="button"
-                                                class="btn btn-sm btn-outline-primary edit-btn"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#jobViewModal"
-                                                th:data-url="@{/employer/jobs/job_detail(encId=${@aesUtil.encryptId(job.id)})}">
-                                            <i class="bi bi-book"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                                </div>
+
+                            </div>
+
                         </div>
                     </div>
                 </section>

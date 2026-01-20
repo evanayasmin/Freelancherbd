@@ -40,51 +40,118 @@
                         </div>
                     </div>
                 </div>
+                <div class="page-heading mb-4">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap">
+                        <div>
+                            <h3 class="fw-bold mb-1 text-success">
+                                <i class="bi bi-cash-coin me-2"></i>
+                                Paid Employees
+                            </h3>
+                            <p class="text-muted mb-0">
+                                Freelancers who have received full payment
+                            </p>
+                        </div>
+
+                        <span class="badge bg-success-subtle text-success fs-6">
+                            Total Paid: <span th:text="${#lists.size(proposals)}"></span>
+                        </span>
+                    </div>
+                </div>
                 <section class="section">
-                    <div class="card">
-                        <div class="card-header">Paid Proposal</div>
-                        <div class="card-body" id="freelancerCardBody">
-                            <table class="table table-striped" id="table1">
-                                <thead>
-                                <tr>
-                                    <th>Job Title</th>
-                                    <th>Category</th>
-                                    <th>Applicant Name</th>
-                                    <th>Expected Salary</th>
-                                    <th>Status</th>
-                                    <th>Applied At</th>
-                                    <th>Action</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr th:each="jobp : ${proposals}">
-                                    <td th:text="${jobp.getJob().title}"></td>
-                                    <td th:text="${jobp.getJob().getCategory().categoryName}"></td>
-                                    <td th:text="${jobp.getUser().fullname}"></td>
-                                    <td th:text="${jobp.expectedSalary}"></td>
-                                    <td><span class="badge bg-success">RECEIVED</span></td>
-                                    <td th:text="${#temporals.format(jobp.applicationDate, 'yyyy-MM-dd')}"></td>
-                                    <td>
-                                        <button type="button"
-                                                class="btn btn-sm btn-outline-primary edit-btn"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#proposalViewModal"
-                                                th:data-url="@{/employer/jobs/proposal_details(encId=${@aesUtil.encryptId(jobp.id)})}">
-                                            <i class="bi bi-book"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-white border-bottom">
+                            <h5 class="fw-semibold mb-0">
+                                <i class="bi bi-receipt-cutoff me-2 text-success"></i>
+                                Payment History
+                            </h5>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle" id="table1">
+                                    <thead class="table-light">
+                                    <tr>
+                                        <th>Job</th>
+                                        <th>Category</th>
+                                        <th>Freelancer</th>
+                                        <th>Paid Amount</th>
+                                        <th>Payment Status</th>
+                                        <th>Paid On</th>
+                                        <th class="text-center">Action</th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr th:each="jobp : ${proposals}">
+
+                                        <!-- Job -->
+                                        <td>
+                                            <div class="fw-semibold" th:text="${jobp.job.title}"></div>
+                                        </td>
+
+                                        <!-- Category -->
+                                        <td>
+                            <span class="badge bg-light-secondary"
+                                  th:text="${jobp.job.category.categoryName}">
+                            </span>
+                                        </td>
+
+                                        <!-- Freelancer -->
+                                        <td>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div class="avatar bg-success text-white rounded-circle">
+                                                    <span th:text="${#strings.substring(jobp.user.fullname,0,1)}"></span>
+                                                </div>
+                                                <span class="fw-medium" th:text="${jobp.user.fullname}"></span>
+                                            </div>
+                                        </td>
+
+                                        <!-- Paid Amount -->
+                                        <td class="fw-bold text-success">
+                                            ৳ <span th:text="${jobp.expectedSalary}"></span>
+                                        </td>
+
+                                        <!-- Status -->
+                                        <td>
+                            <span class="badge bg-success">
+                                PAID
+                            </span>
+                                        </td>
+
+                                        <!-- Date -->
+                                        <td class="text-muted">
+                                            <i class="bi bi-calendar-check me-1"></i>
+                                            <span th:text="${#temporals.format(jobp.applicationDate,'dd MMM yyyy')}"></span>
+                                        </td>
+
+                                        <!-- Action -->
+                                        <td class="text-center">
+                                            <button type="button"
+                                                    class="btn btn-sm btn-outline-success"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#proposalViewModal"
+                                                    th:data-url="@{/employer/jobs/proposal_details(encId=${@aesUtil.encryptId(jobp.id)})}">
+                                                <i class="bi bi-eye"></i>
+                                                View
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </section>
+
                 <div class="modal fade" id="proposalViewModal" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-scrollable modal-xl">
                         <div class="modal-content">
-                            <div class="modal-header bg-light-primary">
-                                <h5 class="modal-title">Job Proposal Details</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            <div class="modal-header bg-success text-white">
+                                <h5 class="modal-title">
+                                    <i class="bi bi-file-earmark-check me-2"></i>
+                                    Payment Details
+                                </h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                             </div>
                             <div class="modal-body rounded bg-white" id="viewModalContent">
                                 <!-- Form content will be loaded here -->

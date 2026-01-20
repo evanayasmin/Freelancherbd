@@ -1,75 +1,107 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
     <div th:replace="~{fragments/header :: header}"></div>
-    <script th:src="@{/assets/vendors/tinymce/tinymce.min.js}"></script>
-    <script th:src="@{/assets/vendors/tinymce/plugins/code/plugin.min.js}"></script>
-    <script>
-        tinymce.init({ selector: '#default' });
-        tinymce.init({ selector: '#required_skill' });
-        tinymce.init({ selector: '#dark', toolbar: 'undo redo styleselect bold italic alignleft aligncenter alignright bullist numlist outdent indent code', plugins: 'code' });
-    </script>
     <link rel="stylesheet" th:href="@{/assets/vendors/simple-datatables/style.css}">
 </head>
+
 <body>
 <div id="app">
+
+    <!-- Sidebar -->
     <div id="sidebar" class="active">
         <div class="sidebar-wrapper active">
             <div class="sidebar-header">
                 <div class="d-flex justify-content-between">
                     <div class="logo">
-                        <a href="index.html"><img src="assets/images/logo/logo.png" alt="Logo" srcset=""></a>
+                        <a href="#"><img src="assets/images/logo/logo.png" alt="Logo"></a>
                     </div>
                     <div class="toggler">
-                        <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
+                        <a href="#" class="sidebar-hide d-xl-none d-block">
+                            <i class="bi bi-x bi-middle"></i>
+                        </a>
                     </div>
                 </div>
             </div>
+
             <div th:replace="~{fragments/navigation :: navigation}"></div>
-            <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
+
+            <button class="sidebar-toggler btn x">
+                <i data-feather="x"></i>
+            </button>
         </div>
     </div>
-    <div id="main" class='layout-navbar'>
+
+    <!-- Main -->
+    <div id="main" class="layout-navbar">
+
         <div th:replace="~{fragments/profile_header :: profile-header}"></div>
+
         <div id="main-content">
             <div class="page-heading">
+
+                <!-- Breadcrumb -->
                 <div class="page-title">
                     <div class="row">
-                        <div class="col-12 col-md-6 order-md-1 order-last"></div>
-                        <div class="col-12 col-md-6 order-md-2 order-first">
-                            <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                        <div class="col-12 col-md-6"></div>
+                        <div class="col-12 col-md-6">
+                            <nav class="breadcrumb-header float-start float-lg-end">
                                 <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a th:href="@{/home}">Dashboard</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">Proposals / New proposal</li>
+                                    <li class="breadcrumb-item">
+                                        <a th:href="@{/home}">Dashboard</a>
+                                    </li>
+                                    <li class="breadcrumb-item">
+                                        Payments
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        Pending Payments
+                                    </li>
                                 </ol>
                             </nav>
                         </div>
                     </div>
                 </div>
-                <div class="page-heading mb-4">
-                    <div class="d-flex justify-content-between align-items-center flex-wrap">
-                        <div>
-                            <h3 class="fw-bold mb-1 text-primary">
-                                <i class="bi bi-inbox-fill me-2"></i>
-                                New Proposals
-                            </h3>
-                            <p class="text-muted mb-0">
-                                Recently submitted proposals awaiting your review
-                            </p>
-                        </div>
-                        <span class="badge bg-primary-subtle text-primary fs-6">
-                        Total New: <span th:text="${#lists.size(proposals)}"></span>
-                        </span>
-                    </div>
-                </div>
 
+                <!-- ===================== SECTION ===================== -->
                 <section class="section">
-                    <div class="card border-0 shadow-sm">
-                        <div class="card-header bg-white border-bottom">
-                            <h5 class="fw-semibold mb-0">
-                                <i class="bi bi-clipboard-data me-2 text-info"></i>
-                                Open Proposals
-                            </h5>
+
+                    <!-- Statistics Header -->
+                    <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
+
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="avatar bg-light-warning">
+                                <i class="bi bi-hourglass-split text-warning"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-1 fw-bold">Pending Payments</h5>
+                                <div class="text-muted small">
+                                    Completed jobs awaiting payment confirmation.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-3 flex-wrap">
+                            <div class="stat-box">
+                                <div class="stat-value" th:text="${pendingCount}">0</div>
+                                <div class="stat-label">Jobs</div>
+                            </div>
+
+                            <div class="stat-box">
+                                <div class="stat-value text-warning">
+                                    ৳ <span th:text="${pendingAmount}">0</span>
+                                </div>
+                                <div class="stat-label">Total Pending</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Cards -->
+                    <div class="card">
+                        <div class="card-header fw-bold">
+                            Pending Payment List
                         </div>
 
                         <div class="card-body">
@@ -77,23 +109,22 @@
                                 <table class="table table-hover align-middle" id="table1">
                                     <thead class="table-light">
                                     <tr>
-                                        <th>Job</th>
+                                        <th>Task</th>
                                         <th>Category</th>
                                         <th>Applicant</th>
-                                        <th>Expected Salary</th>
+                                        <th>Payment</th>
                                         <th>Status</th>
-                                        <th>Applied On</th>
+                                        <th>Submitted At</th>
                                         <th class="text-center">Action</th>
                                     </tr>
                                     </thead>
 
                                     <tbody>
-                                    <tr th:each="jobp : ${proposals}"
-                                        th:classappend="${jobp.applicationStatus.name() == 'RECEIVED'} ? 'table-primary-subtle' : ''">
+                                    <tr th:each="jobp : ${jobPayments}">
 
                                         <!-- Job -->
                                         <td>
-                                            <div class="fw-semibold" th:text="${jobp.job.title}"></div>
+                                            <div class="fw-semibold" th:text="${jobp.getJob().getTitle()}"></div>
                                         </td>
 
                                         <!-- Category -->
@@ -115,25 +146,24 @@
 
                                         <!-- Salary -->
                                         <td class="fw-bold text-success">
-                                            ৳ <span th:text="${jobp.expectedSalary}"></span>
+                                            ৳ <span th:text="${jobp.job.getPaymentAmount()}"></span>
                                         </td>
 
                                         <!-- Status -->
                                         <td>
-                                            <span th:if="${jobp.applicationStatus.name() == 'RECEIVED'}"
-                                                  class="badge bg-primary">
-                                                NEW
+                                            <span class="badge bg-primary text-white" th:if="${jobp.getTrafficType().name() == 'SUBMITTED'}">
+                                                Submitted
                                             </span>
-                                            <span th:if="${jobp.applicationStatus.name() == 'VIEWED'}"
-                                                  class="badge bg-info">
-                                                VIEWED
-                                            </span>
+<!--                                            <span th:if="${jobp.applicationStatus.name() == 'VIEWED'}"-->
+<!--                                                  class="badge bg-info">-->
+<!--                                                VIEWED-->
+<!--                                            </span>-->
                                         </td>
 
                                         <!-- Date -->
                                         <td class="text-muted">
                                             <i class="bi bi-clock me-1"></i>
-                                            <span th:text="${#temporals.format(jobp.applicationDate,'dd MMM yyyy')}"></span>
+                                            <span th:text="${#temporals.format(jobp.getUpdatedAt(),'dd MMM yyyy')}"></span>
                                         </td>
 
                                         <!-- Action -->
@@ -144,7 +174,7 @@
                                                     data-bs-target="#proposalViewModal"
                                                     th:data-url="@{/employer/jobs/proposal_details(encId=${@aesUtil.encryptId(jobp.id)})}">
                                                 <i class="bi bi-eye"></i>
-                                                Review
+                                                Payment
                                             </button>
                                         </td>
                                     </tr>
@@ -153,27 +183,26 @@
                             </div>
                         </div>
                     </div>
+
                 </section>
-
-                <div class="modal fade" id="proposalViewModal" tabindex="-1" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-scrollable modal-xl">
-                        <div class="modal-content">
-                            <div class="modal-header bg-primary text-white">
-                                <h5 class="modal-title">
-                                    <i class="bi bi-file-earmark-text me-2"></i>
-                                    Proposal Review
-                                </h5>
-                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                            </div>
-                            <div class="modal-body rounded bg-white" id="viewModalContent">
-                                <!-- Form content will be loaded here -->
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
+                <!-- ===================== SECTION END ===================== -->
 
             </div>
+
+            <!-- Job Detail Modal -->
+            <div class="modal fade" id="jobViewModal" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Job Details</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body" id="viewModalContent"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
             <footer>
                 <div class="footer clearfix mb-0 text-muted">
                     <div th:replace="~{fragments/footer :: footer}"></div>
@@ -187,9 +216,11 @@
 
                 </div>
             </footer>
+
         </div>
-        <!-- Toast Container (GLOBAL) -->
-        <div id="toastContainer" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
+
+        <div id="toastContainer"
+             class="toast-container position-fixed bottom-0 end-0 p-3"></div>
     </div>
 </div>
 </body>

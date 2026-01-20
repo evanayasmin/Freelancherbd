@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="~{fragments/header :: header}"></div>
+    <link rel="stylesheet" th:href="@{/assets/vendors/simple-datatables/style.css}">
+</head>
+
+<body>
+<div id="app">
+
+    <!-- SIDEBAR -->
+    <div id="sidebar" class="active">
+        <div class="sidebar-wrapper active">
+            <div class="sidebar-header">
+                <div class="d-flex justify-content-between">
+                    <div class="logo">
+                        <a th:href="@{/home}">
+                            <img src="/assets/images/logo/logo.png" alt="Logo">
+                        </a>
+                    </div>
+                    <div class="toggler">
+                        <a href="#" class="sidebar-hide d-xl-none d-block">
+                            <i class="bi bi-x bi-middle"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div th:replace="~{fragments/navigation :: navigation}"></div>
+            <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
+        </div>
+    </div>
+
+    <!-- MAIN -->
+    <div id="main" class="layout-navbar">
+        <div th:replace="~{fragments/profile_header :: profile-header}"></div>
+
+        <div id="main-content">
+            <div class="page-heading">
+
+                <!-- PAGE TITLE + BREADCRUMB -->
+                <div class="page-title">
+                    <div class="row">
+                        <div class="col-12 col-md-6 order-md-1 order-last">
+                            <h4>Withdraw Earnings</h4>
+                        </div>
+                        <div class="col-12 col-md-6 order-md-2 order-first">
+                            <nav aria-label="breadcrumb"
+                                 class="breadcrumb-header float-start float-lg-end">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item">
+                                        <a th:href="@{/home}">Dashboard</a>
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        Withdraw
+                                    </li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION -->
+                <section class="section">
+
+                    <!-- WALLET SUMMARY -->
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <div class="card bg-light-success">
+                                <div class="card-body">
+                                    <small>Available Balance</small>
+                                    <h4 class="fw-bold">৳ <span th:text="${wallet.availableBalance}">0</span></h4>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="card bg-light-warning">
+                                <div class="card-body">
+                                    <small>Pending Withdrawals</small>
+                                    <h4 class="fw-bold">৳ <span th:text="${wallet.pendingAmount}">0</span></h4>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="card bg-light-primary">
+                                <div class="card-body">
+                                    <small>Total Withdrawn</small>
+                                    <h4 class="fw-bold">৳ <span th:text="${wallet.totalWithdrawn}">0</span></h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- WITHDRAW REQUEST -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            Request Withdrawal
+                        </div>
+
+                        <div class="card-body">
+                            <form th:action="@{/freelancer/withdraw}" method="post">
+
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Withdrawal Method</label>
+                                        <select class="form-select" name="method" required>
+                                            <option disabled selected>Select method</option>
+                                            <option value="BKASH">bKash</option>
+                                            <option value="NAGAD">Nagad</option>
+                                            <option value="BANK">Bank Transfer</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label">Amount (৳)</label>
+                                        <input type="number"
+                                               class="form-control"
+                                               name="amount"
+                                               placeholder="Enter amount"
+                                               required>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Account / Mobile No</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               name="accountNumber"
+                                               placeholder="01XXXXXXXXX"
+                                               required>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label">Note (Optional)</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               name="note">
+                                    </div>
+                                </div>
+
+                                <div class="text-end">
+                                    <button class="btn btn-primary">
+                                        <i class="bi bi-cash"></i> Request Withdrawal
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- WITHDRAWAL HISTORY -->
+                    <div class="card">
+                        <div class="card-header">
+                            Withdrawal History
+                        </div>
+
+                        <div class="card-body table-responsive">
+                            <table class="table table-striped" id="table1">
+                                <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Method</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Reference</th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                <tr th:each="wd : ${withdrawals}">
+                                    <td th:text="${#temporals.format(wd.createdAt,'yyyy-MM-dd')}"></td>
+                                    <td th:text="${wd.method}"></td>
+                                    <td>৳ <span th:text="${wd.amount}"></span></td>
+                                    <td>
+                                        <span th:classappend="
+                                          ${wd.status == 'PENDING'} ? 'badge bg-warning' :
+                                          ${wd.status == 'APPROVED'} ? 'badge bg-success' :
+                                          'badge bg-danger'"
+                                              th:text="${wd.status}">
+                                        </span>
+                                    </td>
+                                    <td th:text="${wd.referenceId}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </section>
+            </div>
+
+            <!-- FOOTER -->
+            <footer>
+                <div class="footer clearfix mb-0 text-muted">
+                    <div th:replace="~{fragments/footer :: footer}"></div>
+
+                    <script th:src="@{/assets/vendors/simple-datatables/simple-datatables.js}"></script>
+                    <script>
+                        let table1 = document.querySelector('#table1');
+                        if (table1) {
+                            new simpleDatatables.DataTable(table1);
+                        }
+                    </script>
+                </div>
+            </footer>
+
+        </div>
+    </div>
+
+    <!-- GLOBAL TOAST -->
+    <div id="toastContainer"
+         class="toast-container position-fixed bottom-0 end-0 p-3"></div>
+
+</div>
+</body>
+</html>

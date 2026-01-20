@@ -3,15 +3,13 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <div th:replace="~{fragments/header :: header}"></div>
-    <script th:src="@{/assets/vendors/tinymce/tinymce.min.js}"></script>
-    <script th:src="@{/assets/vendors/tinymce/plugins/code/plugin.min.js}"></script>
-    <script>
-        tinymce.init({ selector: '#default' });
-        tinymce.init({ selector: '#required_skill' });
-        tinymce.init({ selector: '#dark', toolbar: 'undo redo styleselect bold italic alignleft aligncenter alignright bullist numlist outdent indent code', plugins: 'code' });
-    </script>
+
     <link rel="stylesheet" th:href="@{/assets/vendors/simple-datatables/style.css}">
+
+    <!-- Small, theme-friendly helpers (safe) -->
+
 </head>
+
 <body>
 <div id="app">
     <div id="sidebar" class="active">
@@ -30,8 +28,10 @@
             <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
         </div>
     </div>
+
     <div id="main" class='layout-navbar'>
         <div th:replace="~{fragments/profile_header :: profile-header}"></div>
+
         <div id="main-content">
             <div class="page-heading">
                 <div class="page-title">
@@ -47,95 +47,217 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Redesigned Section -->
                 <section class="section">
                     <div class="card">
-<!--                        <div class="card-header">Recommended Job List</div>-->
-                        <div class="card-body" id="freelancerCardBody">
-                            <table class="table" id="table1">
-                                <thead>
-                                <tr><th colspan="6">Recommended Jobs</th></tr>
-                                </thead>
-                                <tbody>
-                                <tr th:each="job : ${jobs}">
-                                    <td colspan="6">
-                                        <div class="card bg-light-secondary mb-3">
-                                            <div class="card-content">
-                                                <div class="card-header bg-info" style="padding-top:1px;"></div>
-                                                <div class="card-body">
-                                                    <!-- Main Job Title -->
-                                                    <h4 class="card-title mb-3">
-                                                        <span th:text="${job.title}"></span>
-                                                    </h4>
+                        <div class="card-body">
 
-                                                    <!-- Category and Job Type -->
-                                                    <div class="row mb-2">
-                                                        <div class="col-md-6">
-                                                            <strong>Category:</strong>
-                                                            <span th:text="${job.getCategory().getCategoryName()}"></span>
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            <strong>Job Type:</strong>
-                                                            <span th:text="${job.jobType}"></span>
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            <strong>Location:</strong>
+                            <!-- Header / Controls -->
+                            <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
+                                <div class="d-flex align-items-start gap-2">
+                                    <div class="avatar bg-light-warning">
+                                        <i class="bi bi-stars text-warning"></i>
+                                    </div>
+                                    <div class="min-w-0">
+                                        <h5 class="mb-1 fw-bold">Recommended Jobs for You</h5>
+                                        <div class="text-muted small">
+                                            Jobs matched with your skills and profile. Use search to quickly find the right one.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Search + Sort (client-side filtering) -->
+                                <div class="d-flex gap-2 flex-wrap">
+                                    <div class="input-group input-group-sm" style="max-width: 320px;">
+                                        <span class="input-group-text"><i class="bi bi-search"></i></span>
+                                        <input type="text" id="jobSearch" class="form-control" placeholder="Search by title, skills, category...">
+                                    </div>
+
+                                    <div class="dropdown">
+                                        <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button"
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="bi bi-sort-down"></i> Sort
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <li><a class="dropdown-item" href="#" onclick="sortJobs('newest');return false;">Newest</a></li>
+                                            <li><a class="dropdown-item" href="#" onclick="sortJobs('deadline');return false;">Nearest Deadline</a></li>
+                                            <li><a class="dropdown-item" href="#" onclick="sortJobs('budget');return false;">Highest Budget</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Summary cards -->
+                            <div class="row g-3 mb-4">
+                                <div class="col-12 col-md-4">
+                                    <div class="card border-0 shadow-sm">
+                                        <div class="card-body d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <div class="text-muted small">Total Recommended</div>
+                                                <div class="fw-bold fs-4" th:text="${jobs == null ? 0 : #lists.size(jobs)}">0</div>
+                                            </div>
+                                            <div class="avatar bg-light-primary">
+                                                <i class="bi bi-briefcase"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="card border-0 shadow-sm">
+                                        <div class="card-body d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <div class="text-muted small">Action Tip</div>
+                                                <div class="fw-semibold">Open details and apply fast</div>
+                                            </div>
+                                            <div class="avatar bg-light-success">
+                                                <i class="bi bi-lightning-charge"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="card border-0 shadow-sm">
+                                        <div class="card-body d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <div class="text-muted small">Best Practice</div>
+                                                <div class="fw-semibold">Tailor proposal to required skills</div>
+                                            </div>
+                                            <div class="avatar bg-light-warning">
+                                                <i class="bi bi-journal-check"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Job Cards -->
+                            <div class="row g-3" id="jobList">
+
+                                <div class="col-12 job-item"
+                                     th:each="job : ${jobs}"
+                                     th:attr="
+                                        data-title=${job.title},
+                                        data-category=${job.category.categoryName},
+                                        data-location=${job.jobLocation},
+                                        data-skills=${job.requiredSkill},
+                                        data-created=${#temporals.format(job.createdAt,'yyyy-MM-dd')},
+                                        data-deadline=${#temporals.format(job.deadline,'yyyy-MM-dd')},
+                                        data-budget=${job.paymentAmount}
+                                     ">
+
+                                    <div class="card job-card">
+                                        <div class="card-body">
+
+                                            <!-- Top row -->
+                                            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-start gap-2 mb-2">
+                                                <div class="min-w-0">
+                                                    <h6 class="fw-bold mb-1 line-clamp-2" th:text="${job.title}">Job Title</h6>
+
+                                                    <div class="text-muted small d-flex flex-wrap gap-2 align-items-center">
+                                                        <span class="nowrap">
+                                                            <i class="bi bi-folder me-1"></i>
+                                                            <span th:text="${job.category.categoryName}"></span>
+                                                        </span>
+                                                        <span class="text-muted">•</span>
+                                                        <span class="nowrap">
+                                                            <i class="bi bi-geo-alt me-1"></i>
                                                             <span th:text="${job.jobLocation}"></span>
-                                                        </div>
+                                                        </span>
                                                     </div>
+                                                </div>
 
-                                                    <!-- Required Skills -->
-                                                    <div class="mb-3">
-                                                        <strong>Required Skills:</strong>
-                                                        <p class="card-text mb-1">
-                                                            <span th:text="${#strings.abbreviate(job.requiredSkill, 100)}"></span>
-                                                        </p>
-                                                    </div>
+                                                <!-- Job Type badge -->
+                                                <div class="nowrap">
+                                                    <span class="badge bg-light-primary">
+                                                        <i class="bi bi-briefcase me-1"></i>
+                                                        <span th:text="${job.jobType}"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
 
-                                                    <hr/>
+                                            <!-- Skills -->
+                                            <div class="mb-3">
+                                                <div class="small text-muted mb-1">
+                                                    <i class="bi bi-tools me-1"></i> Required Skills
+                                                </div>
+                                                <div class="text-muted small">
+                                                    <span th:text="${#strings.abbreviate(job.requiredSkill,140)}"></span>
+                                                </div>
+                                            </div>
 
-                                                    <!-- Price, Deadline, and Vacancy -->
-                                                    <div class="row mb-3">
-                                                        <div class="col-md-4">
-                                                            <strong>Price:</strong>
-                                                            <span th:text="${job.paymentAmount}"></span>
+                                            <!-- Highlights row -->
+                                            <div class="row g-2 mb-3">
+                                                <div class="col-12 col-md-4">
+                                                    <div class="border rounded p-2 h-100">
+                                                        <div class="small text-muted">
+                                                            <i class="bi bi-cash-coin text-success me-1"></i> Budget
                                                         </div>
-                                                        <div class="col-md-4">
-                                                            <strong>Deadline:</strong>
-                                                            <span th:text="${#temporals.format(job.deadline, 'yyyy-MM-dd')}"></span>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <strong>Vacancy:</strong>
-                                                            <span th:text="${job.vacancy != null ? job.vacancy : 'N/A'}"></span>
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- Status and Posted Date -->
-                                                    <div class="row align-items-center">
-                                                        <div class="col-md-6">
-                                                            <span class="badge bg-primary">Posted</span>
-                                                            <small class="text-muted ms-2">
-                                                                <span th:text="${#temporals.format(job.createdAt, 'yyyy-MM-dd')}"></span>
-                                                            </small>
-                                                        </div>
-                                                        <div class="col-md-6 text-end">
-                                                            <!-- View Details Button -->
-                                                            <a type="button" th:target="_blank"
-                                                               class="btn btn-sm btn-outline-primary"
-                                                               th:href="@{('/jobs/job_detail/' + ${@aesUtil.encryptId(job.id)})}">
-                                                                <i class="bi bi-book me-1"></i>View Details
-                                                            </a>
+                                                        <div class="fw-semibold nowrap">
+                                                            ৳ <span th:text="${job.paymentAmount}">0</span>
                                                         </div>
                                                     </div>
                                                 </div>
+
+                                                <div class="col-12 col-md-4">
+                                                    <div class="border rounded p-2 h-100">
+                                                        <div class="small text-muted">
+                                                            <i class="bi bi-calendar-event text-primary me-1"></i> Deadline
+                                                        </div>
+                                                        <div class="fw-semibold nowrap"
+                                                             th:text="${#temporals.format(job.deadline,'yyyy-MM-dd')}"></div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-12 col-md-4">
+                                                    <div class="border rounded p-2 h-100">
+                                                        <div class="small text-muted">
+                                                            <i class="bi bi-people text-warning me-1"></i> Vacancy
+                                                        </div>
+                                                        <div class="fw-semibold nowrap"
+                                                             th:text="${job.vacancy != null ? job.vacancy : 'N/A'}"></div>
+                                                    </div>
+                                                </div>
                                             </div>
+
+                                            <!-- Footer row -->
+                                            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                                                <div class="small text-muted nowrap">
+                                                    <i class="bi bi-clock-history me-1"></i>
+                                                    Posted: <span th:text="${#temporals.format(job.createdAt,'yyyy-MM-dd')}"></span>
+                                                </div>
+
+                                                <a th:href="@{('/jobs/job_detail/' + ${@aesUtil.encryptId(job.id)})}"
+                                                   th:target="_blank"
+                                                   class="btn btn-sm btn-outline-primary nowrap">
+                                                    <i class="bi bi-eye me-1"></i> View Details
+                                                </a>
+                                            </div>
+
                                         </div>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                                    </div>
+                                </div>
+
+                                <!-- Empty state -->
+                                <div class="col-12" th:if="${jobs == null || #lists.isEmpty(jobs)}">
+                                    <div class="card">
+                                        <div class="card-body text-center py-5">
+                                            <i class="bi bi-briefcase fs-1 text-muted"></i>
+                                            <h6 class="fw-bold mt-2 mb-1">No recommended jobs right now</h6>
+                                            <p class="text-muted small mb-0">
+                                                Update your profile skills and check back again.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
                         </div>
                     </div>
                 </section>
+
+                <!-- Existing Modals (kept as-is) -->
                 <div class="modal fade" id="jobViewModal" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content">
@@ -145,32 +267,77 @@
                             </div>
                             <div class="modal-body rounded bg-white" id="viewModalContent">
                                 <!-- Form content will be loaded here -->
-
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- Delete Confirmation Modal -->
-                <div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
 
-                    </div>
+                <div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                    <div class="modal-dialog"></div>
                 </div>
+
             </div>
+
             <footer>
                 <div class="footer clearfix mb-0 text-muted">
                     <div th:replace="~{fragments/footer :: footer}"></div>
+
                     <script th:src="@{/assets/vendors/simple-datatables/simple-datatables.js}"></script>
                     <script>
-                        // Simple Datatable
-                        let table1 = document.querySelector('#table1');
-                        let dataTable = new simpleDatatables.DataTable(table1);
+                        // only init datatable if table exists (prevents console errors)
+                        const table1 = document.querySelector('#table1');
+                        if (table1) {
+                            window.dataTable = new simpleDatatables.DataTable(table1);
+                        }
 
+                        // Client-side search for job cards
+                        const jobSearch = document.getElementById('jobSearch');
+                        const jobItems = () => document.querySelectorAll('.job-item');
+
+                        jobSearch?.addEventListener('input', function () {
+                            const q = this.value.toLowerCase().trim();
+                            jobItems().forEach(item => {
+                                const text =
+                                    (item.dataset.title || '') +
+                                    (item.dataset.category || '') +
+                                    (item.dataset.location || '') +
+                                    (item.dataset.skills || '');
+                                item.style.display = text.toLowerCase().includes(q) ? '' : 'none';
+                            });
+                        });
+
+                        // Simple sort (client-side)
+                        function parseNumber(v) {
+                            if (!v) return 0;
+                            return Number(String(v).replace(/[^\d.]/g, '')) || 0;
+                        }
+
+                        function sortJobs(type) {
+                            const list = document.getElementById('jobList');
+                            if (!list) return;
+
+                            const items = Array.from(list.querySelectorAll('.job-item'));
+                            const sorted = items.sort((a, b) => {
+                                if (type === 'newest') {
+                                    return String(b.dataset.created).localeCompare(String(a.dataset.created));
+                                }
+                                if (type === 'deadline') {
+                                    return String(a.dataset.deadline).localeCompare(String(b.dataset.deadline));
+                                }
+                                if (type === 'budget') {
+                                    return parseNumber(b.dataset.budget) - parseNumber(a.dataset.budget);
+                                }
+                                return 0;
+                            });
+
+                            sorted.forEach(i => list.appendChild(i));
+                        }
                     </script>
-
                 </div>
             </footer>
+
         </div>
+
         <!-- Toast Container (GLOBAL) -->
         <div id="toastContainer" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
     </div>

@@ -3,15 +3,42 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <div th:replace="~{fragments/header :: header}"></div>
-    <script th:src="@{/assets/vendors/tinymce/tinymce.min.js}"></script>
-    <script th:src="@{/assets/vendors/tinymce/plugins/code/plugin.min.js}"></script>
-    <script>
-        tinymce.init({ selector: '#default' });
-        tinymce.init({ selector: '#required_skill' });
-        tinymce.init({ selector: '#dark', toolbar: 'undo redo styleselect bold italic alignleft aligncenter alignright bullist numlist outdent indent code', plugins: 'code' });
-    </script>
+
+
     <link rel="stylesheet" th:href="@{/assets/vendors/simple-datatables/style.css}">
+
+    <!-- Page-only polish (theme-friendly) -->
+    <style>
+        .min-w-0 { min-width: 0; }
+        .nowrap { white-space: nowrap; }
+        .line-clamp-2{
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Card separation (tinted shadow) */
+        .job-card {
+            border-radius: 14px;
+            border: 1px solid #e3e9f3;
+            background: linear-gradient(180deg, rgba(13,110,253,0.06) 0%, rgba(255,255,255,0) 55%);
+            box-shadow: 0 10px 22px rgba(13, 110, 253, 0.10);
+            transition: transform .15s ease, box-shadow .15s ease;
+            overflow: hidden;
+        }
+        .job-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 28px rgba(13, 110, 253, 0.16);
+        }
+        .job-card .card-body { background: transparent; }
+
+        /* Status strip for Work In Progress */
+        .job-top-strip { height: 4px; background: rgba(13,110,253,.85); }
+        .strip-progress { background: rgba(13,202,240,.95); } /* info/cyan */
+    </style>
 </head>
+
 <body>
 <div id="app">
     <div id="sidebar" class="active">
@@ -30,8 +57,10 @@
             <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
         </div>
     </div>
+
     <div id="main" class='layout-navbar'>
         <div th:replace="~{fragments/profile_header :: profile-header}"></div>
+
         <div id="main-content">
             <div class="page-heading">
                 <div class="page-title">
@@ -47,55 +76,226 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Work In Progress Section (same structure as recommended jobs) -->
                 <section class="section">
                     <div class="card">
-                        <div class="card-header">In Progress Job List</div>
-                        <div class="card-body" id="freelancerCardBody">
-                            <table class="table table-striped" id="table1">
-                                <thead>
-                                <tr>
-                                    <th>Job Summary</th>
-                                    <th>Vacancy</th>
-                                    <th>Job Type</th>
-                                    <th>Status</th>
-                                    <th>Created At</th>
-                                    <th>Action</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr th:each="job : ${jobs}">
-                                    <td><div class="card bg-light-secondary">
-                                        <div class="card-content">
-                                            <div class="card-body">
-                                                <h4 class="card-title"><span th:text="${job.title}"></span></h4>
-                                                <p class="card-text"><span th:text="${job.getCategory().getCategoryName()}"></span></p>
-                                                <small class="text-muted">Price: <span th:text="${job.paymentAmount}"></span>  &nbsp; &nbsp;Deadline: <span th:text="${#temporals.format(job.deadline, 'yyyy-MM-dd')}"></span></small>
+                        <div class="card-body">
+
+                            <!-- Header / Controls -->
+                            <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
+                                <div class="d-flex align-items-start gap-2">
+                                    <div class="avatar bg-light-info">
+                                        <i class="bi bi-lightning-charge text-info"></i>
+                                    </div>
+                                    <div class="min-w-0">
+                                        <h5 class="mb-1 fw-bold">Work In Progress</h5>
+                                        <div class="text-muted small">
+                                            Track ongoing jobs, deadlines, and next actions. Use search/sort to stay organized.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Search + Sort -->
+                                <div class="d-flex gap-2 flex-wrap">
+                                    <div class="input-group input-group-sm" style="max-width: 320px;">
+                                        <span class="input-group-text"><i class="bi bi-search"></i></span>
+                                        <input type="text" id="jobSearch" class="form-control" placeholder="Search by title, skills, category...">
+                                    </div>
+
+                                    <div class="dropdown">
+                                        <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button"
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="bi bi-sort-down"></i> Sort
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <li><a class="dropdown-item" href="#" onclick="sortJobs('deadline');return false;">Nearest Deadline</a></li>
+                                            <li><a class="dropdown-item" href="#" onclick="sortJobs('newest');return false;">Newest</a></li>
+                                            <li><a class="dropdown-item" href="#" onclick="sortJobs('budget');return false;">Highest Budget</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Summary row -->
+                            <div class="row g-3 mb-4">
+                                <div class="col-12 col-md-4">
+                                    <div class="card border-0 shadow-sm">
+                                        <div class="card-body d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <div class="text-muted small">Total In Progress</div>
+                                                <div class="fw-bold fs-4" th:text="${jobs == null ? 0 : #lists.size(jobs)}">0</div>
+                                            </div>
+                                            <div class="avatar bg-light-info">
+                                                <i class="bi bi-hourglass-split text-info"></i>
                                             </div>
                                         </div>
                                     </div>
-                                    </td>
-                                    <td th:text="${job.vacancy != null ? job.vacancy : ''}" th:align="center"></td>
-                                    <td th:text="${job.jobType}"></td>
-                                    <td>
-                                        <span th:if="${job.jobStatus.name() =='IN_PROGRESS' }"
-                                        class="badge bg-light-primary">IN PROGRESS</span>
-                                    </td>
-                                    <td th:text="${#temporals.format(job.createdAt, 'yyyy-MM-dd')}"></td>
-                                    <td>
-                                        <button type="button"
-                                                class="btn btn-sm btn-outline-primary edit-btn"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#jobViewModal"
-                                                th:data-url="@{/employee/jobs/job_detail(encId=${@aesUtil.encryptId(job.id)})}">
-                                            <i class="bi bi-book"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                                </div>
+
+                                <div class="col-12 col-md-8">
+                                    <div class="card border-0 shadow-sm">
+                                        <div class="card-body d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
+                                            <div class="text-muted small">
+                                                <i class="bi bi-info-circle"></i>
+                                                Tip: Keep communication active and check deadlines daily.
+                                            </div>
+                                            <!-- optional link -->
+                                            <a class="btn btn-sm btn-outline-primary" th:href="@{/jobs}">
+                                                <i class="bi bi-search"></i> Find More Jobs
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Job Cards -->
+                            <div class="row g-3" id="jobList">
+
+                                <div class="col-12 job-item"
+                                     th:each="job : ${jobs}"
+                                     th:attr="
+                                        data-title=${job.title},
+                                        data-category=${job.category != null ? job.category.categoryName : ''},
+                                        data-location=${job.jobLocation},
+                                        data-skills=${job.requiredSkill},
+                                        data-created=${#temporals.format(job.createdAt,'yyyy-MM-dd')},
+                                        data-deadline=${#temporals.format(job.deadline,'yyyy-MM-dd')},
+                                        data-budget=${job.paymentAmount}
+                                     ">
+
+                                    <div class="card job-card">
+                                        <div class="job-top-strip strip-progress"></div>
+
+                                        <div class="card-body">
+
+                                            <!-- Title + badges -->
+                                            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-start gap-2 mb-2">
+                                                <div class="min-w-0">
+                                                    <h6 class="fw-bold mb-1 line-clamp-2" th:text="${job.title}">Job Title</h6>
+
+                                                    <div class="text-muted small d-flex flex-wrap gap-2 align-items-center">
+                                                        <span class="nowrap">
+                                                            <i class="bi bi-folder me-1"></i>
+                                                            <span th:text="${job.category != null ? job.category.categoryName : 'N/A'}"></span>
+                                                        </span>
+                                                        <span class="text-muted">•</span>
+                                                        <span class="nowrap">
+                                                            <i class="bi bi-geo-alt me-1"></i>
+                                                            <span th:text="${job.jobLocation != null ? job.jobLocation : 'N/A'}"></span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="d-flex gap-2 flex-wrap justify-content-md-end">
+                                                    <span class="badge bg-info text-white">
+                                                        <i class="bi bi-hourglass-split me-1"></i> In Progress
+                                                    </span>
+                                                    <span class="badge bg-light-primary">
+                                                        <i class="bi bi-briefcase me-1"></i>
+                                                        <span th:text="${job.jobType}"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <!-- Required Skills -->
+                                            <div class="mb-3">
+                                                <div class="small text-muted mb-1">
+                                                    <i class="bi bi-tools me-1"></i> Required Skills
+                                                </div>
+                                                <div class="text-muted small">
+                                                    <span th:text="${#strings.abbreviate(job.requiredSkill,150)}"></span>
+                                                </div>
+                                            </div>
+
+                                            <!-- Highlights -->
+                                            <div class="row g-2 mb-3">
+                                                <div class="col-12 col-md-4">
+                                                    <div class="border rounded p-2 h-100">
+                                                        <div class="small text-muted">
+                                                            <i class="bi bi-cash-coin text-success me-1"></i> Budget
+                                                        </div>
+                                                        <div class="fw-semibold nowrap">
+                                                            ৳ <span th:text="${job.paymentAmount}">0</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-12 col-md-4">
+                                                    <div class="border rounded p-2 h-100">
+                                                        <div class="small text-muted">
+                                                            <i class="bi bi-calendar-event text-primary me-1"></i> Deadline
+                                                        </div>
+                                                        <div class="fw-semibold nowrap"
+                                                             th:text="${job.deadline != null ? #temporals.format(job.deadline,'yyyy-MM-dd') : 'N/A'}"></div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-12 col-md-4">
+                                                    <div class="border rounded p-2 h-100">
+                                                        <div class="small text-muted">
+                                                            <i class="bi bi-flag text-warning me-1"></i> Next Step
+                                                        </div>
+                                                        <div class="fw-semibold nowrap">Update & Deliver</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Footer -->
+                                            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                                                <div class="small text-muted nowrap">
+                                                    <i class="bi bi-clock-history me-1"></i>
+                                                    Started: <span th:text="${job.createdAt != null ? #temporals.format(job.createdAt,'yyyy-MM-dd') : 'N/A'}"></span>
+                                                </div>
+
+                                                <div class="d-flex gap-2 flex-wrap">
+                                                    <!-- View Details -->
+                                                    <a th:href="@{('/jobs/job_detail/' + ${@aesUtil.encryptId(job.id)})}"
+                                                       th:target="_blank"
+                                                       class="btn btn-sm btn-outline-primary nowrap">
+                                                        <i class="bi bi-eye me-1"></i> View
+                                                    </a>
+
+                                                    <!-- Optional: Open Chat (change URL if you have chat route) -->
+                                                    <!--
+                                                    <a th:href="@{('/chat/' + ${@aesUtil.encryptId(job.id)})}"
+                                                       class="btn btn-sm btn-outline-info nowrap">
+                                                        <i class="bi bi-chat-dots me-1"></i> Chat
+                                                    </a>
+                                                    -->
+
+                                                    <!-- Optional: Submit Work (change URL if you have submit route) -->
+                                                    <!--
+                                                    <a th:href="@{('/freelancer/work/submit/' + ${@aesUtil.encryptId(job.id)})}"
+                                                       class="btn btn-sm btn-outline-success nowrap">
+                                                        <i class="bi bi-upload me-1"></i> Submit
+                                                    </a>
+                                                    -->
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Empty state -->
+                                <div class="col-12" th:if="${jobs == null || #lists.isEmpty(jobs)}">
+                                    <div class="card">
+                                        <div class="card-body text-center py-5">
+                                            <i class="bi bi-hourglass fs-1 text-muted"></i>
+                                            <h6 class="fw-bold mt-2 mb-1">No work in progress</h6>
+                                            <p class="text-muted small mb-0">When you start a job, it will appear here.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div><!-- /jobList -->
+
                         </div>
                     </div>
                 </section>
+
+                <!-- Existing Modals (kept as-is) -->
                 <div class="modal fade" id="jobViewModal" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content">
@@ -105,32 +305,77 @@
                             </div>
                             <div class="modal-body rounded bg-white" id="viewModalContent">
                                 <!-- Form content will be loaded here -->
-
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- Delete Confirmation Modal -->
-                <div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
 
-                    </div>
+                <div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                    <div class="modal-dialog"></div>
                 </div>
+
             </div>
+
             <footer>
                 <div class="footer clearfix mb-0 text-muted">
                     <div th:replace="~{fragments/footer :: footer}"></div>
+
                     <script th:src="@{/assets/vendors/simple-datatables/simple-datatables.js}"></script>
                     <script>
-                        // Simple Datatable
-                        let table1 = document.querySelector('#table1');
-                        let dataTable = new simpleDatatables.DataTable(table1);
+                        // If any other component on this page uses table1, don't break
+                        const table1 = document.querySelector('#table1');
+                        if (table1) {
+                            window.dataTable = new simpleDatatables.DataTable(table1);
+                        }
 
+                        // Search (client-side)
+                        const jobSearch = document.getElementById('jobSearch');
+                        const jobItems = () => document.querySelectorAll('.job-item');
+
+                        jobSearch?.addEventListener('input', function () {
+                            const q = this.value.toLowerCase().trim();
+                            jobItems().forEach(item => {
+                                const text =
+                                    (item.dataset.title || '') +
+                                    (item.dataset.category || '') +
+                                    (item.dataset.location || '') +
+                                    (item.dataset.skills || '');
+                                item.style.display = text.toLowerCase().includes(q) ? '' : 'none';
+                            });
+                        });
+
+                        // Sorting (client-side)
+                        function parseNumber(v) {
+                            if (!v) return 0;
+                            return Number(String(v).replace(/[^\d.]/g, '')) || 0;
+                        }
+
+                        function sortJobs(type) {
+                            const list = document.getElementById('jobList');
+                            if (!list) return;
+
+                            const items = Array.from(list.querySelectorAll('.job-item'));
+                            const sorted = items.sort((a, b) => {
+                                if (type === 'newest') {
+                                    return String(b.dataset.created).localeCompare(String(a.dataset.created));
+                                }
+                                if (type === 'deadline') {
+                                    return String(a.dataset.deadline).localeCompare(String(b.dataset.deadline));
+                                }
+                                if (type === 'budget') {
+                                    return parseNumber(b.dataset.budget) - parseNumber(a.dataset.budget);
+                                }
+                                return 0;
+                            });
+
+                            sorted.forEach(i => list.appendChild(i));
+                        }
                     </script>
 
                 </div>
             </footer>
         </div>
+
         <!-- Toast Container (GLOBAL) -->
         <div id="toastContainer" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
     </div>

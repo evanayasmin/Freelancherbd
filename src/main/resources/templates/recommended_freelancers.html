@@ -38,57 +38,138 @@
                         </div>
                     </div>
                 </div>
+
                 <section id="basic-vertical-layouts">
                     <div class="container mt-4">
-                        <h4 class="mb-4 fw-bold text-secondary">Recommended Freelancers</h4>
-                        <div class="row row-cols-1 row-cols-md-3 g-4">
-                            <div class="col" th:each="freelancer : ${freelancers}">
-                                <div class="card h-80 shadow-sm border-0 rounded-4">
-                                    <div class="card-body text-center">
-                                        <img th:if="${freelancer.userProfile.profilePicture != null}"
-                                             th:src="@{'/' + ${freelancer.userProfile.profilePicture}}"
-                                             alt="Profile Picture" class="rounded-circle" width="100" height="100">
 
-                                        <img th:if="${freelancer.userProfile.profilePicture == null}"
-                                             th:src="@{/images/default.jpg}"
-                                             alt="Default Profile" class="rounded-circle" width="100" height="100">
-
-                                        <h5 class="card-title mb-1" th:text="${freelancer.fullname}">John Doe</h5>
-                                        <p class="text-muted mb-2" th:text="${freelancer.userProfile.title}">Full Stack Developer</p>
-                                <div class="mb-2">
-                            <span class="badge bg-light text-dark me-1"
-                              th:each="skill : ${#strings.arraySplit(freelancer.userProfile.skills, ',')}"
-                              th:text="${skill}">ReactJS</span>
-                                </div>
-                                    <div class="mb-3">
-                                    <span class="text-warning">
-                                        <i class="bi bi-star-fill"></i>
-                                        <i class="bi bi-star-fill"></i>
-                                        <i class="bi bi-star-fill"></i>
-                                        <i class="bi bi-star-half"></i>
-                                        <i class="bi bi-star"></i>
-                                    </span>
-                                      <small class="text-muted" th:text="'(' + ${freelancer.userProfile.ratings} + ')'">4.7</small>
-                                      </div>
-                                        <p class="text-muted small"
-                                           th:text="${#strings.abbreviate(freelancer.userProfile.getProfessionalSummary(), 80)}">
-                                        </p>
-                                        <p>
-                                            <a th:href="@{('/employer/freelancer/profile_detail/' + ${@aesUtil.encryptId(freelancer.id)})}"
-                                               class="btn btn-sm text-white"
-                                               style="background-color: #0b5ed7; color: #333;">View Profile</a>
-                                        </p>
+                        <!-- Header / Controls -->
+                        <div class="card mb-4">
+                            <div class="card-body d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+                                <div>
+                                    <h5 class="mb-1 fw-bold text-secondary">Recommended Freelancers</h5>
+                                    <div class="text-muted small">
+                                        Browse top freelancers based on skills, rating, and profile quality.
                                     </div>
-<!--                                    <div class="card-footer bg-light text-center border-0">-->
-<!--                                        <a th:href="@{('/freelancer/profile_detail/' + ${@aesUtil.encryptId(freelancer.id)})}"-->
-<!--                                           class="btn btn-sm text-white"-->
-<!--                                           style="background-color: #0b5ed7; color: #333;">View Profile</a>-->
-<!--                                    </div>-->
+                                </div>
+
+                                <!-- Optional search UI (does not break anything if you don't wire it now) -->
+                                <div class="d-flex gap-2 flex-wrap">
+                                    <div class="input-group input-group-sm" style="max-width: 280px;">
+                                        <span class="input-group-text"><i class="bi bi-search"></i></span>
+                                        <input type="text" id="freelancerSearch" class="form-control" placeholder="Search freelancers...">
+                                    </div>
+
+                                    <button type="button" class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-funnel"></i> Filter
+                                    </button>
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Grid -->
+                        <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+
+                            <!-- Freelancer Card -->
+                                <div class="col freelancer-card"
+                                 th:each="freelancer : ${freelancers}"
+                                 th:attr="
+                                    data-name=${freelancer.fullname},
+                                    data-title=${freelancer.userProfile.title},
+                                    data-skills=${freelancer.userProfile.skills},
+                                    data-summary=${freelancer.userProfile.professionalSummary}
+                                    ">
+                                <div class="card h-100 shadow-sm border-0 rounded-4">
+
+                                    <!-- Top soft header -->
+                                    <div class="p-3 rounded-top-4"
+                                         style="background: linear-gradient(180deg, rgba(13,110,253,0.10) 0%, rgba(255,255,255,0) 100%);">
+                                        <div class="d-flex align-items-center gap-3">
+
+                                            <!-- Profile image -->
+                                            <div class="flex-shrink-0">
+                                                <img th:if="${freelancer.userProfile.profilePicture != null}"
+                                                     th:src="@{'/' + ${freelancer.userProfile.profilePicture}}"
+                                                     alt="Profile Picture"
+                                                     class="rounded-circle border"
+                                                     style="width:72px;height:72px;object-fit:cover;">
+
+                                                <img th:if="${freelancer.userProfile.profilePicture == null}"
+                                                     th:src="@{/images/default.jpg}"
+                                                     alt="Default Profile"
+                                                     class="rounded-circle border"
+                                                     style="width:72px;height:72px;object-fit:cover;">
+                                            </div>
+
+                                            <!-- Name + title -->
+                                            <div class="min-w-0">
+                                                <div class="fw-bold text-truncate" th:text="${freelancer.fullname}"></div>
+                                                <div class="text-muted small text-truncate"
+                                                     th:text="${freelancer.userProfile.title}">
+
+                                                </div>
+
+                                                <!-- Rating -->
+                                                <div class="mt-1 d-flex align-items-center gap-2">
+                                                <span class="text-warning">
+                                                    <i class="bi bi-star-fill"></i>
+                                                    <i class="bi bi-star-fill"></i>
+                                                    <i class="bi bi-star-fill"></i>
+                                                    <i class="bi bi-star-half"></i>
+                                                    <i class="bi bi-star"></i>
+                                                </span>
+                                           <small class="text-muted" th:text="'(' + ${freelancer.userProfile.ratings} + ')'">4.7</small></div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="card-body pt-3">
+
+                                        <!-- Skills -->
+                                        <div class="mb-3 d-flex flex-wrap gap-1">
+                                        <span class="badge bg-light text-dark"
+                                              th:each="skill : ${#strings.arraySplit(freelancer.userProfile.skills, ',')}"
+                                              th:text="${skill}">
+                                        </span>
+                                        </div>
+
+                                        <!-- Summary -->
+                                        <p class="text-muted small mb-0"
+                                           th:text="${#strings.abbreviate(freelancer.userProfile.getProfessionalSummary(), 110)}">
+                                        </p>
+                                    </div>
+
+                                    <div class="card-footer bg-white border-0 pt-0 pb-3">
+                                        <div class="px-3 d-flex justify-content-between align-items-center">
+
+                                            <!-- Optional small meta -->
+                                            <div class="text-muted small" align="left"><i class="bi bi-award"></i> Recommended </div>
+                                            <a th:href="@{('/employer/freelancer/profile_detail/' + ${@aesUtil.encryptId(freelancer.id)})}"
+                                               class="btn btn-sm btn-primary"><i class="bi bi-person-lines-fill"></i> View Profile
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <!-- Empty state -->
+                            <div class="col-12" th:if="${freelancers == null || #lists.isEmpty(freelancers)}">
+                                <div class="card">
+                                    <div class="card-body text-center py-5">
+                                        <i class="bi bi-search fs-1 text-muted"></i>
+                                        <h6 class="fw-bold mt-2 mb-1">No freelancers found</h6>
+                                        <p class="text-muted small mb-0">
+                                            Try adjusting your filters or search keywords.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
                 </section>
+
                 <!-- Toast Container (GLOBAL) -->
                 <div id="toastContainer" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
             </div>
@@ -97,6 +178,24 @@
                     <div th:replace="~{fragments/footer :: footer}"></div>
                 </div>
             </footer>
+            <script>
+                document.getElementById('freelancerSearch')?.addEventListener('input', function () {
+                    const query = this.value.toLowerCase().trim();
+                    const cards = document.querySelectorAll('.freelancer-card');
+
+                    cards.forEach(card => {
+                        const text =
+                            (card.dataset.name || '') +
+                            (card.dataset.title || '') +
+                            (card.dataset.skills || '') +
+                            (card.dataset.summary || '');
+
+                        card.style.display = text.toLowerCase().includes(query)
+                            ? ''
+                            : 'none';
+                    });
+                });
+            </script>
         </div>
     </div>
 </div>

@@ -111,6 +111,12 @@ public class JobController {
         model.addAttribute("jobs", jobs);
         model.addAttribute("statuses", UserStatus.values());
         model.addAttribute("aesUtil", aesUtil);
+
+        model.addAttribute("totalActive", jobs.size());
+        model.addAttribute("postedCount", jobs.stream().filter(j -> j.getJobStatus() == JobStatus.POSTED).count());
+        model.addAttribute("progressCount", jobs.stream().filter(j -> j.getJobStatus() == JobStatus.IN_PROGRESS).count());
+        model.addAttribute("completedCount", jobs.stream().filter(j -> j.getJobStatus() == JobStatus.COMPLETED).count());
+
         model.addAttribute("currentPath", "/employer/jobs/active_job");
 
         return "active_jobs";
@@ -263,6 +269,29 @@ public class JobController {
 
     /*
      * @author: evana
+     * @Desc: Completed job lists for payment pending of LoggedIn User as Employer
+     * @Date: 18-12-26
+     * */
+
+    @GetMapping("/employer/payments/pending_payments")
+    public String pendingPaymentJobList(@ModelAttribute("loggedUser") CustomUserDetail loggedUser, Model model) {
+        log.info("Loggedin user=",loggedUser.getUser().getUsername());
+
+        List<JobTraffic> jobPayments= jobTrafficService.findJobTrafficByStatus(loggedUser.getId(), TrafficType.SUBMITTED);
+
+        model.addAttribute("aesUtil", aesUtil);
+
+        model.addAttribute("jobPayments", jobPayments);
+        model.addAttribute("pendingCount", jobPayments.size());
+        model.addAttribute("pendingAmount", jobPayments.size());
+
+        model.addAttribute("currentPath", "/employer/payments/pending");
+
+        return "employee_pending_payments";
+    }
+
+    /*
+     * @author: evana
      * @Desc: New job lists of LoggedIn User as Employee
      * @Date: 28-10-25
      * */
@@ -347,7 +376,7 @@ public class JobController {
     public String completedJobList(@ModelAttribute("loggedUser") CustomUserDetail loggedUser, Model model) {
         log.info("Loggedin user=",loggedUser.getUser().getUsername());
         Long userId = loggedUser.getId();
-        List<Job> jobs = jobService.findBySavedJobs(TrafficType.COMPLETED, userId);
+        List<Job> jobs = jobService.findBySavedJobs(TrafficType.SUBMITTED, userId);
         model.addAttribute("jobs", jobs);
         model.addAttribute("aesUtil", aesUtil);
         return "employee_completed_jobs";
@@ -517,12 +546,17 @@ public class JobController {
                         model.addAttribute("reportStatus", "Reported");
                     }else if (traffic.getTrafficType() == TrafficType.APPLIED) {
                         model.addAttribute("applyStatus", "Applied");
+                    }else if (traffic.getTrafficType() == TrafficType.SUBMITTED) {
+                        model.addAttribute("submitStatus", "Submitted");
+                    }
+                    else if (traffic.getTrafficType() == TrafficType.REJECTED) {
+                        model.addAttribute("rejectStatus", "Rejected");
                     }
                 }
 
             }
             model.addAttribute("jobDetail", job);
-            return "categoryJob_detail";
+        return "categoryJob_detail";
 
         } catch (Exception e) {
             e.printStackTrace();
