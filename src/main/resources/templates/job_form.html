@@ -1,196 +1,174 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
+    <!-- Header Fragment -->
     <div th:replace="~{fragments/header :: header}"></div>
+
+    <!-- TinyMCE -->
     <script th:src="@{/assets/vendors/tinymce/tinymce.min.js}"></script>
-    <script th:src="@{/assets/vendors/tinymce/plugins/code/plugin.min.js}"></script>
     <script>
-        tinymce.init({ selector: '#default' });
-        tinymce.init({ selector: '#required_skill' });
-        tinymce.init({ selector: '#dark', toolbar: 'undo redo styleselect bold italic alignleft aligncenter alignright bullist numlist outdent indent code', plugins: 'code' });
+        tinymce.init({
+            selector: '.tinymce-basic',
+            height: 280,
+            menubar: false,
+            plugins: 'lists link code',
+            toolbar: 'undo redo | bold italic | bullist numlist | link | code'
+        });
     </script>
 </head>
 <body>
 <div id="app">
+
+    <!-- Sidebar -->
     <div id="sidebar" class="active">
         <div class="sidebar-wrapper active">
             <div class="sidebar-header">
-                <div class="d-flex justify-content-between">
-                    <div class="logo">
-                        <a href="index.html"><img src="assets/images/logo/logo.png" alt="Logo" srcset=""></a>
-                    </div>
-                    <div class="toggler">
-                        <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
-                    </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <a th:href="@{/home}">
+                        <img th:src="@{/assets/images/logo/logo.png}" alt="Logo" height="35">
+                    </a>
+                    <a href="#" class="sidebar-hide d-xl-none"><i class="bi bi-x"></i></a>
                 </div>
             </div>
             <div th:replace="~{fragments/navigation :: navigation}"></div>
-            <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
         </div>
     </div>
-    <div id="main" class='layout-navbar'>
+
+    <!-- Main Content -->
+    <div id="main" class="layout-navbar">
+
         <div th:replace="~{fragments/profile_header :: profile-header}"></div>
+
         <div id="main-content">
             <div class="page-heading">
-                <div class="page-title">
-                    <div class="row">
-                        <div class="col-12 col-md-6 order-md-1 order-last">
-                            <!--  <h3>Vertical Layout with Navbar</h3>-->
-                        </div>
-                        <div class="col-12 col-md-6 order-md-2 order-first">
-                            <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a th:href="@{/home}">Dashboard</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">Create New Job</li>
-                                </ol>
-                            </nav>
-                        </div>
-                    </div>
-                </div>
-                <section id="basic-vertical-layouts">
-                    <div class="row match-height">
-                        <div class="col-md-10 col-12">
-                            <div class="card">
-                                <div class="card-header"><h4 class="card-title">Job Create Form</h4></div>
-                                <div class="card-content">
-                                    <div class="card-body">
-                                        <div th:if="${messsage}" class="alert alert-success">
-                                            <span th:text="${messsage}"></span>
+                <nav aria-label="breadcrumb" class="breadcrumb-header float-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a th:href="@{/home}">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Create Job</li>
+                    </ol>
+                </nav>
+            </div>
+
+            <section class="section">
+                <div class="row justify-content-center">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Create New Job</h4>
+                            </div>
+                            <div class="card-body">
+
+                                <!-- Success Message -->
+                                <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+
+                                <form th:object="${job}" th:action="@{/employer/job/submit_job}" method="post" class="form">
+                                    <div class="row g-3">
+
+                                        <div class="col-md-6">
+                                            <label class="form-label">Job Title</label>
+                                            <input type="text" class="form-control" th:field="*{title}" required>
                                         </div>
-                                        <form th:object="${job}" class="form form-vertical" th:action="@{/employer/job/submit_job}" method="post">
-                                            <div class="form-body">
-                                                <div class="row">
-                                                    <div class="col-12">
-                                                        <div class="form-group">
-                                                            <label for="job_title">Job Title</label>
-                                                            <input type="text" id="job_title" th:name="jobTitle" class="form-control"
-                                                                   placeholder="Job Title" th:field="*{title}" required />
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <div class="form-group">
-                                                            <label for="default">Job Description</label>
-                                                            <textarea class="form-control" id="default" cols="30" rows="10" th:name="description" th:field="*{description}"></textarea>
-                                                        </div>
-                                                   </div>
-                                                    <div class="col-12">
-                                                        <div class="form-group">
-                                                            <label for="company">Company Name</label>
-                                                            <input type="text" id="company" th:name="company" class="form-control"
-                                                                   placeholder="Company" th:field="*{company}" required />
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <div class="form-group">
-                                                            <label class="form-label">Job Category</label>
-                                                            <select class="form-select" th:name="category_id" th:field="*{category}" required>
-                                                                <option th:each="st : ${categories}"
-                                                                        th:value="${st.id}"
-                                                                        th:text="${st.categoryName}">
-                                                                </option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <div class="form-group">
-                                                            <label class="form-label">Job Type</label>
-                                                            <select th:name="jobType" class="form-select" th:field="*{jobType}">
-                                                                <option th:each="jt : ${jobTypes}"
-                                                                        th:value="${jt.name()}"
-                                                                        th:text="${jt.name()}">
-                                                                </option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <div class="form-group">
-                                                            <label for="dark">Required Skill</label>
-                                                            <textarea class="form-control" id="dark" cols="30" rows="10" th:name="requiredSkill" th:field="*{requiredSkill}"></textarea>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <div class="form-group">
-                                                            <label for="required_level">Required Level</label>
-                                                            <select class="form-control" id="required_level" th:name="requiredLevel" th:field="*{requiredLevel}">
-                                                                <option value="S.S.C">S.S.C</option>
-                                                                <option value="H.S.C">H.S.C</option>
-                                                                <option value="BA(Degree)">BA(Degree)</option>
-                                                                <option value="MA(Degree)">MA(Degree)</option>
-                                                                <option value="BSc(Hons)">BSc(Hons)</option>
-                                                                <option value="MSc">MSc</option>
-                                                                <option value="PHD">PHD</option>
-                                                                <option value="PGD">PGD</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <div class="form-group">
-                                                            <label for="vacancy">Vacancy</label>
-                                                            <input type="number" id="vacancy" th:name="vacanccy" class="form-control"
-                                                                   placeholder="Vacancy" th:field="*{vacancy}" />
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <div class="form-group">
-                                                            <label for="age_limit">Vacancy</label>
-                                                            <input type="text" th:name="ageLimit" id="age_limit" class="form-control"
-                                                                   placeholder="Age Limit" th:field="*{ageLimit}" />
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <div class="form-group">
-                                                            <label for="experience">Required Experience</label>
-                                                            <input type="text" id="experience" th:name="experience" class="form-control"
-                                                                   placeholder="Required Experience" th:field="*{experience}" />
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <div class="form-group">
-                                                            <label for="payment">Payment(Tk.)</label>
-                                                            <input type="text" id="payment" name="payment" class="form-control"
-                                                                   placeholder="Job Price" th:field="*{paymentAmount}" required/>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <div class="form-group">
-                                                            <label for="deadline">Deadline</label>
-                                                            <input type="datetime-local" id="deadline" name="deadline" class="form-control"
-                                                                   placeholder="Deadline" th:field="*{deadline}" required/>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <div class="form-group">
-                                                            <label for="job_locatiob">Job Location</label>
-                                                            <input type="text" id="job_locatiob" class="form-control" name="jobLocation"
-                                                                   placeholder="Job Location" th:field="*{jobLocation}" required/>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <div class="form-group">
-                                                            <label for="dark">Special Instruction</label>
-                                                            <textarea class="form-control" cols="30" rows="5" name="companyInstruction" th:field="*{companyInstruction}"></textarea>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-12 d-flex justify-content-end">
-                                                        <button type="submit" class="btn btn-primary me-1 mb-1">Submit</button>
-                                                        <button type="reset" class="btn btn-light-secondary me-1 mb-1">Reset</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
+
+                                        <div class="col-md-6">
+                                            <label class="form-label">Company Name</label>
+                                            <input type="text" class="form-control" th:field="*{company}" required>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <label class="form-label">Job Description</label>
+                                            <textarea class="form-control tinymce-basic" th:field="*{description}"></textarea>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="form-label">Job Category</label>
+                                            <select class="form-select" th:field="*{category}" required>
+                                                <option value="">-- Select Category --</option>
+                                                <option th:each="c : ${categories}" th:value="${c.id}" th:text="${c.categoryName}"></option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="form-label">Job Type</label>
+                                            <select class="form-select" th:field="*{jobType}" required>
+                                                <option th:each="jt : ${jobTypes}" th:value="${jt.name()}" th:text="${jt.name()}"></option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <label class="form-label">Required Skills</label>
+                                            <textarea class="form-control tinymce-basic" th:field="*{requiredSkill}"></textarea>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="form-label">Required Level</label>
+                                            <select class="form-select" th:field="*{requiredLevel}">
+                                                <option value="">-- Select Level --</option>
+                                                <option value="SSC">S.S.C</option>
+                                                <option value="HSC">H.S.C</option>
+                                                <option value="BACHELOR">Bachelor</option>
+                                                <option value="MASTER">Master</option>
+                                                <option value="PHD">PhD</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="form-label">Vacancy</label>
+                                            <input type="number" class="form-control" th:field="*{vacancy}" min="1">
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="form-label">Age Limit</label>
+                                            <input type="text" class="form-control" th:field="*{ageLimit}" placeholder="e.g. 25–40">
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="form-label">Required Experience</label>
+                                            <input type="text" class="form-control" th:field="*{experience}" placeholder="e.g. 3+ years">
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="form-label">Payment Amount (BDT)</label>
+                                            <input type="number" step="0.01" class="form-control" th:field="*{paymentAmount}" required>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="form-label">Platform Fee (BDT)</label>
+                                            <input type="number" step="0.01" class="form-control" th:field="*{platformFee}" readonly>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="form-label">Application Deadline</label>
+                                            <input type="datetime-local" class="form-control" th:field="*{deadline}" required>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <label class="form-label">Job Location</label>
+                                            <input type="text" class="form-control" th:field="*{jobLocation}" required>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <label class="form-label">Special Instructions</label>
+                                            <textarea class="form-control" rows="4" th:field="*{companyInstruction}"></textarea>
+                                        </div>
+
+                                        <div class="col-12 text-end">
+                                            <button type="submit" class="btn btn-primary">Submit Job</button>
+                                            <button type="reset" class="btn btn-light-secondary">Reset</button>
+                                        </div>
+
                                     </div>
-                                </div>
+                                </form>
+
                             </div>
                         </div>
                     </div>
-                </section>
-            </div>
-            <footer>
-                <div class="footer clearfix mb-0 text-muted">
-                    <div th:replace="~{fragments/footer :: footer}"></div>
                 </div>
+            </section>
 
+            <footer class="footer mt-4">
+                <div th:replace="~{fragments/footer :: footer}"></div>
             </footer>
+
         </div>
     </div>
 </div>

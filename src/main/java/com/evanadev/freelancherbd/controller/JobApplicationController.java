@@ -115,11 +115,13 @@ public class JobApplicationController {
         if(existing.isPresent()){
             JobTraffic jobTraffic = existing.get();
             jobTraffic.setTrafficType(TrafficType.SAVED);
+            jobTraffic.setSalary(job.getPaymentAmount());
             jobTrafficService.save(jobTraffic);
         }else{
             JobTraffic jobTraffic = new JobTraffic();
             jobTraffic.setJob(job);
             jobTraffic.setTrafficType(TrafficType.SAVED);
+            jobTraffic.setSalary(job.getPaymentAmount());
             jobTraffic.setUser(loggedUserDetail.getUser());
             jobTrafficService.save(jobTraffic);
         }
@@ -142,17 +144,19 @@ public class JobApplicationController {
         Job job = jobService.findById(did);
 
         //JobTraffic Value Set ===
-        Optional<JobTraffic> existing = jobTrafficService.findByUserIdJobId(user.getId(), did,TrafficType.SUBMITTED);
+        Optional<JobTraffic> existing = jobTrafficService.findByUserIdJobId(user.getId(), did,TrafficType.WORKING);
 
         System.out.println("Existing record found: " + existing.isPresent());
         if(existing.isPresent()){
             JobTraffic jobTraffic = existing.get();
             jobTraffic.setTrafficType(TrafficType.SUBMITTED);
+            jobTraffic.setSalary(jobTraffic.getSalary());
             jobTrafficService.save(jobTraffic);
         }else{
             JobTraffic jobTraffic = new JobTraffic();
             jobTraffic.setJob(job);
             jobTraffic.setTrafficType(TrafficType.SUBMITTED);
+            jobTraffic.setSalary(jobTraffic.getSalary());
             jobTraffic.setUser(loggedUserDetail.getUser());
             jobTrafficService.save(jobTraffic);
         }
@@ -279,6 +283,7 @@ public class JobApplicationController {
                 JobTraffic jobTraffic = new JobTraffic();
                 jobTraffic.setJob(jobApplication.getJob());
                 jobTraffic.setTrafficType(TrafficType.WORKING);
+                jobTraffic.setSalary(jobApplication.getApprovedSalary());
                 jobTraffic.setUser(existProposal.getUser());
                 jobTrafficService.save(jobTraffic);
             }

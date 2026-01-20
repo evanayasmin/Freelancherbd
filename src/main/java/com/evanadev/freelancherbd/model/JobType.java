@@ -1,10 +1,8 @@
 package com.evanadev.freelancherbd.model;
 
 public enum JobType {
-    FULL_TIME,
-    PART_TIME,
+    ONSITE,
     FREELANCE,
-    CONTRACT,
-    INTERNSHIP,
-    REMOTE
+    REMOTE,
+    HYBRID
 }

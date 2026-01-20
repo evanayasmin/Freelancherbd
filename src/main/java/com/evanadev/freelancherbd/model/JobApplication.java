@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -21,11 +22,11 @@ public class JobApplication {
     @Column(columnDefinition = "LongText")
     private String coverLetter;
 
-    @Column(nullable = false)
-    private String expectedSalary;
+    @Column(nullable = false, precision = 15, scale = 2)
+    private BigDecimal expectedSalary;
 
-    @Column(nullable = false)
-    private Double approvedSalary;
+    @Column(nullable = false, precision = 15, scale = 2)
+    private BigDecimal approvedSalary;
 
     @Enumerated(EnumType.STRING)
     private ApplicationStatus applicationStatus;
@@ -65,19 +66,19 @@ public class JobApplication {
         this.coverLetter = coverLetter;
     }
 
-    public String getExpectedSalary() {
+    public BigDecimal getExpectedSalary() {
         return expectedSalary;
     }
 
-    public void setExpectedSalary(String expectedSalary) {
+    public void setExpectedSalary(BigDecimal expectedSalary) {
         this.expectedSalary = expectedSalary;
     }
 
-    public Double getApprovedSalary() {
+    public BigDecimal getApprovedSalary() {
         return approvedSalary;
     }
 
-    public void setApprovedSalary(Double approvedSalary) {
+    public void setApprovedSalary(BigDecimal approvedSalary) {
         this.approvedSalary = approvedSalary;
     }
 

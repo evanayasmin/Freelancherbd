@@ -7,6 +7,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -54,7 +55,20 @@ public class Job {
     @Enumerated(EnumType.STRING)
     private JobStatus jobStatus = JobStatus.PENDING;
 
-    private String PaymentAmount;
+    @Column(nullable = false, precision = 15, scale = 2)
+    private BigDecimal PaymentAmount;
+
+    /**
+     * OnSite -- 2000 tk
+     * Remote -- 1000 tk.
+     * Freelancing -- 500 tk.
+     */
+
+    @Column(nullable = false, precision = 15, scale = 2)
+    private BigDecimal PlatformFee;
+
+    @Column(precision = 15, scale = 2)
+    private BigDecimal ActualPayment;
 
     @Column(nullable = false)
     private String jobLocation;
@@ -200,12 +214,28 @@ public class Job {
         this.jobStatus = jobStatus;
     }
 
-    public String getPaymentAmount() {
+    public BigDecimal getPaymentAmount() {
         return PaymentAmount;
     }
 
-    public void setPaymentAmount(String paymentAmount) {
-        this.PaymentAmount = paymentAmount;
+    public void setPaymentAmount(BigDecimal paymentAmount) {
+        PaymentAmount = paymentAmount;
+    }
+
+    public BigDecimal getPlatformFee() {
+        return PlatformFee;
+    }
+
+    public void setPlatformFee(BigDecimal platformFee) {
+        PlatformFee = platformFee;
+    }
+
+    public BigDecimal getActualPayment() {
+        return ActualPayment;
+    }
+
+    public void setActualPayment(BigDecimal actualPayment) {
+        ActualPayment = actualPayment;
     }
 
     public LocalDateTime getPaymentDate() {

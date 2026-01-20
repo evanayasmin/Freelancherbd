@@ -75,7 +75,7 @@ public class JobController {
         String message = "";
         job.setUser(user);
         jobService.JobSave(job);
-        message = "Your Job is created successfully. After Admin approval, it will be posted for Freelancer.";
+        message = "Your Job is created successfully. After Admin approval, You will be requested to pay platform fee for publishing on site..";
         model.addAttribute("messsage", message);
         model.addAttribute("job", new Job());
         model.addAttribute("jobType", JobType.values());
@@ -283,6 +283,7 @@ public class JobController {
 
         model.addAttribute("jobPayments", jobPayments);
         model.addAttribute("pendingCount", jobPayments.size());
+
         model.addAttribute("pendingAmount", jobPayments.size());
 
         model.addAttribute("currentPath", "/employer/payments/pending");
