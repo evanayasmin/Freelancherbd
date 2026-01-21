@@ -89,11 +89,18 @@
 
                                         <div class="col-md-6">
                                             <label class="form-label">Job Type</label>
-                                            <select class="form-select" th:field="*{jobType}" required>
-                                                <option th:each="jt : ${jobTypes}" th:value="${jt.name()}" th:text="${jt.name()}"></option>
+                                            <select class="form-select" id="jobType" required name="jobType"
+                                                    th:data-remote-fee="${remoteFee}"
+                                                    th:data-onsite-fee="${onsiteFee}"
+                                                    th:data-freelance-fee="${freelanceFee}"
+                                                    th:data-hybrid-fee="${hybridFee}">
+                                                <option value="">-- Select Job Type --</option>
+                                                <option value="ONSITE">ONSITE</option>
+                                                <option value="FREELANCE">FREELANCE</option>
+                                                <option value="REMOTE">REMOTE</option>
+                                                <option value="HYBRID">HYBRID</option>
                                             </select>
                                         </div>
-
                                         <div class="col-12">
                                             <label class="form-label">Required Skills</label>
                                             <textarea class="form-control tinymce-basic" th:field="*{requiredSkill}"></textarea>
@@ -113,7 +120,7 @@
 
                                         <div class="col-md-4">
                                             <label class="form-label">Vacancy</label>
-                                            <input type="number" class="form-control" th:field="*{vacancy}" min="1">
+                                            <input type="text" class="form-control" th:field="*{vacancy}" value="N/A">
                                         </div>
 
                                         <div class="col-md-4">
@@ -131,9 +138,16 @@
                                             <input type="number" step="0.01" class="form-control" th:field="*{paymentAmount}" required>
                                         </div>
 
+
                                         <div class="col-md-6">
                                             <label class="form-label">Platform Fee (BDT)</label>
-                                            <input type="number" step="0.01" class="form-control" th:field="*{platformFee}" readonly>
+                                            <input type="number"
+                                                   step="0.01"
+                                                   id="platformFee"
+                                                   class="form-control"
+                                                   th:field="*{platformFee}"
+                                                   readonly
+                                                   style="background-color:#f8f9fa; color:#000;">
                                         </div>
 
                                         <div class="col-md-6">

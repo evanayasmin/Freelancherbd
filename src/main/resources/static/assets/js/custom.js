@@ -488,4 +488,39 @@ $(document).ready(function () {
     });
 });
 
+$(function () {
+    const $jobType = $('#jobType');
+    const $platformFee = $('#platformFee');
+
+    // Get fees from data attributes
+    const remoteFee = parseFloat($jobType.data('remote-fee')) || 0;
+    const onsiteFee = parseFloat($jobType.data('onsite-fee')) || 0;
+    const freelanceFee = parseFloat($jobType.data('freelance-fee')) || 0;
+    const hybridFee = parseFloat($jobType.data('hybrid-fee')) || 0;
+
+    $jobType.on('change', function () {
+        let fee = 0;
+        switch (this.value) {
+            case 'REMOTE': fee = remoteFee; break;
+            case 'ONSITE': fee = onsiteFee; break;
+            case 'FREELANCE': fee = freelanceFee; break;
+            case 'HYBRID': fee = hybridFee; break;
+        }
+
+        // Only set if valid number
+        $platformFee.val(!isNaN(fee) ? fee : 0);
+    });
+
+    // Trigger once on page load
+    $jobType.trigger('change');
+});
+
+
+
+
+
+
+
+
+
 

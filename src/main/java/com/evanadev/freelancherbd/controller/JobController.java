@@ -1,7 +1,6 @@
 package com.evanadev.freelancherbd.controller;
 
 import com.evanadev.freelancherbd.model.*;
-import com.evanadev.freelancherbd.repository.CategoryRepository;
 import com.evanadev.freelancherbd.repository.JobRepository;
 import com.evanadev.freelancherbd.service.CategoryService;
 import com.evanadev.freelancherbd.service.JobReportService;
@@ -24,14 +23,14 @@ public class JobController {
     @Autowired
     private JobRepository jobRepository;
     @Autowired
-    private JobService jobService;
+    private final JobService jobService;
 
-    private CategoryService categoryService;
+    private final CategoryService categoryService;
 
     @Autowired
     private AESUtil aesUtil;
     @Autowired
-    private JobReportService jobReportService;
+    private final JobReportService jobReportService;
     @Autowired
     private JobTrafficService jobTrafficService;
 
@@ -50,9 +49,14 @@ public class JobController {
      * */
     @GetMapping ("/employer/jobs/create_job")
     public String CreateJob(Model model) {
+
         List<Category> categories = categoryService.getAllCategories();
         model.addAttribute("categories", categories);
         model.addAttribute("jobTypes", JobType.values());
+        model.addAttribute("remoteFee", 1000);
+        model.addAttribute("onsiteFee", 2000);
+        model.addAttribute("freelanceFee", 500);
+        model.addAttribute("hybridFee", 1500);
         model.addAttribute("job", new Job());
         model.addAttribute("currentPath", "/employer/jobs/create_job");
         return "job_form";
