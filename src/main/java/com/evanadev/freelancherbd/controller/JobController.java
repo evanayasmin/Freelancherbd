@@ -97,6 +97,13 @@ public class JobController {
         List<Job> jobs = jobService.findAllJobsWithCategory(loggedUser.getUser());
         model.addAttribute("jobs", jobs);
         model.addAttribute("statuses", UserStatus.values());
+        model.addAttribute("totalJobs", jobs.size());
+        model.addAttribute("postedJobs",
+                jobs.stream().filter(j -> j.getJobStatus() == JobStatus.POSTED).count());
+        model.addAttribute("inProgressJobs",
+                jobs.stream().filter(j -> j.getJobStatus() == JobStatus.IN_PROGRESS).count());
+        model.addAttribute("completedJobs",
+                jobs.stream().filter(j -> j.getJobStatus() == JobStatus.COMPLETED).count());
         model.addAttribute("aesUtil", aesUtil);
         model.addAttribute("currentPath", "/employer/jobs/job_list");
         return "alljob_list";

@@ -64,9 +64,80 @@
                         </span>
                     </div>
                 </div>
+                <!-- Statistics Panel -->
+                <div class="row g-3 mb-4">
+                    <div class="col-xl-3 col-md-6">
+                        <div class="card shadow-sm border-0">
+                            <div class="card-body">
+                                <h6 class="text-muted mb-1">Total Jobs</h6>
+                                <h3 class="fw-bold text-primary" th:text="${totalJobs}"></h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-md-6">
+                        <div class="card shadow-sm border-0">
+                            <div class="card-body">
+                                <h6 class="text-muted mb-1">Posted</h6>
+                                <h3 class="fw-bold text-info" th:text="${postedJobs}"></h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-md-6">
+                        <div class="card shadow-sm border-0">
+                            <div class="card-body">
+                                <h6 class="text-muted mb-1">In Progress</h6>
+                                <h3 class="fw-bold text-warning" th:text="${inProgressJobs}"></h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-md-6">
+                        <div class="card shadow-sm border-0">
+                            <div class="card-body">
+                                <h6 class="text-muted mb-1">Completed</h6>
+                                <h3 class="fw-bold text-success" th:text="${completedJobs}"></h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
 
                 <section class="section">
-                    <div class="card">
+                    <!-- Search & Filter -->
+<!--                    <div class="card mb-4 border-0 shadow-sm">-->
+<!--                        <div class="card-body">-->
+<!--                            <div class="row g-3">-->
+<!--                                <div class="col-md-5">-->
+<!--                                    <input type="text" id="jobSearch" class="form-control" placeholder="🔍 Search by job title">-->
+<!--                                </div>-->
+
+<!--                                <div class="col-md-4">-->
+<!--                                    <select id="statusFilter" class="form-select">-->
+<!--                                        <option value="">All Status</option>-->
+<!--                                        <option value="POSTED">Posted</option>-->
+<!--                                        <option value="PENDING">Pending</option>-->
+<!--                                        <option value="IN_PROGRESS">In Progress</option>-->
+<!--                                        <option value="COMPLETED">Completed</option>-->
+<!--                                        <option value="CANCELLED">Cancelled</option>-->
+<!--                                    </select>-->
+<!--                                </div>-->
+
+<!--                                <div class="col-md-3">-->
+<!--                                    <button class="btn btn-outline-secondary w-100"-->
+<!--                                            onclick="resetFilters()">-->
+<!--                                        Reset-->
+<!--                                    </button>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+
+                    <div class="card job-card h-100 border-0"
+                         data-title="[[${job.title}]]"
+                         data-status="[[${job.jobStatus.name()}]]"
+                         data-category="[[${job.category.categoryName}]]">
                         <div class="card-header d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2">
                             <div class="d-flex align-items-center gap-2">
                                 <i class="bi bi-list-check"></i>
@@ -75,7 +146,7 @@
                         </div>
                         <div class="card-body" id="freelancerCardBody">
                         <div class="row g-4">
-                        <div class="col-xl-4 col-lg-6 col-md-6"
+                        <div class="col-xl-4 col-lg-6 col-md-6 job-item"
                              th:each="job : ${jobs}">
 
                             <div class="card job-card h-100 border-0">
@@ -200,13 +271,46 @@
             <footer>
                 <div class="footer clearfix mb-0 text-muted">
                     <div th:replace="~{fragments/footer :: footer}"></div>
-                    <script th:src="@{/assets/vendors/simple-datatables/simple-datatables.js}"></script>
                     <script>
-                        // Simple Datatable
-                        let table1 = document.querySelector('#table1');
-                        let dataTable = new simpleDatatables.DataTable(table1);
+                        document.addEventListener('DOMContentLoaded', function () {
 
+                            const searchInput = document.getElementById('jobSearch');
+                            const statusFilter = document.getElementById('statusFilter');
+                            const jobCards = document.querySelectorAll('#freelancerCardBody .job-card');
+
+                            if (!searchInput || !statusFilter) return;
+
+                            function filterJobs() {
+                                const searchValue = searchInput.value.toLowerCase();
+                                const statusValue = statusFilter.value;
+
+                                jobCards.forEach(card => {
+                                    const title = (card.dataset.title || '').toLowerCase();
+                                    const status = card.dataset.status || '';
+
+                                    const matchesSearch = title.includes(searchValue);
+                                    const matchesStatus = !statusValue || status === statusValue;
+
+                                    /*const jobItem = card.closest('.job-item');
+                                    if (!jobItem) return;*/
+                                    const jobItem = card.closest('.job-item');
+                                    jobItem.style.display =
+                                        matchesSearch && matchesStatus ? '' : 'none';
+                                });
+                            }
+
+                            searchInput.addEventListener('keyup', filterJobs);
+                            statusFilter.addEventListener('change', filterJobs);
+
+                            window.resetFilters = function () {
+                                searchInput.value = '';
+                                statusFilter.value = '';
+                                filterJobs();
+                            };
+
+                        });
                     </script>
+
 
                 </div>
             </footer>
