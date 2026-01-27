@@ -105,34 +105,34 @@
 
 
                 <section class="section">
-                    <!-- Search & Filter -->
-<!--                    <div class="card mb-4 border-0 shadow-sm">-->
-<!--                        <div class="card-body">-->
-<!--                            <div class="row g-3">-->
-<!--                                <div class="col-md-5">-->
-<!--                                    <input type="text" id="jobSearch" class="form-control" placeholder="🔍 Search by job title">-->
-<!--                                </div>-->
+                     Search & Filter
+                    <div class="card mb-4 border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-5">
+                                    <input type="text" id="alljobSearch" class="form-control" placeholder="🔍 Search by job title">
+                                </div>
 
-<!--                                <div class="col-md-4">-->
-<!--                                    <select id="statusFilter" class="form-select">-->
-<!--                                        <option value="">All Status</option>-->
-<!--                                        <option value="POSTED">Posted</option>-->
-<!--                                        <option value="PENDING">Pending</option>-->
-<!--                                        <option value="IN_PROGRESS">In Progress</option>-->
-<!--                                        <option value="COMPLETED">Completed</option>-->
-<!--                                        <option value="CANCELLED">Cancelled</option>-->
-<!--                                    </select>-->
-<!--                                </div>-->
+                                <div class="col-md-4">
+                                    <select id="statusFilter" class="form-select">
+                                        <option value="">All Status</option>
+                                        <option value="POSTED">Posted</option>
+                                        <option value="PENDING">Pending</option>
+                                        <option value="IN_PROGRESS">In Progress</option>
+                                        <option value="COMPLETED">Completed</option>
+                                        <option value="CANCELLED">Cancelled</option>
+                                    </select>
+                                </div>
 
-<!--                                <div class="col-md-3">-->
-<!--                                    <button class="btn btn-outline-secondary w-100"-->
-<!--                                            onclick="resetFilters()">-->
-<!--                                        Reset-->
-<!--                                    </button>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
+                                <div class="col-md-3">
+                                    <button class="btn btn-outline-secondary w-100"
+                                            onclick="resetFilters()">
+                                        Reset
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="card job-card h-100 border-0"
                          data-title="[[${job.title}]]"
@@ -274,7 +274,7 @@
                     <script>
                         document.addEventListener('DOMContentLoaded', function () {
 
-                            const searchInput = document.getElementById('jobSearch');
+                            const searchInput = document.getElementById('alljobSearch');
                             const statusFilter = document.getElementById('statusFilter');
                             const jobCards = document.querySelectorAll('#freelancerCardBody .job-card');
 
