@@ -14,7 +14,6 @@ import java.util.Optional;
 public interface JobTrafficRepository extends JpaRepository<JobTraffic, Long> {
     JobTraffic findJobTrafficByJobId(Long jobId);
 
-
     @Query("""
     SELECT DISTINCT t
     FROM JobTraffic t
@@ -46,7 +45,7 @@ public interface JobTrafficRepository extends JpaRepository<JobTraffic, Long> {
     @Query("""
     SELECT DISTINCT t
     FROM JobTraffic t JOIN Job jb ON t.job.id = jb.id 
-    WHERE t.trafficType =:trafficType AND jb.user.id = :userId
+    WHERE t.trafficType =:trafficType AND jb.user.id = :userId AND jb.jobType = 'FREELANCE'
     """)
     List<JobTraffic> findJobTrafficByStatus(
             @Param("userId") Long userId,

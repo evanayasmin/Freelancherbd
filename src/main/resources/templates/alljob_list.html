@@ -181,7 +181,6 @@
 
                                 <!-- Card Body -->
                                 <div class="card-body">
-
                                     <div class="d-flex justify-content-between mb-2">
                                     <span class="text-muted">
                                         <i class="bi bi-cash-stack me-1"></i>
@@ -207,6 +206,17 @@
                                         </span>
                                         <span th:text="${#temporals.format(job.createdAt,'dd MMM yyyy')}"></span>
                                     </div>
+                                    <div class="d-flex align-items-start justify-content-between mt-2">
+                                            <span class="text-muted fw-semibold">
+                                                <i class="bi bi-book me-1"></i> Type:
+                                            </span>
+                                        <div class="d-flex flex-wrap gap-1 justify-content-end">
+                                            <span class="badge rounded-pill bg-light-info text-primary">
+                                                <i class="bi bi-lightning-charge me-1"></i>
+                                                <span th:text="${job.jobType}"></span>
+                                            </span>
+                                        </div>
+                                    </div>
 <!--                                    <div class="d-flex align-items-start justify-content-between mt-2">-->
 <!--                                    <span class="text-muted fw-semibold">-->
 <!--                                        <i class="bi bi-tools me-1"></i> Skills:-->
@@ -225,10 +235,7 @@
 
                                 <!-- Card Footer -->
                                 <div class="card-footer bg-white border-top d-flex justify-content-between align-items-center">
-                                    <small class="text-muted">
-                                        Location: <span th:text="${job.jobLocation}"></span>
-                                    </small>
-
+                                    <small class="text-muted"><span th:text="${job.jobLocation}"></span></small>
                                     <button type="button"
                                             class="btn btn-sm btn-outline-primary"
                                             data-bs-toggle="modal"

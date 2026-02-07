@@ -175,6 +175,14 @@
                                                 <i class="bi bi-eye"></i>
                                                 Payment
                                             </button>
+                                            <button type="button"
+                                                    class="btn btn-sm btn-outline-danger"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#proposalViewModal"
+                                                    th:data-url="@{/employer/jobs/proposal_details(encId=${@aesUtil.encryptId(jobp.id)})}">
+                                                <i class="bi bi-back"></i>
+                                                Cancel
+                                            </button>
                                         </td>
                                     </tr>
                                     </tbody>
