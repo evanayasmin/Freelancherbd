@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Invoice</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+        .invoice-box {
+            max-width: 800px;
+            margin: auto;
+            border: 1px solid #eee;
+            padding: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        .total {
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .text-right {
+            text-align: right;
+        }
+        .print-btn {
+            margin-top: 20px;
+        }
+        @media print {
+            .print-btn {
+                display: none;
+            }
+        }
+        @media print {
+            body {
+                margin: 20mm;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<!-- Invoice Header -->
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
+
+    <div>
+        <h2 style="margin:0; color:#0d6efd;">FreelancingBD</h2>
+        <small style="color:#6c757d;">One Platform: Endless Opportunity</small>
+    </div>
+
+    <div style="text-align:right;">
+        <strong>Online Job Portal</strong><br>
+        Bangladesh
+    </div>
+
+</div>
+
+<hr>
+
+<div class="invoice-box">
+
+    <h2>Invoice</h2>
+
+    <p>
+        <strong>Invoice No:</strong>
+        <span th:text="${invoiceNo}"></span><br>
+
+        <strong>Date:</strong>
+        <span th:text="${#temporals.format(invoiceDate,'dd MMM yyyy')}"></span>
+    </p>
+
+    <hr>
+
+    <h4>Employer</h4>
+    <p>
+        <span th:text="${payment.employerId.getUserProfile().getCompanyName()}"></span><br>
+        <span th:text="${payment.employerId.getUserProfile().getCompanyEmail()}"></span>
+    </p>
+
+    <h4>Freelancer</h4>
+    <p th:text="${payment.freelancerId.fullname}"></p>
+    <hr>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Task</th>
+            <th class="text-right">Amount</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td th:text="${payment.job.title}"></td>
+            <td class="text-right">
+                ৳ <span th:text="${payment.amount}"></span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <p class="total text-right">
+        Total: ৳ <span th:text="${payment.amount}"></span>
+    </p>
+
+    <p>
+        <strong>Status:</strong>
+        <span th:text="${payment.status}"></span><br>
+
+        <strong>Payment Type:</strong>
+        <span th:text="${payment.paymentType}"></span><br>
+
+        <strong>Transaction ID:</strong>
+        <span th:text="${payment.transactionId}"></span>
+    </p>
+
+    <button class="print-btn" onclick="window.print()">
+        Print Invoice
+    </button>
+
+</div>
+<!-- Invoice Footer -->
+<hr>
+
+<p style="font-size:12px; color:#6c757d; text-align:center; margin-top:30px;">
+    This is a system-generated document from the online job portal <strong>FreelancingBD</strong>.
+    No signature is required.
+</p>
+</body>
+</html>

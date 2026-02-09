@@ -22,4 +22,9 @@ public class PaymentService {
     public List<Payment> getEmployerPayments(User employer) {
         return paymentRepository.findByEmployerId(employer);
     }
+
+    public Payment getPaymentForInvoice(Long paymentId) {
+        return paymentRepository.findById(paymentId)
+                .orElseThrow(() -> new RuntimeException("Payment not found"));
+    }
 }
