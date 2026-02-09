@@ -207,14 +207,8 @@
                 <span>Support</span>
             </a>
             <ul class="submenu" th:classappend="${currentPath != null and currentPath.startsWith('/user/support')} ? ' active'">
-                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/user/support/help')} ? ' active'">
-                    <a th:href="@{/user/support/help_center}">Help Center</a>
-                </li>
-                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/user/support/report')} ? ' active'">
-                    <a th:href="@{/user/suport/report_problem}">Report a Problem</a>
-                </li>
                 <li class="submenu-item text-dark" th:classappend="${currentPath != null and currentPath.startsWith('/user/support/contactus')} ? ' active'">
-                    <a th:href="@{/user/support/contactus}">Contact Support</a>
+                    <a th:href="@{/user/support/contact-us}">Contact Support</a>
                 </li>
             </ul>
         </li>
