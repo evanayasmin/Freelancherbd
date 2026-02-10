@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="~{fragments/header :: header}"></div>
+</head>
+<body>
+<div id="app">
+    <div id="sidebar" class="active">
+        <div class="sidebar-wrapper active">
+            <div class="sidebar-header">
+                <div class="d-flex justify-content-between">
+                    <div class="logo">
+                        <a href="index.html"><img src="assets/images/logo/logo.png" alt="Logo" srcset=""></a>
+                    </div>
+                    <div class="toggler">
+                        <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div th:replace="~{fragments/navigation :: navigation}"></div>
+            <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
+        </div>
+    </div>
+    <div id="main" class='layout-navbar'>
+        <div th:replace="~{fragments/profile_header :: profile-header}"></div>
+        <div id="main-content">
+            <div class="page-heading">
+                <div class="page-title">
+                    <div class="row">
+                        <div class="col-12 col-md-6 order-md-1 order-last"></div>
+                        <div class="col-12 col-md-6 order-md-2 order-first">
+                            <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a th:href="@{/home}">Dashboard</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">User Profile</li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+                <section id="basic-vertical-layouts">
+                    <div class="row match-height">
+                        <div class="col-md-6 col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4>Withdraw Earnings</h4>
+                                </div>
+
+                                <div class="card-body">
+                                    <form th:action="@{/freelancer/wallet/withdraw}" th:object="${withdrawal}" method="post">
+                                        <div class="mb-3">
+                                            <label>Amount</label>
+                                            <input type="number" step="0.01" th:field="*{amount}" class="form-control" required>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label>Method</label>
+                                            <select th:field="*{method}" class="form-control">
+                                                <option value="BKASH">bKash</option>
+                                                <option value="NAGAD">Nagad</option>
+                                                <option value="BANK">Bank</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label>Account Number</label>
+                                            <input type="text" th:field="*{accountNumber}" class="form-control" required>
+                                        </div>
+
+                                        <button class="btn btn-success">Submit Withdrawal</button>
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <footer>
+                <div class="footer clearfix mb-0 text-muted">
+                    <div th:replace="~{fragments/footer :: footer}"></div>
+                </div>
+            </footer>
+        </div>
+    </div>
+</div>
+</body>
+</html>

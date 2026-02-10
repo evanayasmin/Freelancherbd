@@ -55,16 +55,16 @@
             </a>
             <ul class="submenu" th:classappend="${currentPath != null and currentPath.startsWith('/employee/earnings')} ? ' active'">
                 <li class="submenu-item">
-                    <a th:href="@{/employee/earnings/wallet_balance}">Wallet Balance</a>
+                    <a th:href="@{/freelancer/wallet/balance}">Wallet Balance</a>
                 </li>
                 <li class="submenu-item ">
-                    <a th:href="@{/employee/earnings/withdrwal}">Withdrawal</a>
+                    <a th:href="@{/freelancer/wallet/withdrwal}">Withdrawal</a>
                 </li>
                 <li class="submenu-item active">
-                    <a th:href="@{/employee/earnings/transaction_history}">Transaction History</a>
+                    <a th:href="@{/freelancer/wallet/transaction_history}">Transaction History</a>
                 </li>
                 <li class="submenu-item ">
-                    <a th:href="@{/employee/earnings/employer_reports}">Reports</a>
+                    <a th:href="@{/freelancer/wallet/employer_reports}">Reports</a>
                 </li>
             </ul>
         </li>
@@ -334,6 +334,17 @@
             </ul>
         </li>
 
+        <li class="sidebar-item has-sub" sec:authorize="hasAnyRole('ADMIN','EMPLOYER')">
+            <a href="#" class='sidebar-link'>
+                <i class="bi bi-cash text-gray"></i>
+                <span>Platform Fees</span>
+            </a>
+            <ul class="submenu" th:classappend="${currentPath != null and currentPath.startsWith('/platform/fees')} ? ' active'">
+                <li class="submenu-item" th:classappend="${currentPath != null and currentPath.startsWith('/platform/fees')} ? ' active'">
+                    <a th:href="@{/admin/settings/platform_settings}">Fees</a>
+                </li>
+            </ul>
+        </li>
         <li class="sidebar-item has-sub"
             sec:authorize="hasAnyRole('FREELANCER','EMPLOYER')"
             th:classappend="${currentPath != null and currentPath.startsWith('/chat')} ? ' active'">
