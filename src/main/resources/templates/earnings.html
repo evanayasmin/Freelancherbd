@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="~{fragments/header :: header}"></div>
+</head>
+<body>
+<div id="app">
+    <div id="sidebar" class="active">
+        <div class="sidebar-wrapper active">
+            <div class="sidebar-header">
+                <div class="d-flex justify-content-between">
+                    <div class="logo">
+                        <a href="index.html"><img src="assets/images/logo/logo.png" alt="Logo" srcset=""></a>
+                    </div>
+                    <div class="toggler">
+                        <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div th:replace="~{fragments/navigation :: navigation}"></div>
+            <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
+        </div>
+    </div>
+    <div id="main" class='layout-navbar'>
+        <div th:replace="~{fragments/profile_header :: profile-header}"></div>
+        <div id="main-content">
+            <div class="page-heading">
+                <div class="page-title">
+                    <div class="row">
+                        <div class="col-12 col-md-6 order-md-1 order-last"></div>
+                        <div class="col-12 col-md-6 order-md-2 order-first">
+                            <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a th:href="@{/home}">Dashboard</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">Earning</li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+                <section id="basic-vertical-layouts">
+                    <div class="row match-height">
+                        <div class="col-md-6 col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Paid Earnings</h4>
+                                </div>
+                                <div class="card-body table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>Job</th>
+                                            <th>Gross</th>
+                                            <th>Platform Fee</th>
+                                            <th>Net Paid</th>
+                                            <th>Paid Date</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="e : ${earnings}">
+                                            <td th:text="${e.jobTitle}">—</td>
+                                            <td>৳ <span th:text="${e.grossAmount}"></span></td>
+                                            <td class="text-danger">
+                                                ৳ <span th:text="${e.platformFee}"></span>
+                                            </td>
+                                            <td class="text-success fw-bold">
+                                                ৳ <span th:text="${e.netAmount}"></span>
+                                            </td>
+                                            <td th:text="${#temporals.format(e.paidAt, 'dd MMM yyyy')}"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <footer>
+                <div class="footer clearfix mb-0 text-muted">
+                    <div th:replace="~{fragments/footer :: footer}"></div>
+                </div>
+            </footer>
+        </div>
+    </div>
+</div>
+</body>
+</html>
